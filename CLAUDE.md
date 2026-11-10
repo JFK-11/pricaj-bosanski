@@ -18,8 +18,10 @@ Offline-Lern-App (PWA) für Bosnisch, genutzt als Home-Bildschirm-App auf einem 
   - `PRICAJ:` + `{"v":1,"items":[{"bs","de","laut","p"}]}` – Satzliste (`p:1` = persönlicher Satz)
   - `PRICAJ-SICHERUNG:` + `{"v":1,"kind":"backup","at",...,"data":{profile,vocab,days,path}}` – komplette Sicherung der iPhone-App. Einspielen führt zusammen, löscht nie.
 
-## Commits
-- Autor immer `JFK-11 <355063843+JFK-11@users.noreply.github.com>`. Netlify (Gratis-Tarif, privates Repository) baut nur Commits, die GitHub dem Konto JFK-11 zuordnet; andere Autoren blockiert es mit „Unrecognized Git contributor“.
+## Commits & Veröffentlichung
+- Autor: `JFK-11 <355063843+JFK-11@users.noreply.github.com>`.
+- Das Repository ist absichtlich öffentlich. Als es privat war, hat Netlify (Gratis-Tarif) jeden Push über Claudes GitHub-Zugang mit „Unrecognized Git contributor“ blockiert, auch mit korrektem Autor. Nicht wieder auf privat stellen.
+- Deshalb gehören keine persönlichen Daten ins Repository (keine Lerndaten, keine Namen, keine privaten Sätze).
 
 ## Inhalte
 - Bosnisch in lateinischer Schrift, ijekavisch, bosnische Standardformen (kafa, hljeb, sedmica, hiljada).
