@@ -40,3 +40,7 @@ Beide Formen gelten als richtig. Offen ist nur, welche man in Bosnien im Alltag 
 9. **jučer** (gestern): oder *juče*?
 10. **veče / dobro veče** (Abend): oder *večer / dobra večer*?
 11. **trebam, trebaš …** (Konjugation von *trebati*, „brauchen“): Ist die persönliche Form so üblich, oder lieber nur *treba mi*?
+
+## Nachträglich korrigiert
+
+- **Datum auf der Startseite:** „utorak, 10. novembar“ → „utorak, 10. novembra“. Im Datum steht der Monat im Genitiv. Falls man in Bosnien auch „10. novembar“ schreibt, bitte melden.
