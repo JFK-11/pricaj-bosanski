@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Pričaj bosanski</title>
 <meta name="description" content="Bosnisch lernen: Grundwortschatz, Zahlen, Quiz, Karteikarten, Nachsprechen.">
-<meta name="theme-color" content="#2340a8">
+<meta name="theme-color" content="#2340a8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#090c16" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pričaj">
@@ -21,12 +22,18 @@
   --gold:#e3a915; --gold-soft:#fbefc9; --gold-ink:#1b1500; --ok:#1d7a4f; --ok-soft:#dcf1e6; --warn:#8a5f00; --bad:#b3372f; --bad-soft:#f8e1de;
   --display:ui-rounded, "SF Pro Rounded", -apple-system, "Segoe UI", system-ui, sans-serif;
   --body:-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --track:#e3e7f1; --card-line:var(--line); --card-shadow:none;
+  --t-path:#2340a8; --t-words:#0f7d70; --t-frames:#6b46c1; --t-numbers:#c2501f; --t-sounds:#c0306f; --t-listen:#a86f00; --t-quiz:#1271b0; --t-cards:#1d7a4f;
+  --ring-a:#2340a8; --ring-b:#0f7d70; --tint:0%;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root{
-  --bg:#0e1220; --surface:#171d33; --surface-2:#20284a; --line:#2c355c;
+  --bg:#090c16; --surface:#141a2d; --surface-2:#1f2742; --line:#273050;
   --fg:#e8eaf4; --muted:#9aa2c2; --accent:#8da2f5; --accent-ink:#0e1220; --accent-soft:#232c55;
   --gold:#f2c552; --gold-soft:#3a3214; --gold-ink:#1b1500; --ok:#6fd3a0; --ok-soft:#163327; --warn:#e8c066; --bad:#f08a80; --bad-soft:#3d1d1b;
+  --track:#1c2339; --card-line:rgba(255,255,255,.07); --card-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 8px 22px rgba(0,0,0,.35);
+  --t-path:#8da2f5; --t-words:#5fd4c4; --t-frames:#b79cf7; --t-numbers:#f59f7a; --t-sounds:#f28cb8; --t-listen:#f2c552; --t-quiz:#6cc4f5; --t-cards:#6fd3a0;
+  --ring-a:#8da2f5; --ring-b:#5fd4c4; --tint:13%;
   color-scheme:dark}}
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -55,9 +62,9 @@ p{margin:0}
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);padding-top:6px;padding-bottom:max(6px, env(safe-area-inset-bottom, 0px))}
 .tabs button{border:0;background:transparent;display:grid;justify-items:center;gap:2px;padding:4px 0;font-size:.74rem;color:var(--muted);font-weight:600}
 .tabs svg{width:23px;height:23px}
-.tabs button[aria-current="page"]{color:var(--accent)}
+.tabs button[aria-current="page"]{color:var(--tone, var(--accent))}
 .foot{padding-bottom:env(safe-area-inset-bottom, 0px)}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.card{background:var(--surface);border:1px solid var(--card-line);border-radius:14px;padding:14px;box-shadow:var(--card-shadow)}
 .stack{display:grid;gap:10px}
 .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .spread{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -87,26 +94,41 @@ select.textin{width:auto;max-width:100%}
 .hello p{color:var(--muted);margin-top:2px}
 .today{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
 .ring{width:92px;height:92px}
-.ring .track{stroke:var(--surface-2)}
-.ring .val{stroke:var(--accent);transition:stroke-dashoffset .6s}
-.ring.done .val{stroke:var(--gold)}
+.ring{overflow:visible}
+.ring .track{stroke:var(--track)}
+.ring .val{stroke:url(#ringG);transition:stroke-dashoffset .6s}
+.ring.done .val{stroke:url(#ringGold)}
+.ring.done{animation:pop .9s ease-out}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
 .ring text{fill:var(--fg);font-family:var(--display);font-weight:700}
 .ring .unit{fill:var(--muted);font-family:var(--body);font-weight:400}
 .stats{display:grid;gap:4px}
 .stats b{font-family:var(--display);font-size:1.15rem}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:84px;margin-top:4px}
 .week .col{display:grid;gap:4px;justify-items:center;align-self:stretch;grid-template-rows:1fr auto}
-.week .bar{width:100%;max-width:26px;border-radius:6px 6px 3px 3px;background:var(--surface-2);align-self:end;min-height:4px}
-.week .bar.hit{background:var(--accent)}
-.week .bar.now{outline:2px solid var(--gold);outline-offset:1px}
+.week .slot{width:100%;max-width:26px;display:flex;align-items:flex-end;background:var(--track);border-radius:6px;overflow:hidden}
+.week .slot.now{outline:2px solid var(--gold);outline-offset:2px}
+.week .bar{width:100%;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg, var(--ring-b), var(--ring-a))}
+.week .bar.zero{background:transparent}
+.week .bar.hit{background:linear-gradient(180deg, #ffd977, var(--gold))}
 .week span{font-size:.72rem;color:var(--muted);font-weight:600}
-.action,.scen{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px;display:grid;gap:3px;align-content:start}
+.action,.scen{text-align:left;background:var(--surface);border:1px solid var(--card-line);box-shadow:var(--card-shadow);border-radius:14px;padding:13px;display:grid;gap:3px;align-content:start}
 .action b,.scen b{font-family:var(--display);font-size:1.02rem}
 .action small,.scen small{color:var(--muted);font-size:.84rem;line-height:1.3}
+/* Bereichsfarben: jede Übung hat ihre Farbe (--tone), als Symbolfeld und im Dunkeln als zarter Schimmer */
+.t-path{--tone:var(--t-path)}.t-words{--tone:var(--t-words)}.t-frames{--tone:var(--t-frames)}.t-numbers{--tone:var(--t-numbers)}
+.t-sounds{--tone:var(--t-sounds)}.t-listen{--tone:var(--t-listen)}.t-quiz{--tone:var(--t-quiz)}.t-cards{--tone:var(--t-cards)}
+.action[class*="t-"],.scen[class*="t-"]{background:linear-gradient(150deg, color-mix(in srgb, var(--tone) var(--tint), var(--surface)) 0%, var(--surface) 70%)}
+.action{grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
+.action .txt{display:grid;gap:3px;min-width:0}
+.grid2 .action{grid-template-columns:minmax(0,1fr);gap:9px;align-items:start}
+.ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:var(--tone, var(--accent));background:var(--surface-2);background:color-mix(in srgb, var(--tone, var(--accent)) 16%, transparent)}
+.ico svg{width:20px;height:20px}
+.scen[class*="t-"] span{color:var(--tone)}
 .scen span{font-size:.88rem;font-weight:600;color:var(--accent)}
 .action .badge{justify-self:start;background:var(--gold-soft);color:var(--warn);border-radius:999px;font-size:.75rem;font-weight:600;padding:1px 8px;margin-top:3px}
 .list{display:grid;gap:8px}
-.li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center}
+.li{background:var(--surface);border:1px solid var(--card-line);box-shadow:var(--card-shadow);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center}
 .li .grow{flex:1;min-width:0}
 .li .grow b{display:block;overflow-wrap:anywhere}
 .li .grow small{display:block;color:var(--muted);font-size:.84rem;overflow-wrap:anywhere}
@@ -138,6 +160,7 @@ body.hide-laut .laut, body.hide-de .de{display:none}
 .prog i{flex:1;height:5px;border-radius:3px;background:var(--surface-2)}
 .prog i.done{background:var(--accent)}
 .prog i.cur{background:var(--gold)}
+.hero{border-color:var(--accent);background:var(--accent-soft)}
 .practice{display:grid;gap:12px;text-align:center;justify-items:center;padding:20px 14px}
 .practice .bs{font-size:1.6rem}
 .veil{border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--muted);width:100%}
@@ -189,7 +212,19 @@ details.card[open] > summary{margin-bottom:10px}
 .wrow .ex{font-size:.9rem;color:var(--muted)}
 .wrow .ex b{color:var(--fg);font-weight:600}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom, 0px));background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:.9rem;width:max-content;max-width:min(90vw,460px);text-align:center;z-index:40}
-@media (prefers-reduced-motion: reduce){.mic[data-state="listening"]::after{animation:none}.ring .val{transition:none}}
+@media (prefers-color-scheme: dark){
+  .hero{background:linear-gradient(140deg,#2c4fd0 0%,#1b2c80 55%,#111a48 100%);border-color:rgba(255,255,255,.14);color:#fff;box-shadow:0 12px 30px rgba(20,40,140,.35)}
+  .hero .cap,.hero .muted{color:rgba(255,255,255,.78)}
+  .hero .prog i{background:rgba(255,255,255,.16)}
+  .hero .prog i.done{background:var(--gold)}
+  .hero .prog i.cur{background:#fff}
+  .hero .btn{background:var(--gold);color:var(--gold-ink)}
+  .hero .btn.ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.28);color:#fff}
+  .ring.done{filter:drop-shadow(0 0 10px rgba(242,197,82,.45))}
+  .week .bar.hit{box-shadow:0 0 10px rgba(242,197,82,.45)}
+  .tabs{background:linear-gradient(180deg, transparent, rgba(255,255,255,.015))}
+}
+@media (prefers-reduced-motion: reduce){.mic[data-state="listening"]::after{animation:none}.ring .val{transition:none}.ring.done{animation:none}}
 </style>
 </head>
 <body>
@@ -443,6 +478,14 @@ const I = {
   plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
   star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
   starOn:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
+  path:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7.5a3.5 3.5 0 0 0 0-7h-7a3.5 3.5 0 0 1 0-7H16"/></svg>',
+  words:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v12"/><path d="M3 5h6a3 3 0 0 1 3 3 3 3 0 0 1 3-3h6v13h-6a3 3 0 0 0-3 2 3 3 0 0 0-3-2H3z"/></svg>',
+  frames:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="8" height="7" rx="1.5"/><rect x="13" y="4" width="8" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/></svg>',
+  numbers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 9h14M5 15h14M10 4 8 20M16 4l-2 16"/></svg>',
+  sounds:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg>',
+  listen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="7" rx="1.5"/><rect x="17" y="14" width="4" height="7" rx="1.5"/></svg>',
+  quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7"/><path d="M12 17h.01"/></svg>',
+  cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="13" height="16" rx="2"/><path d="M4 7v12a2 2 0 0 0 2 2h10"/></svg>',
   trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'
 };
 
@@ -655,6 +698,7 @@ function starBtn(item){
 
 /* ================= router ================= */
 let view = "home", arg = null;
+const TAB_TONE = {home:"t-path", learn:"t-words", train:"t-listen", book:"t-cards"};
 const TABS = [["home","Start",I.home],["learn","Lernen",I.learn],["train","Üben",I.train],["book","Heft",I.book]];
 const PARENT = {words:"learn", numbers:"learn", sounds:"learn", frames:"learn", quiz:"train", cards:"train", shadow:"train", listen:"train", settings:"home", path:"home", session:"home"};
 function go(v, a){
@@ -672,7 +716,7 @@ function render(){
   (VIEWS[view] || VIEWS.home)(hdr, main);
   if (TABS.some(t => t[0] === view)){
     const nav = h("nav", {class:"tabs", "aria-label":"Bereiche"});
-    for (const [id, label, icon] of TABS) nav.append(h("button", {type:"button", html: icon + `<span>${label}</span>`, "aria-current": id === view ? "page" : null, onclick: () => go(id)}));
+    for (const [id, label, icon] of TABS) nav.append(h("button", {type:"button", class: TAB_TONE[id], html: icon + `<span>${label}</span>`, "aria-current": id === view ? "page" : null, onclick: () => go(id)}));
     bottom.append(nav);
   }
   updateHint();
@@ -695,7 +739,9 @@ function pillChoice(options, get, set){
   for (const [v, l] of options) row.append(h("button", {class:"pill", type:"button", "data-v": String(v), text: l, onclick: () => { set(v); paint(); }}));
   paint(); return row;
 }
-const act = (title, text, badge, fn) => h("button", {class:"action", type:"button", onclick: fn}, h("b", {text:title}), h("small", {text}), badge ? h("span", {class:"badge", text: badge}) : null);
+/* Bereich → Farbe und Symbol. "shadow" (Nachsprechen) teilt sich Farbe mit den Lauten, beides ist Aussprache. */
+const AREA = {path:["path",I.path], words:["words",I.words], frames:["frames",I.frames], numbers:["numbers",I.numbers], sounds:["sounds",I.sounds], shadow:["sounds",I.mic], listen:["listen",I.listen], quiz:["quiz",I.quiz], cards:["cards",I.cards]};
+const act = (title, text, badge, fn, area) => { const a = AREA[area]; return h("button", {class:"action" + (a ? " t-" + a[0] : ""), type:"button", onclick: fn}, a ? h("span", {class:"ico", html: a[1]}) : null, h("span", {class:"txt"}, h("b", {text:title}), h("small", {text}), badge ? h("span", {class:"badge", text: badge}) : null)); };
 function voiceNote(){
   if (canSpeak()) return null;
   return h("p", {class:"note", text: synth ? "Für das Vorlesen fehlt eine kroatische oder bosnische Stimme. iPhone: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Kroatisch, dort eine Stimme laden. Danach die App neu öffnen." : "Dieser Browser kann nicht vorlesen."});
@@ -727,14 +773,14 @@ VIEWS.home = (hdr, main) => {
   for (let i = 6; i >= 0; i--){ const dd = new Date(now.getTime() - i * DAY); secs.push([dd, (S.days[dayKey(dd)] || {}).sec || 0]); }
   const max = Math.max(goal * 60, ...secs.map(x => x[1]));
   secs.forEach(([dd, s], i) => week.append(h("div", {class:"col"},
-    h("div", {class:"bar" + (s >= goal * 60 ? " hit" : "") + (i === 6 ? " now" : ""), style:`height:${Math.max(4, s / max * 64)}px`}), h("span", {text: DAY_ABBR[dd.getDay()]}))));
+    h("div", {class:"slot" + (i === 6 ? " now" : "")}, h("div", {class:"bar" + (s >= goal * 60 ? " hit" : s ? "" : " zero"), style:`height:${s ? Math.max(6, s / max * 100) : 0}%`})), h("span", {text: DAY_ABBR[dd.getDay()]}))));
   main.append(h("section", {class:"card stack"},
-    h("div", {class:"today"}, h("div", {html:`<svg class="ring${frac >= 1 ? " done" : ""}" viewBox="0 0 92 92" role="img" aria-label="${mins} von ${goal} Minuten heute"><circle class="track" cx="46" cy="46" r="38" fill="none" stroke-width="9"/><circle class="val" cx="46" cy="46" r="38" fill="none" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - frac)}" transform="rotate(-90 46 46)"/><text x="46" y="50" text-anchor="middle" font-size="22">${mins}</text><text class="unit" x="46" y="66" text-anchor="middle" font-size="10">von ${goal} Min</text></svg>`}),
+    h("div", {class:"today"}, h("div", {html:`<svg class="ring${frac >= 1 ? " done" : ""}" viewBox="0 0 92 92" role="img" aria-label="${mins} von ${goal} Minuten heute"><defs><linearGradient id="ringG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--ring-b)"/><stop offset="1" style="stop-color:var(--ring-a)"/></linearGradient><linearGradient id="ringGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd977"/><stop offset="1" style="stop-color:var(--gold)"/></linearGradient></defs><circle class="track" cx="46" cy="46" r="38" fill="none" stroke-width="9"/><circle class="val" cx="46" cy="46" r="38" fill="none" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - frac)}" transform="rotate(-90 46 46)"/><text x="46" y="50" text-anchor="middle" font-size="22">${mins}</text><text class="unit" x="46" y="66" text-anchor="middle" font-size="10">von ${goal} Min</text></svg>`}),
       h("div", {class:"stats"}, h("b", {text: frac >= 1 ? "Tagesziel geschafft" : `Noch ${Math.max(1, goal - mins)} Min bis zum Ziel`}),
         h("span", {class:"muted small", text: `${st} ${st === 1 ? "Tag" : "Tage"} in Folge · ${d.spoken || 0} Sätze gesprochen`}),
         h("span", {class:"muted small", text: `${vocabN} Einträge im Heft`}))), week));
   const cur = currentLesson(), doneN = Object.keys(S.path.done).length;
-  main.append(h("section", {class:"card stack", style:"border-color:var(--accent);background:var(--accent-soft)"},
+  main.append(h("section", {class:"card stack hero"},
     h("span", {class:"cap", text: cur ? `Abschnitt ${cur.ph}: ${PHASES[cur.ph]}` : "Lernpfad geschafft"}),
     h("h3", {style:"font-size:1.25rem", text: cur ? `Etappe ${lessonNo(cur)}: ${cur.t}` : "Wiederholen hält dich fit"}),
     h("p", {class:"muted small", text: cur ? `${due ? due + " Wiederholungen, dann neue" : "Neue"} Sätze, Hören und Sprechen, kurzer Abschlusstest. Etwa 15 Minuten.` : (due ? `${due} Karten sind fällig.` : "Heute ist nichts fällig.")}),
@@ -742,12 +788,12 @@ VIEWS.home = (hdr, main) => {
     h("div", {class:"row"}, h("button", {class:"btn", type:"button", text:"Heute lernen", onclick: () => startLesson(cur, "full")}),
       h("button", {class:"btn ghost", type:"button", text:`Lernpfad (${doneN}/${LESSONS.length})`, onclick: () => go("path")}))));
   main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Frei üben"}), h("div", {class:"grid2"},
-    act("Hören & Sagen", "Deutsch hören, Bosnisch sagen, Lösung hören", null, () => go("listen")),
-    act("Satzbaukästen", "Želim …, Treba mi …, Bio sam u …", null, () => go("frames")),
-    act("Wiederholen", vocabN ? `${vocabN} Karten im Heft` : "Füllt sich automatisch", due ? `${due} fällig` : null, () => go("cards")),
-    act("Quiz", "Ein Wort, vier Antworten", null, () => go("quiz")),
-    act("Zahlen", "Hören, wählen, sagen, Preise", null, () => go("numbers")),
-    act("Nachsprechen", "Alltagssätze hören und nachsprechen", null, () => go("shadow")))));
+    act("Hören & Sagen", "Deutsch hören, Bosnisch sagen, Lösung hören", null, () => go("listen"), "listen"),
+    act("Satzbaukästen", "Želim …, Treba mi …, Bio sam u …", null, () => go("frames"), "frames"),
+    act("Wiederholen", vocabN ? `${vocabN} Karten im Heft` : "Füllt sich automatisch", due ? `${due} fällig` : null, () => go("cards"), "cards"),
+    act("Quiz", "Ein Wort, vier Antworten", null, () => go("quiz"), "quiz"),
+    act("Zahlen", "Hören, wählen, sagen, Preise", null, () => go("numbers"), "numbers"),
+    act("Nachsprechen", "Alltagssätze hören und nachsprechen", null, () => go("shadow"), "shadow"))));
   const vn = voiceNote(); if (vn) main.append(vn);
   if (vocabN >= 10 && (!S.profile.lastBackup || daysSince(S.profile.lastBackup) >= 14))
     main.append(h("div", {class:"note row", style:"justify-content:space-between"}, h("span", {text: backupAge() + " Deine Daten liegen nur auf diesem iPhone."}),
@@ -758,21 +804,21 @@ VIEWS.home = (hdr, main) => {
 VIEWS.learn = (hdr, main) => {
   header(hdr, "Lernen", "Nachschlagen und anhören", {gear:true});
   main.append(h("div", {class:"stack"},
-    act("Lernpfad", `24 Etappen in der Reihenfolge deines 30-Tage-Plans. ${Object.keys(S.path.done).length} geschafft.`, null, () => go("path")),
-    act("Grundwortschatz", `${WORDS.length} Themen mit ${WORDS.reduce((a, c) => a + c.items.length, 0)} Einträgen: Fragewörter, Verben, häufige kleine Wörter, Familie, Körper, Farben, Wetter und mehr.`, null, () => go("words")),
-    act("Satzbaukästen", `${FRAMES.length} feste Satzanfänge zum Abwandeln, z. B. Želim …, Treba mi …, Bio sam u …`, null, () => go("frames")),
-    act("Zahlen", "Zahlentafel von 0 bis 9999 und vier Übungen, auch Preise in KM.", null, () => go("numbers")),
-    act("Laute", "Die Laute, die es im Deutschen nicht gibt, mit Beispielwörtern.", null, () => go("sounds"))));
+    act("Lernpfad", `24 Etappen in der Reihenfolge deines 30-Tage-Plans. ${Object.keys(S.path.done).length} geschafft.`, null, () => go("path"), "path"),
+    act("Grundwortschatz", `${WORDS.length} Themen mit ${WORDS.reduce((a, c) => a + c.items.length, 0)} Einträgen: Fragewörter, Verben, häufige kleine Wörter, Familie, Körper, Farben, Wetter und mehr.`, null, () => go("words"), "words"),
+    act("Satzbaukästen", `${FRAMES.length} feste Satzanfänge zum Abwandeln, z. B. Želim …, Treba mi …, Bio sam u …`, null, () => go("frames"), "frames"),
+    act("Zahlen", "Zahlentafel von 0 bis 9999 und vier Übungen, auch Preise in KM.", null, () => go("numbers"), "numbers"),
+    act("Laute", "Die Laute, die es im Deutschen nicht gibt, mit Beispielwörtern.", null, () => go("sounds"), "sounds")));
   const vn = voiceNote(); if (vn) main.append(vn);
 };
 VIEWS.train = (hdr, main) => {
   header(hdr, "Üben", "Kurze Einheiten, auch offline", {gear:true});
   const due = dueItems().length, total = Object.keys(S.vocab).length;
   main.append(h("div", {class:"stack"},
-    act("Hören & Sagen", "Vorgabe auf Deutsch, Pause zum Sprechen, dann die Lösung. Sätze kommen in wachsenden Abständen wieder.", null, () => go("listen")),
-    act("Quiz", "Ein Wort, vier Antworten. Aus dem Grundwortschatz, Zahlen oder deinem Heft.", null, () => go("quiz")),
-    act("Wiederholen", total ? `Karteikarten aus deinem Heft mit Wiederholungsplan. ${total} Einträge.` : "Karteikarten aus deinem Heft. Merke dir zuerst Wörter mit dem Stern.", due ? `${due} fällig` : null, () => go("cards")),
-    act("Nachsprechen", "Alltagssätze hören, nachsprechen und Wort für Wort abgleichen.", null, () => go("shadow"))));
+    act("Hören & Sagen", "Vorgabe auf Deutsch, Pause zum Sprechen, dann die Lösung. Sätze kommen in wachsenden Abständen wieder.", null, () => go("listen"), "listen"),
+    act("Quiz", "Ein Wort, vier Antworten. Aus dem Grundwortschatz, Zahlen oder deinem Heft.", null, () => go("quiz"), "quiz"),
+    act("Wiederholen", total ? `Karteikarten aus deinem Heft mit Wiederholungsplan. ${total} Einträge.` : "Karteikarten aus deinem Heft. Merke dir zuerst Wörter mit dem Stern.", due ? `${due} fällig` : null, () => go("cards"), "cards"),
+    act("Nachsprechen", "Alltagssätze hören, nachsprechen und Wort für Wort abgleichen.", null, () => go("shadow"), "shadow")));
 };
 
 /* ---------- words ---------- */
@@ -781,7 +827,7 @@ VIEWS.words = (hdr, main) => {
   const cat = WORDS.find(c => c.id === arg);
   if (!cat){
     header(hdr, "Grundwortschatz", "Antippen, anhören, merken, abfragen", {back:true});
-    main.append(h("div", {class:"grid2"}, WORDS.map(c => h("button", {class:"scen", type:"button", onclick: () => go("words", c.id)},
+    main.append(h("div", {class:"grid2"}, WORDS.map(c => h("button", {class:"scen t-words", type:"button", onclick: () => go("words", c.id)},
       h("b", {text: c.de}), h("span", {text: c.bs}), h("small", {text: `${c.items.length} ${c.verbs ? "Verben mit allen Formen" : "Einträge"}`})))));
     return;
   }
@@ -1497,7 +1543,7 @@ VIEWS.frames = (hdr, main) => {
   if (!f){
     header(hdr, "Satzbaukästen", "Ein Rahmen, viele Sätze", {back:true});
     main.append(h("p", {class:"muted small", text:"Jeder Baukasten ist ein fester Satzanfang mit austauschbarem Ende. Wer in solchen Blöcken spricht, wird schneller flüssig, und die Endungen lernst du nebenbei übers Hören."}));
-    main.append(h("div", {class:"grid2"}, FRAMES.map(x => h("button", {class:"scen", type:"button", onclick: () => go("frames", x.id)}, h("b", {text: x.bs}), h("span", {text: x.de}), h("small", {text: `${x.items.length} Sätze`})))));
+    main.append(h("div", {class:"grid2"}, FRAMES.map(x => h("button", {class:"scen t-frames", type:"button", onclick: () => go("frames", x.id)}, h("b", {text: x.bs}), h("span", {text: x.de}), h("small", {text: `${x.items.length} Sätze`})))));
     return;
   }
   if (DR && DR.f === f) return frameDrill(hdr, main, f);
