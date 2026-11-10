@@ -1405,6 +1405,7 @@ VIEWS.book = (hdr, main) => {
   }
   main.append(h("button", {class:"btn sec", type:"button", text:`Heft für die iPhone-App kopieren (${Object.keys(S.vocab).length})`, disabled: !Object.keys(S.vocab).length,
     onclick: () => copyExport(Object.values(S.vocab).map(v => ({bs: v.bs, de: v.de, laut: v.laut}))) }));
+  main.append(fromPhoneBox());
   /* lookup + filter */
   const q = h("input", {id:"bookQ", placeholder:"Deutsch oder Bosnisch eingeben", "aria-label":"Nachschlagen oder im Heft suchen", autocomplete:"off", value: bookQ});
   const resBox = h("div");
@@ -1853,6 +1854,45 @@ VIEWS.aboutme = (hdr, main) => {
       h("button", {class:"btn ghost", type:"button", text:"Alle hier ins Heft", onclick: () => { let n = 0; for (const x of ABOUT.items) if (addVocab({...x, src:"Über mich"}, true)) n++; toast(n ? `${n} Sätze ins Heft gelegt.` : "Alles steht schon im Heft."); }})));
   }
 };
+
+
+/* ---------- import from the iPhone app (sentence code or full backup) ---------- */
+function parsePhoneCode(code){
+  const raw = String(code || "").replace(/\s+/g, "");
+  const m = raw.match(/PRICAJ(-SICHERUNG)?:([A-Za-z0-9+/=_-]+)/);
+  if (!m) throw new Error("Kein gültiger Code. Er beginnt mit PRICAJ: oder PRICAJ-SICHERUNG:");
+  let data;
+  try{
+    const bin = atob(m[2].replace(/-/g, "+").replace(/_/g, "/")), bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    data = JSON.parse(new TextDecoder().decode(bytes));
+  }catch(e){ throw new Error("Der Code ist unvollständig. Bitte komplett kopieren."); }
+  if (m[1]) return Object.values((data && data.data && data.data.vocab) || {});
+  if (!data || !Array.isArray(data.items)) throw new Error("Der Code enthält keine Sätze.");
+  return data.items;
+}
+function fromPhoneBox(){
+  const ta = h("textarea", {class:"textin", rows:"3", placeholder:"Sicherung oder Code aus der iPhone-App einfügen", style:"resize:vertical;width:100%"});
+  const file = h("input", {type:"file", accept:".txt,.json,text/plain,application/json", style:"display:none"});
+  const run = (text) => {
+    try{
+      const items = parsePhoneCode(text); let added = 0, raised = 0;
+      for (const it of items){
+        if (!it || !it.bs) continue;
+        let v = findVocab(it.bs);
+        if (!v){ if (!addVocab({bs: it.bs, de: it.de || "", laut: it.laut || "", src: it.p || it.personal ? "Über mich" : "iPhone-App"}, true)) continue; v = findVocab(it.bs); added++; }
+        if (v && it.box && it.box > (v.box || 1)){ v.box = it.box; v.due = it.due || v.due; v.upd = Date.now(); persistVocab(v.id); raised++; }
+      }
+      toast(added ? `${added} Einträge aus der iPhone-App übernommen.` : raised ? "Lernstand aus der iPhone-App übernommen." : "Alles war schon im Heft.");
+      ta.value = ""; render();
+    }catch(e){ toast(e.message || "Der Code ließ sich nicht lesen."); }
+  };
+  file.addEventListener("change", async () => { const f = file.files && file.files[0]; if (!f) return; try{ run(await f.text()); }catch(e){ toast("Die Datei ließ sich nicht lesen."); } file.value = ""; });
+  return h("details", {class:"card"}, h("summary", {text:"Aus der iPhone-App übernehmen", style:"cursor:pointer;font-weight:600"}), h("div", {class:"stack", style:"margin-top:10px"},
+    h("p", {class:"muted small", text:"In der iPhone-App unter Einstellungen → Sicherung eine Sicherung speichern oder als Code kopieren. Hier kommen nur die Heft-Einträge an, Lernpfad und Lerntage bleiben in der App."}),
+    h("button", {class:"btn sec", type:"button", text:"Sicherungsdatei wählen", onclick: () => file.click()}), file,
+    ta, h("button", {class:"btn", type:"button", text:"Übernehmen", onclick: () => run(ta.value)})));
+}
 
 /* ================= boot ================= */
 applyBodyClasses();

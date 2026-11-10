@@ -711,7 +711,8 @@ VIEWS.onboard = (hdr, main) => {
     h("div", {class:"stack"}, h("h2", {text:"Dobro došao!"}), h("p", {class:"lead", text:"Zwei kurze Angaben, dann geht's los. Alles läuft auch ohne Internet."})),
     h("label", {class:"stack", for:"onbName"}, h("span", {class:"cap", text:"Wie heißt du?"}), name, h("small", {class:"muted", text:"Für die Begrüßung und Sätze wie „Zovem se …“. Leer lassen geht auch."})),
     h("div", {class:"stack"}, h("span", {class:"cap", text:"Tagesziel in Minuten"}), segControl([[5,"5"],[10,"10"],[15,"15"],[20,"20"],[30,"30"]], () => goal, (v) => goal = v)),
-    h("button", {class:"btn block", type:"button", text:"Los geht's", onclick: () => { Object.assign(S.profile, {name: clip(name.value, 40), goal, onboarded:true}); save(); view = "home"; render(); }})));
+    h("button", {class:"btn block", type:"button", text:"Los geht's", onclick: () => { Object.assign(S.profile, {name: clip(name.value, 40), goal, onboarded:true}); save(); view = "home"; render(); }}),
+    restoreBox({title:"Ich habe eine Sicherung", help:"Sicherungsdatei wählen oder den Code einfügen. Danach geht es mit deinem alten Stand weiter.", onDone: () => { view = "home"; render(); }})));
 };
 
 VIEWS.home = (hdr, main) => {
@@ -747,6 +748,9 @@ VIEWS.home = (hdr, main) => {
     act("Zahlen", "Hören, wählen, sagen, Preise", null, () => go("numbers")),
     act("Nachsprechen", "Alltagssätze hören und nachsprechen", null, () => go("shadow")))));
   const vn = voiceNote(); if (vn) main.append(vn);
+  if (vocabN >= 10 && (!S.profile.lastBackup || daysSince(S.profile.lastBackup) >= 14))
+    main.append(h("div", {class:"note row", style:"justify-content:space-between"}, h("span", {text: backupAge() + " Deine Daten liegen nur auf diesem iPhone."}),
+      h("button", {class:"tbtn", type:"button", text:"Jetzt sichern", onclick: shareBackup})));
   main.append(h("p", {class:"note"}, "Gespräche mit dem Tutor gibt es in der Claude-Version (braucht Internet): ", h("a", {href: TUTOR_URL, target:"_blank", rel:"noopener", style:"color:var(--accent);font-weight:600", text:"Tutor öffnen"})));
 };
 
@@ -1181,7 +1185,8 @@ VIEWS.settings = (hdr, main) => {
       SR ? sw("setMic", "Mikrofon-Knopf zeigen", "Nutzt die Spracherkennung des Browsers. Klappt sie nicht, geht das Tastatur-Mikrofon immer.", "mic", () => { micBroken = false; }) : h("p", {class:"muted small", text:"Dieser Browser hat keine eigene Spracherkennung. Nutze das Mikrofon deiner Tastatur."}),
       SR ? h("div", {class:"setrow"}, h("label", {for:"setRec"}, "Sprache der Erkennung", h("small", {text:"Bosnisch wird nicht überall angeboten, Kroatisch fast immer"})), recSel) : null,
       sw("setAuto", "Nach dem Sprechen sofort prüfen", null, "autoCheck")),
-    h("section", {class:"card set"}, h("h3", {text:"Daten"}), h("p", {class:"muted small", text:"Alles liegt nur auf diesem Gerät, die App braucht nach dem ersten Öffnen kein Internet."}), reset));
+    backupCard(),
+    h("section", {class:"card set"}, h("h3", {text:"Daten"}), h("p", {class:"muted small", text:"Löscht Heft, Lernpfad, Lerntage und Einstellungen auf diesem iPhone. Vorher sichern."}), reset));
 };
 
 
@@ -1522,27 +1527,144 @@ function frameDrill(hdr, main, f){
   main.append(card);
 }
 
-/* ---------- import of personal sentences / Heft from the Claude version ---------- */
-function decodeImport(code){
-  const m = String(code).trim().match(/PRICAJ:([A-Za-z0-9+/=_-]+)/);
-  if (!m) throw new Error("Kein gültiger Code. Er beginnt mit PRICAJ:");
-  const b64 = m[1].replace(/-/g, "+").replace(/_/g, "/");
-  const bin = atob(b64), bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  const data = JSON.parse(new TextDecoder().decode(bytes));
+/* ---------- exchange codes & backup ---------- */
+function b64encode(str){
+  const bytes = new TextEncoder().encode(str); let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+function b64decode(b64){
+  const bin = atob(b64.replace(/-/g, "+").replace(/_/g, "/"));
+  const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+/* reads both kinds of code: PRICAJ: (sentence list from the Claude version) and PRICAJ-SICHERUNG: (full backup) */
+function parseCode(code){
+  const raw = String(code || "").replace(/\s+/g, "");
+  const m = raw.match(/PRICAJ(-SICHERUNG)?:([A-Za-z0-9+/=_-]+)/);
+  if (!m) throw new Error("Kein gültiger Code. Er beginnt mit PRICAJ: oder PRICAJ-SICHERUNG:");
+  let data;
+  try{ data = JSON.parse(b64decode(m[2])); }catch(e){ throw new Error("Der Code ist unvollständig. Bitte komplett kopieren."); }
+  if (m[1]){
+    if (!data || data.kind !== "backup" || !data.data) throw new Error("Die Sicherung ist beschädigt.");
+    return {kind:"backup", at: data.at, data: data.data};
+  }
   if (!data || !Array.isArray(data.items)) throw new Error("Der Code enthält keine Sätze.");
-  return data.items;
+  return {kind:"items", items: data.items};
+}
+function importItems(items){
+  let n = 0;
+  for (const it of items){
+    if (!it || !it.bs) continue;
+    const ex = findVocab(it.bs);
+    if (ex){ if (it.p && !ex.personal){ ex.personal = true; n++; } continue; }
+    autoAdd({bs: it.bs, de: it.de || "", laut: it.laut || "", personal: !!it.p}, it.p ? "Über mich" : "Claude-Version", false); n++;
+  }
+  save(); return n;
+}
+/* merge a backup into the current data: nothing already here gets lost */
+function mergeBackup(d){
+  const r = {vocab:0, days:0, etappen:0};
+  const fresh = !S.profile.onboarded;
+  if (d.profile && typeof d.profile === "object"){
+    if (fresh){ S.profile = Object.assign(freshProfile(), d.profile); S.profile.settings = Object.assign({...DEFAULT_SETTINGS}, d.profile.settings || {}); S.profile.onboarded = true; }
+    else {
+      if (!S.profile.name && d.profile.name) S.profile.name = clip(d.profile.name, 40);
+      S.profile.lastBackup = Math.max(S.profile.lastBackup || 0, d.profile.lastBackup || 0) || undefined;
+    }
+  }
+  for (const v of Object.values(d.vocab || {})){
+    if (!v || !v.bs) continue;
+    const ex = findVocab(v.bs);
+    if (!ex){
+      const id = newId();
+      S.vocab[id] = {id, bs: clip(v.bs, 200), de: clip(v.de, 200), laut: clip(v.laut || bsToLaut(v.bs), 200), box: v.box || 1, due: v.due || Date.now(), added: v.added || Date.now(), src: v.src || "", personal: !!v.personal};
+      r.vocab++;
+    } else {
+      if ((v.box || 1) > (ex.box || 1)){ ex.box = v.box; ex.due = v.due; }
+      if (v.personal) ex.personal = true;
+      if (!ex.de && v.de) ex.de = v.de;
+    }
+  }
+  for (const [k, x] of Object.entries(d.days || {})){
+    if (!x) continue;
+    const cur = S.days[k];
+    if (!cur){ S.days[k] = {sec: x.sec || 0, spoken: x.spoken || 0}; r.days++; }
+    else { cur.sec = Math.max(cur.sec || 0, x.sec || 0); cur.spoken = Math.max(cur.spoken || 0, x.spoken || 0); }
+  }
+  for (const [id, when] of Object.entries((d.path && d.path.done) || {})){
+    if (!S.path.done[id]){ S.path.done[id] = when; r.etappen++; }
+  }
+  store.set("pricaj-app", S); applyBodyClasses();
+  return r;
+}
+function applyCode(code){
+  const c = parseCode(code);
+  if (c.kind === "items"){ const n = importItems(c.items); return n ? `${n} Einträge übernommen.` : "Alles war schon im Heft."; }
+  const r = mergeBackup(c.data);
+  const parts = [r.vocab ? `${r.vocab} Einträge` : "", r.etappen ? `${r.etappen} Etappen` : "", r.days ? `${r.days} Lerntage` : ""].filter(Boolean);
+  return parts.length ? `Sicherung eingespielt: ${parts.join(", ")} dazugekommen.` : "Sicherung eingespielt. Es war schon alles da.";
+}
+function backupCode(){ return "PRICAJ-SICHERUNG:" + b64encode(JSON.stringify({v:1, kind:"backup", at: Date.now(), data: {profile: S.profile, vocab: S.vocab, days: S.days, path: S.path}})); }
+function markBackup(){ S.profile.lastBackup = Date.now(); save(); }
+const daysSince = (t) => Math.floor((startOfDay(Date.now()) - startOfDay(t)) / DAY);
+function backupAge(){
+  const t = S.profile.lastBackup;
+  if (!t) return "Noch keine Sicherung.";
+  const d = daysSince(t);
+  return `Letzte Sicherung: ${d === 0 ? "heute" : d === 1 ? "gestern" : `vor ${d} Tagen`}.`;
+}
+async function shareBackup(){
+  const code = backupCode(), name = `pricaj-sicherung-${dayKey()}.txt`;
+  try{
+    const file = new File([code], name, {type:"text/plain"});
+    if (navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:"Pričaj-Sicherung"});
+      markBackup(); toast("Gesichert."); render(); return;
+    }
+    if (navigator.share){ await navigator.share({title:"Pričaj-Sicherung", text: code}); markBackup(); toast("Gesichert."); render(); return; }
+  }catch(e){ if (e && e.name === "AbortError") return; }
+  copyBackup();
+}
+function copyBackup(){
+  const code = backupCode();
+  const done = () => { markBackup(); toast("Code kopiert. Füg ihn z. B. in eine Notiz ein."); render(); };
+  try{
+    navigator.clipboard.writeText(code).then(done, () => showCode(code));
+  }catch(e){ showCode(code); }
+}
+function showCode(code){
+  const box = document.getElementById("backupOut"); if (!box) return;
+  box.textContent = "";
+  const ta = h("textarea", {class:"textin", rows:"4", readonly:"readonly", style:"font-size:.75rem"}); ta.value = code;
+  box.append(h("p", {class:"muted small", text:"Kopieren ging nicht automatisch: Text lange drücken, „Alles auswählen“, dann „Kopieren“."}), ta);
+  ta.focus(); ta.select(); markBackup();
+}
+function restoreBox(opts){
+  opts = opts || {};
+  const ta = h("textarea", {class:"textin", rows:"3", placeholder:"Code hier einfügen (beginnt mit PRICAJ)", style:"resize:vertical"});
+  const file = h("input", {type:"file", accept:".txt,.json,text/plain,application/json", style:"display:none"});
+  const run = (text) => {
+    try{ const msg = applyCode(text); toast(msg); ta.value = ""; if (opts.onDone) opts.onDone(); else render(); }
+    catch(e){ toast(e.message || "Der Code ließ sich nicht lesen."); }
+  };
+  file.addEventListener("change", async () => { const f = file.files && file.files[0]; if (!f) return; try{ run(await f.text()); }catch(e){ toast("Die Datei ließ sich nicht lesen."); } file.value = ""; });
+  return h("details", {class:"card", open: opts.open ? "open" : null}, h("summary", {text: opts.title || "Sicherung oder Code einspielen"}), h("div", {class:"stack"},
+    h("p", {class:"muted small", text: opts.help || "Eine Sicherungsdatei wählen oder einen Code einfügen. Bestehende Daten bleiben erhalten, nur Neues kommt dazu."}),
+    h("button", {class:"btn sec", type:"button", text:"Sicherungsdatei wählen", onclick: () => file.click()}), file,
+    ta, h("button", {class:"btn", type:"button", text:"Einspielen", onclick: () => run(ta.value)})));
 }
 function importBox(){
-  const ta = h("textarea", {class:"textin", rows:"3", placeholder:"Code aus der Claude-Version hier einfügen (beginnt mit PRICAJ:)", style:"resize:vertical"});
-  return h("details", {class:"card"}, h("summary", {text:"Sätze aus der Claude-Version übernehmen"}), h("div", {class:"stack"},
-    h("p", {class:"muted small", text:"In der Claude-Version unter „Sprechen → Sätze über mich“ oder im Heft auf „Für die iPhone-App kopieren“ tippen, dann hier einfügen."}), ta,
-    h("button", {class:"btn", type:"button", text:"Übernehmen", onclick: () => {
-      try{
-        const items = decodeImport(ta.value); let n = 0;
-        for (const it of items){ if (!it || !it.bs) continue; const ex = findVocab(it.bs); if (ex){ if (it.p && !ex.personal){ ex.personal = true; n++; } continue; } autoAdd({bs: it.bs, de: it.de || "", laut: it.laut || "", personal: !!it.p}, it.p ? "Über mich" : "Claude-Version", false); n++; }
-        save(); toast(n ? `${n} Einträge übernommen.` : "Alles war schon im Heft."); ta.value = ""; render();
-      }catch(e){ toast(e.message || "Der Code ließ sich nicht lesen."); }
-    }})));
+  return restoreBox({title:"Sätze aus der Claude-Version übernehmen", help:"In der Claude-Version unter „Sprechen → Sätze über mich“ oder im Heft auf „Für die iPhone-App kopieren“ tippen, dann hier einfügen. Eine Sicherung kannst du hier ebenfalls einspielen."});
+}
+function backupCard(){
+  return h("section", {class:"card set"}, h("h3", {text:"Sicherung"}),
+    h("p", {class:"muted small", text:"Deine Daten liegen nur in dieser App auf diesem iPhone. Löschst du das Symbol, sind sie weg. Eine Sicherung enthält Heft, Lernpfad, Lerntage und Einstellungen."}),
+    h("p", {style:"font-weight:600", text: backupAge()}),
+    h("div", {class:"row"}, h("button", {class:"btn", type:"button", text:"Sicherung speichern", onclick: shareBackup}), h("button", {class:"btn ghost", type:"button", text:"Als Code kopieren", onclick: copyBackup})),
+    h("p", {class:"muted small", text:"„Sicherung speichern“ öffnet das Teilen-Menü: „In Dateien sichern“ legt eine kleine Textdatei ab, z. B. in iCloud Drive."}),
+    h("div", {id:"backupOut", class:"stack"}),
+    restoreBox());
 }
 
 /* ================= boot ================= */

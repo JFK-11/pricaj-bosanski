@@ -13,8 +13,10 @@ Offline-Lern-App (PWA) für Bosnisch, genutzt als Home-Bildschirm-App auf einem 
 - Keine externen Ressourcen (keine CDNs, keine Google Fonts). Externe Schriften haben den Start auf dem iPhone blockiert.
 - Im Service Worker nie `index.html` cachen, nur `./`: Netlify leitet `index.html` auf `/` um, und iOS lehnt umgeleitete Antworten beim Start ab.
 - Nutzerdaten liegen in `localStorage` unter `pricaj-app` (`profile`, `vocab`, `days`, `path`). Struktur rückwärtskompatibel halten, nie ohne Migration umbenennen.
-- Die Daten hängen an der Adresse `iridescent-pie-25a1a1.netlify.app`. Projekt nicht umbenennen, bevor es eine Sicherungsfunktion gibt.
-- Austauschcode zwischen Claude-Version und App: `PRICAJ:` + Base64 von `{"v":1,"items":[{"bs","de","laut","p"}]}` (`p:1` = persönlicher Satz).
+- Die Daten hängen an der Adresse `iridescent-pie-25a1a1.netlify.app`. Vor einem Adresswechsel: in der alten App sichern (Einstellungen → Sicherung), in der neuen einspielen.
+- Austauschcodes (Base64 von UTF-8-JSON), beide Versionen lesen beide:
+  - `PRICAJ:` + `{"v":1,"items":[{"bs","de","laut","p"}]}` – Satzliste (`p:1` = persönlicher Satz)
+  - `PRICAJ-SICHERUNG:` + `{"v":1,"kind":"backup","at",...,"data":{profile,vocab,days,path}}` – komplette Sicherung der iPhone-App. Einspielen führt zusammen, löscht nie.
 
 ## Inhalte
 - Bosnisch in lateinischer Schrift, ijekavisch, bosnische Standardformen (kafa, hljeb, sedmica, hiljada).
