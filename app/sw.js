@@ -1,5 +1,5 @@
 /* Pričaj bosanski: offline cache. Bump VERSION when files change. */
-const VERSION = "pricaj-v7";
+const VERSION = "pricaj-v8";
 const PAGE = "./";   // the app page; never cache "index.html" (hosts like Netlify redirect it to "/")
 const SHELL = [PAGE, "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 

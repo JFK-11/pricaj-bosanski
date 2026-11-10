@@ -41,7 +41,7 @@ html,body{height:100%;margin:0}
 html{padding-top:env(safe-area-inset-top,0px)}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%;
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0}
-.app{height:100%;max-width:720px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;min-height:0}
+.app{height:100%;max-width:720px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr);min-height:0}
 button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 input,select,textarea{font:inherit;color:var(--fg)}
 button:focus-visible,input:focus-visible,select:focus-visible,.word:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -135,6 +135,7 @@ select.textin{width:auto;max-width:100%}
 .boxdots{display:inline-flex;gap:3px;margin-top:4px}
 .boxdots i{width:6px;height:6px;border-radius:50%;background:var(--line)}
 .boxdots i.on{background:var(--ok)}
+.li .grow small.weak{color:var(--bad);font-weight:600}
 .bs{font-family:var(--display);font-size:1.3rem;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
 .laut{font-size:.92rem;color:var(--accent);font-style:italic;overflow-wrap:anywhere}
 .de{font-size:.95rem;color:var(--muted)}
@@ -163,6 +164,12 @@ body.hide-laut .laut, body.hide-de .de{display:none}
 .hero{border-color:var(--accent);background:var(--accent-soft)}
 .practice{display:grid;gap:12px;text-align:center;justify-items:center;padding:20px 14px}
 .practice .bs{font-size:1.6rem}
+/* Rückmeldung: Karte färbt sich nach dem Ergebnis (gesetzt in markFeedback) */
+.practice.fb-ok{border-color:var(--ok);background:linear-gradient(180deg, var(--ok-soft), var(--surface) 65%);animation:fbIn .45s ease-out}
+.practice.fb-mid{border-color:var(--gold);background:linear-gradient(180deg, var(--gold-soft), var(--surface) 65%);animation:fbIn .45s ease-out}
+.practice.fb-bad{border-color:var(--bad);background:linear-gradient(180deg, var(--bad-soft), var(--surface) 65%);animation:fbShake .4s ease-out}
+@keyframes fbIn{0%{transform:scale(.97)}100%{transform:none}}
+@keyframes fbShake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .veil{border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--muted);width:100%}
 .answer{display:grid;gap:8px;width:100%}
 .diff{font-family:var(--display);font-size:1.3rem;line-height:1.5;display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:center}
@@ -224,7 +231,7 @@ details.card[open] > summary{margin-bottom:10px}
   .week .bar.hit{box-shadow:0 0 10px rgba(242,197,82,.45)}
   .tabs{background:linear-gradient(180deg, transparent, rgba(255,255,255,.015))}
 }
-@media (prefers-reduced-motion: reduce){.mic[data-state="listening"]::after{animation:none}.ring .val{transition:none}.ring.done{animation:none}}
+@media (prefers-reduced-motion: reduce){.mic[data-state="listening"]::after{animation:none}.ring .val{transition:none}.ring.done{animation:none}.practice.fb-ok,.practice.fb-mid,.practice.fb-bad{animation:none}}
 </style>
 </head>
 <body>
@@ -570,6 +577,9 @@ function streak(){
   return n;
 }
 const dueItems = () => Object.values(S.vocab).filter(v => (v.due || 0) <= Date.now());
+/* Schwach: mindestens zweimal verfehlt (miss) und noch nicht sicher (Stufe 1–3). */
+const isWeak = (v) => (v.miss || 0) >= 2 && (v.box || 1) <= 3;
+const weakItems = () => Object.values(S.vocab).filter(isWeak).sort((a, b) => (b.miss || 0) - (a.miss || 0));
 
 /* ================= speech output ================= */
 let voices = [], voice = null, playingBtn = null;
@@ -719,7 +729,17 @@ function render(){
     for (const [id, label, icon] of TABS) nav.append(h("button", {type:"button", class: TAB_TONE[id], html: icon + `<span>${label}</span>`, "aria-current": id === view ? "page" : null, onclick: () => go(id)}));
     bottom.append(nav);
   }
+  markFeedback(main);
   updateHint();
+}
+/* Färbt Übungskarten nach dem Ergebnis: falsche Wahl rot, richtige grün, Sprechabgleich nach Prozent. */
+function markFeedback(root){
+  for (const c of root.querySelectorAll(".practice")){
+    const sc = c.querySelector(".score");
+    const k = c.querySelector(".opt.wrong") ? "bad" : c.querySelector(".opt.right") ? "ok"
+      : sc ? (sc.classList.contains("good") ? "ok" : sc.classList.contains("mid") ? "mid" : "bad") : null;
+    if (k) c.classList.add("fb-" + k);
+  }
 }
 function header(hdr, title, sub, opts){
   opts = opts || {};
@@ -828,7 +848,7 @@ VIEWS.words = (hdr, main) => {
   if (!cat){
     header(hdr, "Grundwortschatz", "Antippen, anhören, merken, abfragen", {back:true});
     main.append(h("div", {class:"grid2"}, WORDS.map(c => h("button", {class:"scen t-words", type:"button", onclick: () => go("words", c.id)},
-      h("b", {text: c.de}), h("span", {text: c.bs}), h("small", {text: `${c.items.length} ${c.verbs ? "Verben mit allen Formen" : "Einträge"}`})))));
+      h("b", {text: c.de}), h("span", {text: c.bs}), h("small", {text: `${c.items.length} ${c.verbs ? (c.items.every(x => x[2].length === 6) ? "Verben mit allen Formen" : "Verben mit Ich-Form") : "Einträge"}`})))));
     return;
   }
   header(hdr, cat.de, cat.bs, {back:true, backTo:"words"});
@@ -1105,7 +1125,7 @@ VIEWS.shadow = (hdr, main) => {
 let CD = null;
 VIEWS.cards = (hdr, main) => {
   header(hdr, "Wiederholen", CD && CD.phase === "run" ? `${CD.done} geschafft · ${CD.queue.length} offen` : "Karteikarten aus deinem Heft", {back:true, onBack: CD && CD.phase !== "setup" ? () => { stopSpeaking(); CD = null; render(); } : null});
-  const all = Object.values(S.vocab), due = dueItems();
+  const all = Object.values(S.vocab), due = dueItems(), weak = weakItems();
   if (!CD || CD.phase === "setup"){
     if (!all.length){
       main.append(h("div", {class:"card empty stack"}, h("h3", {text:"Dein Heft ist noch leer"}),
@@ -1119,7 +1139,10 @@ VIEWS.cards = (hdr, main) => {
       h("section", {class:"stack"}, h("span", {class:"cap", text:"Richtung"}), pillChoice([["de","Deutsch → Bosnisch"],["listen","Hören → Deutsch"]], () => dir, (v) => dir = v)),
       h("button", {class:"btn block", type:"button", text: due.length ? `${Math.min(20, due.length)} fällige Karten üben` : "10 zufällige Karten üben", onclick: () => {
         const pool = due.length ? due.sort((a, b) => (a.due || 0) - (b.due || 0)).slice(0, 20) : shuffle(all).slice(0, 10);
-        CD = {phase:"run", dir, queue: pool.map(x => x.id), done:0, good:0, hard:0, again:0, revealed:false, result:null, requeued:{}, spoke:null}; render(); }}));
+        CD = {phase:"run", dir, queue: pool.map(x => x.id), done:0, good:0, hard:0, again:0, revealed:false, result:null, requeued:{}, spoke:null}; render(); }}),
+      weak.length ? h("button", {class:"btn ghost block", type:"button", text:`${Math.min(20, weak.length)} schwache Karten üben`, onclick: () => {
+        CD = {phase:"run", dir, queue: weak.slice(0, 20).map(x => x.id), done:0, good:0, hard:0, again:0, revealed:false, result:null, requeued:{}, spoke:null}; render(); }}) : null,
+      weak.length ? h("p", {class:"muted small", text:"Schwach sind Karten, die du mindestens zweimal verfehlt hast und die noch nicht sitzen."}) : null);
     return;
   }
   if (CD.phase === "done"){
@@ -1153,7 +1176,7 @@ VIEWS.cards = (hdr, main) => {
 };
 function rateCard(it, r){
   const now = Date.now();
-  if (r === "again"){ it.box = 1; it.due = now; CD.again++; if (!CD.requeued[it.id]){ CD.requeued[it.id] = 1; CD.queue.push(it.id); } }
+  if (r === "again"){ it.box = 1; it.due = now; it.miss = (it.miss || 0) + 1; CD.again++; if (!CD.requeued[it.id]){ CD.requeued[it.id] = 1; CD.queue.push(it.id); } }
   else if (r === "hard"){ it.box = Math.max(1, it.box || 1); it.due = startOfDay(now) + DAY; CD.hard++; }
   else { it.box = Math.min(6, (it.box || 1) + 1); it.due = startOfDay(now) + BOX_DAYS[it.box] * DAY; CD.good++; }
   save(); CD.queue.shift(); CD.done++; CD.revealed = false; CD.result = null; CD.spoke = null;
@@ -1162,7 +1185,7 @@ function rateCard(it, r){
 }
 
 /* ---------- book (Heft) ---------- */
-let bookQ = "", confirmDel = null;
+let bookQ = "", bookF = "alle", confirmDel = null;
 VIEWS.book = (hdr, main) => {
   header(hdr, "Heft", "Deine Wörter und Sätze", {gear:true});
   const bs = h("input", {class:"textin", id:"addBs", placeholder:"Bosnisch, z. B. Hvala lijepa", autocomplete:"off", autocapitalize:"off", autocorrect:"off"});
@@ -1174,12 +1197,13 @@ VIEWS.book = (hdr, main) => {
   const paint = () => {
     listBox.textContent = "";
     const term = loose(normWords(q.value).join(" "));
-    let items = Object.values(S.vocab).sort((a, b) => (b.added || 0) - (a.added || 0));
+    let items = bookF === "schwach" ? weakItems() : Object.values(S.vocab).sort((a, b) => (b.added || 0) - (a.added || 0));
     if (term) items = items.filter(v => loose(normWords(v.bs + " " + v.de).join(" ")).includes(term));
-    if (!items.length){ listBox.append(h("p", {class:"empty", text: Object.keys(S.vocab).length ? "Nichts passt dazu." : "Noch leer. Trag oben etwas ein oder tippe in den Übungen auf den Stern."})); return; }
+    if (!items.length){ listBox.append(h("p", {class:"empty", text: bookF === "schwach" && !term ? "Keine schwachen Karten. Gut so." : Object.keys(S.vocab).length ? "Nichts passt dazu." : "Noch leer. Trag oben etwas ein oder tippe in den Übungen auf den Stern."})); return; }
     for (const v of items) listBox.append(h("div", {class:"li"},
       h("div", {class:"grow"}, h("b", {text: v.bs}), v.de ? h("small", {text: v.de}) : null, h("small", {class:"laut", text: "≈ " + (v.laut || bsToLaut(v.bs))}), v.src ? h("small", {text: v.src + (v.personal && v.src !== "Über mich" ? " · persönlich" : "")}) : null,
-        h("span", {class:"boxdots", title:`Stufe ${v.box || 1} von 6`}, [1,2,3,4,5,6].map(i => h("i", {class: i <= (v.box || 1) ? "on" : ""})))),
+        h("span", {class:"boxdots", title:`Stufe ${v.box || 1} von 6`}, [1,2,3,4,5,6].map(i => h("i", {class: i <= (v.box || 1) ? "on" : ""}))),
+        isWeak(v) ? h("small", {class:"weak", text:`${v.miss}× verfehlt`}) : null),
       speakIcon(v.bs),
       confirmDel === v.id ? h("button", {class:"btn danger", type:"button", style:"padding:7px 12px", text:"Löschen", onclick: () => { delete S.vocab[v.id]; confirmDel = null; save(); render(); }})
         : iconBtn(I.trash, "Löschen", () => { confirmDel = v.id; render(); setTimeout(() => { if (confirmDel === v.id){ confirmDel = null; if (view === "book") render(); } }, 4000); }, "ibtn")));
@@ -1189,7 +1213,9 @@ VIEWS.book = (hdr, main) => {
   main.append(h("section", {class:"card stack"}, h("span", {class:"cap", text:"Eigenen Eintrag hinzufügen"}), bs, diacriticKeysAlways(bs), de,
       h("div", {class:"setrow"}, h("label", {for:"addPers"}, "Persönlicher Satz", h("small", {text:"Kommt in der Etappe „Über mich“ dran"})), pers),
       h("button", {class:"btn", type:"button", html: I.plus + "<span>Ins Heft</span>", onclick: add})), importBox(),
-    h("section", {class:"stack"}, h("span", {class:"cap", text:`Im Heft (${Object.keys(S.vocab).length})`}), q), listBox);
+    h("section", {class:"stack"}, h("span", {class:"cap", text:`Im Heft (${Object.keys(S.vocab).length})`}),
+      weakItems().length ? pillChoice([["alle","Alle"],["schwach",`Schwache (${weakItems().length})`]], () => bookF, (v) => { bookF = v; paint(); }) : null, q), listBox);
+  if (!weakItems().length) bookF = "alle";
   paint();
 };
 function diacriticKeysAlways(input){ const k = diacriticKeys(input); k.style.display = "flex"; return k; }
@@ -1246,14 +1272,15 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 function autoAdd(item, src, dueNow){
   if (!item || !item.bs) return;
   const ex = findVocab(item.bs), now = Date.now();
-  if (ex){ if (dueNow){ ex.box = 1; ex.due = now; save(); } return; }
+  if (ex){ if (dueNow){ ex.box = 1; ex.due = now; ex.miss = (ex.miss || 0) + 1; save(); } return; }
   const id = newId();
   S.vocab[id] = {id, bs: clip(item.bs, 200), de: clip(item.de, 200), laut: clip(item.laut || bsToLaut(item.bs), 200), box:1, due: dueNow ? now : startOfDay(now) + DAY, added: now, src: src || "", personal: !!item.personal};
+  if (dueNow) S.vocab[id].miss = 1;
   save();
 }
 function rateItem(it, r){
   const now = Date.now();
-  if (r === "again"){ it.box = 1; it.due = now; }
+  if (r === "again"){ it.box = 1; it.due = now; it.miss = (it.miss || 0) + 1; }
   else if (r === "hard"){ it.box = Math.max(1, it.box || 1); it.due = startOfDay(now) + DAY; }
   else { it.box = Math.min(6, (it.box || 1) + 1); it.due = startOfDay(now) + BOX_DAYS[it.box] * DAY; }
   save();
@@ -1308,7 +1335,7 @@ function hmCreate(items, offsets){
 }
 function hmPaint(){ if (HM && HM.paint) HM.paint(); }
 async function hmRun(){
-  const my = {}; HM.token = my; HM.running = true; HM.finished = false;
+  const my = {}; HM.token = my; HM.running = true; HM.finished = false; keepAwake(true);
   const bsV = voice, deV = deVoiceOf(), mult = ({kurz:0.75, normal:1, lang:1.4})[ST().hmPause] || 1;
   const think = (s) => (1600 + normWords(s).length * 550) * mult;
   try{
@@ -1325,10 +1352,19 @@ async function hmRun(){
       }
       await hmWait(900, my); HM.pos++; lastAct = Date.now();
     }
-    HM.running = false; HM.finished = true; HM.stage = "done"; hmPaint();
+    HM.running = false; HM.finished = true; HM.stage = "done"; keepAwake(false); hmPaint();
   }catch(e){ if (e !== HM_STOP) throw e; }
 }
-function hmStop(){ if (HM){ HM.token = null; HM.running = false; } try{ synth && synth.cancel(); }catch(e){} }
+function hmStop(){ if (HM){ HM.token = null; HM.running = false; } keepAwake(false); try{ synth && synth.cancel(); }catch(e){} }
+/* Bildschirm wach halten, solange Hören & Sagen läuft (Wake Lock, wo verfügbar). */
+let wakeLock = null;
+async function keepAwake(on){
+  try{
+    if (on){ if (!wakeLock && navigator.wakeLock){ const w = await navigator.wakeLock.request("screen"); wakeLock = w; w.addEventListener("release", () => { if (wakeLock === w) wakeLock = null; }); } }
+    else if (wakeLock){ const w = wakeLock; wakeLock = null; await w.release(); }
+  }catch(e){}
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && HM && HM.running) keepAwake(true); });
 function hmPanel(onDone, doneLabel){
   const STAGE = {hear:"Hör zu", repeat:"Sprich nach", again:"Nochmal hören", prompt:"Wie sagt man das?", think:"Sag es laut auf Bosnisch", answer:"So heißt es", done:"Fertig"};
   const cap = h("span", {class:"cap", text:"Hören & Sagen"});
@@ -1513,7 +1549,7 @@ function sessionDone(main){
 }
 
 /* ---------- standalone listening mode ---------- */
-let HMsrc = "pfad";
+let HMsrc = "pfad", HMn = 8;
 VIEWS.listen = (hdr, main) => {
   header(hdr, "Hören & Sagen", "Vorgabe auf Deutsch, du sprichst, dann die Lösung", {back:true, onBack: HM && HM.standalone ? () => { hmStop(); HM = null; render(); } : null});
   if (HM && HM.standalone){ main.append(...hmPanel(() => { HM = null; render(); }, "Neue Runde")); return; }
@@ -1521,17 +1557,19 @@ VIEWS.listen = (hdr, main) => {
   const sources = {
     pfad: ["Gelerntes aus dem Pfad", learned],
     faellig: ["Fällige Karten", dueItems().map(v => ({bs: v.bs, de: v.de, laut: v.laut}))],
+    schwach: ["Schwache Karten", weakItems().map(v => ({bs: v.bs, de: v.de, laut: v.laut}))],
     heft: ["Ganzes Heft", Object.values(S.vocab).filter(v => v.de).map(v => ({bs: v.bs, de: v.de, laut: v.laut}))],
     baukasten: ["Satzbaukästen", FRAMES.flatMap(f => f.items.map(x => ({bs: x[0], de: x[1]})))],
     alltag: ["Alltagssätze", PHRASES.flatMap(g => g.items).filter(x => !x[0].includes("{ime}")).map(x => ({bs: x[0], de: x[1]}))]
   };
   main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Sätze aus"}), pillChoice(Object.entries(sources).map(([k, v]) => [k, `${v[0]} (${v[1].length})`]), () => HMsrc, (v) => HMsrc = v)),
     h("section", {class:"stack"}, h("span", {class:"cap", text:"Bedenkzeit"}), pillChoice([["kurz","kurz"],["normal","normal"],["lang","lang"]], () => ST().hmPause, (v) => { ST().hmPause = v; save(); })),
-    h("p", {class:"muted small", text:"8 Sätze, jeder kommt viermal: erst zum Nachsprechen, dann als Abruf in wachsenden Abständen. Etwa 8 bis 10 Minuten. Der Bildschirm sollte dabei anbleiben."}),
+    h("section", {class:"stack"}, h("span", {class:"cap", text:"Länge"}), pillChoice([[8,"8 Sätze · 8–10 Min"],[16,"16 Sätze · Spaziergang"]], () => HMn, (v) => HMn = v)),
+    h("p", {class:"muted small", text:"Jeder Satz kommt viermal: erst zum Nachsprechen, dann als Abruf in wachsenden Abständen. Die App hält den Bildschirm dabei wach, wenn das iPhone es erlaubt. Sperrst du das iPhone oder wechselst die App, stoppt das Vorlesen."}),
     h("button", {class:"btn block", type:"button", text:"Runde vorbereiten", onclick: () => {
       const pool = sources[HMsrc][1];
       if (!pool.length){ toast(HMsrc === "pfad" ? "Noch keine Etappe geschafft. Nimm erst die Satzbaukästen oder Alltagssätze." : "Hier ist gerade nichts drin."); return; }
-      hmCreate(shuffle(pool).slice(0, 8)); HM.standalone = true; render();
+      hmCreate(shuffle(pool).slice(0, HMn)); HM.standalone = true; render();
     }}));
   const vn = voiceNote(); if (vn) main.append(vn);
 };
@@ -1626,10 +1664,12 @@ function mergeBackup(d){
     if (!ex){
       const id = newId();
       S.vocab[id] = {id, bs: clip(v.bs, 200), de: clip(v.de, 200), laut: clip(v.laut || bsToLaut(v.bs), 200), box: v.box || 1, due: v.due || Date.now(), added: v.added || Date.now(), src: v.src || "", personal: !!v.personal};
+      if (v.miss > 0) S.vocab[id].miss = Number(v.miss) || 0;
       r.vocab++;
     } else {
       if ((v.box || 1) > (ex.box || 1)){ ex.box = v.box; ex.due = v.due; }
       if (v.personal) ex.personal = true;
+      if ((Number(v.miss) || 0) > (ex.miss || 0)) ex.miss = Number(v.miss);
       if (!ex.de && v.de) ex.de = v.de;
     }
   }
