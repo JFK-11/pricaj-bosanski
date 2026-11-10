@@ -383,7 +383,7 @@ const PHRASES = [
 const SOUNDS = [
   {g:"č", how:"hartes tsch wie in Tschüss", ex:[["čaj","Tee"],["čovjek","Mensch"]]},
   {g:"ć", how:"weiches tsch, Zunge vorn an den Zähnen, fast wie tj", ex:[["kuća","Haus"],["noć","Nacht"]]},
-  {g:"dž", how:"hartes dsch wie in Dschungel", ex:[["džep","Hosentasche"],["džamija","Moschee"]]},
+  {g:"dž", how:"hartes dsch wie in Dschungel", ex:[["džep","Tasche (an Kleidung)"],["džamija","Moschee"]]},
   {g:"đ", how:"weiches dsch, fast wie dj", ex:[["đak","Schüler"],["rođendan","Geburtstag"]]},
   {g:"š", how:"sch wie in Schule", ex:[["šuma","Wald"],["škola","Schule"]]},
   {g:"ž", how:"stimmhaftes sch wie das j in Journal", ex:[["žena","Frau"],["život","Leben"]]},
@@ -423,7 +423,8 @@ const priceBs = (n) => num2bs(n, true) + " " + plural(n, "marka", "marke", "mara
 const NUM_RANGES = [["0-10","0–10",0,10],["11-20","11–20",11,20],["0-100","bis 100",0,100],["100-1000","bis 1000",100,1000],["1000-9999","Tausender",1000,9999]];
 const WEEKDAYS = ["nedjelja","ponedjeljak","utorak","srijeda","četvrtak","petak","subota"];
 const DAY_ABBR = ["N","P","U","S","Č","P","S"];
-const MONTHS = ["januar","februar","mart","april","maj","juni","juli","august","septembar","oktobar","novembar","decembar"];
+/* Genitiv, weil das Datum so geschrieben wird: „10. novembra“. Die Monatsnamen zum Lernen stehen in WORDS → kalendar. */
+const MONTHS = ["januara","februara","marta","aprila","maja","juna","jula","augusta","septembra","oktobra","novembra","decembra"];
 const BOX_DAYS = [0, 0, 1, 3, 7, 14, 30];
 const DAY = 86400000;
 const REC_LANGS = [["hr-HR","Kroatisch"],["bs-BA","Bosnisch"],["sr-RS","Serbisch"]];

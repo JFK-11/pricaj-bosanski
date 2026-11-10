@@ -299,7 +299,7 @@ const LEVEL_NAME = {pocetnik:"Einsteiger", osnove:"Grundlagen", dalje:"Weiter"};
 const SOUNDS = [
   {g:"č", how:"hartes tsch wie in Tschüss", ex:[["čaj","Tee"],["čovjek","Mensch"]]},
   {g:"ć", how:"weiches tsch, Zunge vorn an den Zähnen, fast wie tj", ex:[["kuća","Haus"],["noć","Nacht"]]},
-  {g:"dž", how:"hartes dsch wie in Dschungel", ex:[["džep","Hosentasche"],["džamija","Moschee"]]},
+  {g:"dž", how:"hartes dsch wie in Dschungel", ex:[["džep","Tasche (an Kleidung)"],["džamija","Moschee"]]},
   {g:"đ", how:"weiches dsch, fast wie dj", ex:[["đak","Schüler"],["rođendan","Geburtstag"]]},
   {g:"š", how:"sch wie in Schule", ex:[["šuma","Wald"],["škola","Schule"]]},
   {g:"ž", how:"stimmhaftes sch wie das j in Journal", ex:[["žena","Frau"],["život","Leben"]]},
@@ -405,7 +405,8 @@ const DICT_LANGS = ["bs","hr","sr"];
 const LANG_NAME = {bs:"Bosnisch", hr:"Kroatisch", sr:"Serbisch"};
 const WEEKDAYS = ["nedjelja","ponedjeljak","utorak","srijeda","četvrtak","petak","subota"];
 const DAY_ABBR = ["N","P","U","S","Č","P","S"];
-const MONTHS = ["januar","februar","mart","april","maj","juni","juli","august","septembar","oktobar","novembar","decembar"];
+/* Genitiv, weil das Datum so geschrieben wird: „10. novembra“. Die Monatsnamen zum Lernen stehen in WORDS → kalendar. */
+const MONTHS = ["januara","februara","marta","aprila","maja","juna","jula","augusta","septembra","oktobra","novembra","decembra"];
 const BOX_DAYS = [0, 0, 1, 3, 7, 14, 30];
 const DAY = 86400000;
 const LAUT_RULES = "Lautschrift: deutsche Annäherung, Silben mit Bindestrich, betonte Silbe in GROSSBUCHSTABEN. č = tsch, ć = weiches tj, dž = dsch, đ = weiches dj, š = sch, ž = zh (wie j in Journal), c = z, z = stimmhaftes s (schreibe s), s = ss, h = ch, v = w, j = j, lj = lj, nj = nj, r rollen.";
@@ -765,7 +766,7 @@ const tier = () => ST().quality === "gruendlich" ? "default" : "quick";
 function aboutLearner(level){
   const n = clip(P().name, 40);
   return [
-    "Der Lerner ist ein Mann mit Deutsch als Muttersprache. Wenn er über sich spricht und in allen Vorschlägen für seine Sätze immer maskuline Formen (bio sam, radio sam, sretan sam, umoran sam).",
+    "Der Lerner ist ein Mann mit Deutsch als Muttersprache. Verwende in seinen Sätzen über sich selbst und in allen Vorschlägen für seine Sätze immer maskuline Formen (bio sam, radio sam, sretan sam, umoran sam).",
     n ? `Sein Name ist ${n}. Sprich ihn gelegentlich mit diesem Namen an und verwende genau diesen Namen, wo ein Satz seinen Namen braucht (z. B. "Zovem se ${n}").`
       : "Du kennst seinen Namen nicht. Erfinde keinen Namen für ihn und sprich ihn nicht mit einem Namen an. Braucht ein Vorschlag seinen Namen, schreibe \"Zovem se …\" mit drei Punkten.",
     "Schreibe Bosnisch immer in lateinischer Schrift, ijekavisch, mit bosnischen Standardformen (kafa, hljeb, historija, sedmica) und korrekten Zeichen č ć dž đ š ž.",
