@@ -1,0 +1,1572 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pričaj bosanski</title>
+<meta name="description" content="Bosnisch lernen: Grundwortschatz, Zahlen, Quiz, Karteikarten, Nachsprechen.">
+<meta name="theme-color" content="#2340a8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pričaj">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+/* Layout: phone-first app — header, scrolling view, bottom tab bar. Flag blue + gold. */
+:root{
+  --bg:#f3f4f8; --surface:#ffffff; --surface-2:#e8ebf4; --line:#d5dae8;
+  --fg:#151a2e; --muted:#5b6380; --accent:#2340a8; --accent-ink:#ffffff; --accent-soft:#e2e7f8;
+  --gold:#e3a915; --gold-soft:#fbefc9; --gold-ink:#1b1500; --ok:#1d7a4f; --ok-soft:#dcf1e6; --warn:#8a5f00; --bad:#b3372f; --bad-soft:#f8e1de;
+  --display:ui-rounded, "SF Pro Rounded", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --body:-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0e1220; --surface:#171d33; --surface-2:#20284a; --line:#2c355c;
+  --fg:#e8eaf4; --muted:#9aa2c2; --accent:#8da2f5; --accent-ink:#0e1220; --accent-soft:#232c55;
+  --gold:#f2c552; --gold-soft:#3a3214; --gold-ink:#1b1500; --ok:#6fd3a0; --ok-soft:#163327; --warn:#e8c066; --bad:#f08a80; --bad-soft:#3d1d1b;
+  color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+html{padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0}
+.app{height:100%;max-width:720px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;min-height:0}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font:inherit;color:var(--fg)}
+button:focus-visible,input:focus-visible,select:focus-visible,.word:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.15}
+p{margin:0}
+.cap{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.hdr{display:flex;align-items:center;gap:8px;padding-block:12px 10px;min-height:56px;border-bottom:1px solid var(--line)}
+.hdr .ttl{flex:1;min-width:0}
+.hdr h1{font-size:1.3rem;font-weight:700;letter-spacing:-.01em}
+.hdr h1 span{color:var(--accent)}
+.hdr .sub{font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ibtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:38px;height:38px;display:grid;place-items:center;flex:none;padding:0}
+.ibtn svg{width:18px;height:18px}
+.tbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:.9rem;flex:none}
+.main{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;padding-block:16px 20px;display:grid;grid-auto-rows:max-content;gap:18px;align-content:start}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);padding-top:6px;padding-bottom:max(6px, env(safe-area-inset-bottom, 0px))}
+.tabs button{border:0;background:transparent;display:grid;justify-items:center;gap:2px;padding:4px 0;font-size:.74rem;color:var(--muted);font-weight:600}
+.tabs svg{width:23px;height:23px}
+.tabs button[aria-current="page"]{color:var(--accent)}
+.foot{padding-bottom:env(safe-area-inset-bottom, 0px)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stack{display:grid;gap:10px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spread{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.btn{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:10px 18px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.sec{background:var(--surface-2);color:var(--fg)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.btn.danger{background:var(--bad);color:var(--surface)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.block{width:100%}
+.btn svg{width:17px;height:17px}
+.pill{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:6px 12px;font-size:.9rem;display:inline-flex;align-items:center;gap:6px}
+.pill svg{width:15px;height:15px}
+.pill.playing{border-color:var(--gold);background:var(--gold-soft)}
+.pill.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface);max-width:100%;justify-self:start}
+.seg button{border:0;background:transparent;padding:7px 12px;font-size:.9rem;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.field{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px 4px 4px 12px;gap:6px;min-width:0}
+.field input{flex:1;min-width:0;border:0;background:transparent;padding:8px 0;outline:none;font-size:16px}
+.textin{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;outline:none;font-size:16px}
+.textin:focus{border-color:var(--accent)}
+select.textin{width:auto;max-width:100%}
+.note{font-size:.88rem;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:9px 11px}
+.empty{color:var(--muted);text-align:center;padding:18px 8px}
+.hello h2{font-size:1.9rem;letter-spacing:-.015em}
+.hello p{color:var(--muted);margin-top:2px}
+.today{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.ring{width:92px;height:92px}
+.ring .track{stroke:var(--surface-2)}
+.ring .val{stroke:var(--accent);transition:stroke-dashoffset .6s}
+.ring.done .val{stroke:var(--gold)}
+.ring text{fill:var(--fg);font-family:var(--display);font-weight:700}
+.ring .unit{fill:var(--muted);font-family:var(--body);font-weight:400}
+.stats{display:grid;gap:4px}
+.stats b{font-family:var(--display);font-size:1.15rem}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:84px;margin-top:4px}
+.week .col{display:grid;gap:4px;justify-items:center;align-self:stretch;grid-template-rows:1fr auto}
+.week .bar{width:100%;max-width:26px;border-radius:6px 6px 3px 3px;background:var(--surface-2);align-self:end;min-height:4px}
+.week .bar.hit{background:var(--accent)}
+.week .bar.now{outline:2px solid var(--gold);outline-offset:1px}
+.week span{font-size:.72rem;color:var(--muted);font-weight:600}
+.action,.scen{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px;display:grid;gap:3px;align-content:start}
+.action b,.scen b{font-family:var(--display);font-size:1.02rem}
+.action small,.scen small{color:var(--muted);font-size:.84rem;line-height:1.3}
+.scen span{font-size:.88rem;font-weight:600;color:var(--accent)}
+.action .badge{justify-self:start;background:var(--gold-soft);color:var(--warn);border-radius:999px;font-size:.75rem;font-weight:600;padding:1px 8px;margin-top:3px}
+.list{display:grid;gap:8px}
+.li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center}
+.li .grow{flex:1;min-width:0}
+.li .grow b{display:block;overflow-wrap:anywhere}
+.li .grow small{display:block;color:var(--muted);font-size:.84rem;overflow-wrap:anywhere}
+.boxdots{display:inline-flex;gap:3px;margin-top:4px}
+.boxdots i{width:6px;height:6px;border-radius:50%;background:var(--line)}
+.boxdots i.on{background:var(--ok)}
+.bs{font-family:var(--display);font-size:1.3rem;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.laut{font-size:.92rem;color:var(--accent);font-style:italic;overflow-wrap:anywhere}
+.de{font-size:.95rem;color:var(--muted)}
+body.hide-laut .laut, body.hide-de .de{display:none}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px}
+.chip{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:7px 10px;display:grid;gap:1px}
+.chip b{font-weight:600}
+.chip small{color:var(--muted)}
+.live{font-size:.95rem;color:var(--muted);font-style:italic}
+.keys{display:none;gap:6px;flex-wrap:wrap}
+.answer:focus-within .keys{display:flex}
+.keys button{border:1px solid var(--line);background:var(--surface);border-radius:8px;min-width:40px;padding:6px 8px;font-weight:600}
+.bar{display:flex;align-items:center;gap:8px}
+.send{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;width:38px;height:38px;display:grid;place-items:center;flex:none;padding:0}
+.send svg{width:18px;height:18px}
+.mic{width:56px;height:56px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;flex:none;position:relative;padding:0}
+.mic svg{width:24px;height:24px}
+.mic[data-state="listening"]{background:var(--gold);color:var(--gold-ink)}
+.mic[data-state="listening"]::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:3px solid var(--gold);animation:ring 1.4s ease-out infinite}
+@keyframes ring{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+.hint{font-size:.8rem;color:var(--muted);text-align:center}
+.prog{display:flex;gap:5px;width:100%}
+.prog i{flex:1;height:5px;border-radius:3px;background:var(--surface-2)}
+.prog i.done{background:var(--accent)}
+.prog i.cur{background:var(--gold)}
+.practice{display:grid;gap:12px;text-align:center;justify-items:center;padding:20px 14px}
+.practice .bs{font-size:1.6rem}
+.veil{border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--muted);width:100%}
+.answer{display:grid;gap:8px;width:100%}
+.diff{font-family:var(--display);font-size:1.3rem;line-height:1.5;display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:center}
+.diff .ok{color:var(--ok)}
+.diff .near{color:var(--warn);text-decoration:underline wavy;text-underline-offset:5px}
+.diff .miss{color:var(--bad);text-decoration:line-through;opacity:.8}
+.score{font-family:var(--display);font-size:2.2rem;font-weight:700}
+.score.good{color:var(--ok)}.score.mid{color:var(--warn)}.score.low{color:var(--bad)}
+.rate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.rate button{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 4px;display:grid;gap:1px;font-weight:600}
+.rate button small{font-weight:400;color:var(--muted);font-size:.78rem}
+.rate .r1{border-color:var(--bad)} .rate .r2{border-color:var(--gold)} .rate .r3{border-color:var(--ok)}
+.sound{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start}
+.sound .glyph{font-family:var(--display);font-size:2rem;font-weight:700;color:var(--accent);text-align:center;line-height:1.1}
+.sound .ex{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.set{display:grid;gap:14px}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.setrow label,.setrow .lbl{flex:1;min-width:0}
+.setrow small{display:block;color:var(--muted);font-size:.8rem}
+.switch{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:999px;background:var(--line);position:relative;flex:none;cursor:pointer;transition:background .15s;margin:0}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:left .15s}
+.switch:checked{background:var(--accent)}
+.switch:checked::after{left:21px}
+input[type=range]{accent-color:var(--accent);width:140px}
+.val{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem;min-width:3.2em;text-align:right}
+.onb{display:grid;gap:22px;padding-block:20px}
+.onb h2{font-size:2.1rem;letter-spacing:-.02em}
+.onb .lead{color:var(--muted);font-size:1.05rem}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:14px 10px;font-weight:600;font-size:1.08rem;min-height:68px;overflow-wrap:anywhere;transition:border-color .15s, background .15s}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.opt:disabled{cursor:default}
+.opt.dim{opacity:.45}
+.quizhead{display:flex;justify-content:space-between;align-items:center;width:100%;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.combo{color:var(--warn);font-weight:600}
+.bignum{font-family:var(--display);font-size:3.2rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.numgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px}
+.numgrid button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 4px;display:grid;text-align:center}
+.numgrid b{font-family:var(--display);font-size:1.1rem;font-variant-numeric:tabular-nums}
+.numgrid small{color:var(--muted);font-size:.78rem;overflow-wrap:anywhere}
+details.card > summary{cursor:pointer;font-weight:600}
+details.card[open] > summary{margin-bottom:10px}
+.conj{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:.95rem;margin-top:8px}
+.conj span{color:var(--muted)}
+.wrow{display:grid;gap:3px}
+.wrow .ex{font-size:.9rem;color:var(--muted)}
+.wrow .ex b{color:var(--fg);font-weight:600}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom, 0px));background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:.9rem;width:max-content;max-width:min(90vw,460px);text-align:center;z-index:40}
+@media (prefers-reduced-motion: reduce){.mic[data-state="listening"]::after{animation:none}.ring .val{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr" id="hdr"></div>
+  <main class="main" id="main"></main>
+  <div id="bottom" class="foot"></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+<script>
+(() => {
+"use strict";
+const TUTOR_URL = "https://claude.ai/artifact/Mp6jXWJC7MFEsxvPE9nH7Y";
+
+/* ================= content ================= */
+const WORDS = [
+  {id:"pitanja", bs:"Upitne riječi", de:"Fragewörter", items:[
+    ["ko?","wer?","Ko je to?","Wer ist das?"],["šta?","was?","Šta je ovo?","Was ist das?"],["gdje?","wo?","Gdje si?","Wo bist du?"],
+    ["kada?","wann?","Kada dolaziš?","Wann kommst du?"],["zašto?","warum?","Zašto učiš bosanski?","Warum lernst du Bosnisch?"],
+    ["kako?","wie?","Kako si?","Wie geht es dir?"],["koliko?","wie viel?","Koliko košta?","Wie viel kostet das?"],
+    ["koji?","welcher?","Koji autobus ide u centar?","Welcher Bus fährt ins Zentrum?"],["čiji?","wessen?","Čija je ovo torba?","Wessen Tasche ist das?"],
+    ["odakle?","woher?","Odakle si?","Woher kommst du?"],["kuda?","wohin?","Kuda ideš?","Wohin gehst du?"],["otkad?","seit wann?","Otkad živiš ovdje?","Seit wann wohnst du hier?"]]},
+  {id:"glagoli", bs:"Osnovni glagoli", de:"Grundverben", verbs:true, items:[
+    ["biti","sein",["sam","si","je","smo","ste","su"]],["imati","haben",["imam","imaš","ima","imamo","imate","imaju"]],
+    ["ići","gehen",["idem","ideš","ide","idemo","idete","idu"]],["htjeti","wollen",["hoću","hoćeš","hoće","hoćemo","hoćete","hoće"]],
+    ["moći","können",["mogu","možeš","može","možemo","možete","mogu"]],["znati","wissen",["znam","znaš","zna","znamo","znate","znaju"]],
+    ["raditi","arbeiten, machen",["radim","radiš","radi","radimo","radite","rade"]],["govoriti","sprechen",["govorim","govoriš","govori","govorimo","govorite","govore"]],
+    ["razumjeti","verstehen",["razumijem","razumiješ","razumije","razumijemo","razumijete","razumiju"]],["pričati","reden, erzählen",["pričam","pričaš","priča","pričamo","pričate","pričaju"]],
+    ["jesti","essen",["jedem","jedeš","jede","jedemo","jedete","jedu"]],["piti","trinken",["pijem","piješ","pije","pijemo","pijete","piju"]],
+    ["voljeti","lieben, mögen",["volim","voliš","voli","volimo","volite","vole"]],["živjeti","leben, wohnen",["živim","živiš","živi","živimo","živite","žive"]],
+    ["vidjeti","sehen",["vidim","vidiš","vidi","vidimo","vidite","vide"]],["čuti","hören",["čujem","čuješ","čuje","čujemo","čujete","čuju"]],
+    ["dolaziti","kommen",["dolazim","dolaziš","dolazi","dolazimo","dolazite","dolaze"]],["trebati","brauchen",["trebam","trebaš","treba","trebamo","trebate","trebaju"]],
+    ["učiti","lernen",["učim","učiš","uči","učimo","učite","uče"]],["kupiti","kaufen",["kupim","kupiš","kupi","kupimo","kupite","kupe"]],
+    ["čekati","warten",["čekam","čekaš","čeka","čekamo","čekate","čekaju"]],["spavati","schlafen",["spavam","spavaš","spava","spavamo","spavate","spavaju"]]]},
+  {id:"pozdravi", bs:"Pozdravi", de:"Begrüßen & Höflichkeit", items:[
+    ["zdravo","hallo"],["dobro jutro","guten Morgen"],["dobar dan","guten Tag"],["dobro veče","guten Abend"],["laku noć","gute Nacht"],
+    ["doviđenja","auf Wiedersehen"],["ćao","tschüss, hallo"],["vidimo se","bis bald"],["hvala","danke"],["hvala lijepa","vielen Dank"],
+    ["molim","bitte"],["izvinite","entschuldigen Sie"],["da","ja"],["ne","nein"],["može","geht klar"],["drago mi je","freut mich"]]},
+  {id:"ljudi", bs:"Ljudi", de:"Personen & Familie", items:[
+    ["ja","ich"],["ti","du"],["on","er"],["ona","sie (eine Person)"],["mi","wir"],["vi","ihr, Sie"],["oni","sie (mehrere)"],
+    ["mama","Mama"],["tata","Papa"],["brat","Bruder"],["sestra","Schwester"],["prijatelj","Freund"],["prijateljica","Freundin"],
+    ["porodica","Familie"],["dijete","Kind"],["čovjek","Mensch, Mann"]]},
+  {id:"vrijeme", bs:"Vrijeme", de:"Zeit & Wochentage", items:[
+    ["danas","heute"],["sutra","morgen"],["jučer","gestern"],["sada","jetzt"],["kasnije","später"],["uvijek","immer"],["nikad","nie"],
+    ["jutro","Morgen (Tageszeit)"],["veče","Abend"],["sedmica","Woche"],["ponedjeljak","Montag"],["utorak","Dienstag"],["srijeda","Mittwoch"],
+    ["četvrtak","Donnerstag"],["petak","Freitag"],["subota","Samstag"],["nedjelja","Sonntag"]]},
+  {id:"hrana", bs:"Hrana i piće", de:"Essen & Trinken", items:[
+    ["voda","Wasser"],["kafa","Kaffee"],["čaj","Tee"],["sok","Saft"],["pivo","Bier"],["mlijeko","Milch"],["hljeb","Brot"],["sir","Käse"],
+    ["meso","Fleisch"],["riba","Fisch"],["voće","Obst"],["povrće","Gemüse"],["jabuka","Apfel"],["šećer","Zucker"],["so","Salz"],["račun","Rechnung"]]},
+  {id:"mjesta", bs:"Mjesta", de:"Orte & Richtungen", items:[
+    ["kuća","Haus"],["stan","Wohnung"],["grad","Stadt"],["ulica","Straße"],["posao","Arbeit"],["prodavnica","Laden"],["pijaca","Markt"],
+    ["stanica","Haltestelle, Bahnhof"],["apoteka","Apotheke"],["bolnica","Krankenhaus"],["škola","Schule"],["restoran","Restaurant"],
+    ["lijevo","links"],["desno","rechts"],["pravo","geradeaus"],["blizu","nah"],["daleko","weit"]]},
+  {id:"opis", bs:"Opisi", de:"Eigenschaften", note:"Adjektive in der männlichen Grundform.", items:[
+    ["dobar","gut"],["loš","schlecht"],["velik","groß"],["mali","klein"],["lijep","schön"],["nov","neu"],["star","alt"],["topao","warm"],
+    ["hladan","kalt"],["skup","teuer"],["jeftin","billig"],["brz","schnell"],["spor","langsam"],["sretan","glücklich"],["umoran","müde"],["gladan","hungrig"]]}
+];
+const PRON = ["ja","ti","on, ona","mi","vi","oni"];
+
+/* ---- extended basic vocabulary ---- */
+WORDS.push(
+  {id:"cesto", bs:"Česte riječi", de:"Häufige kleine Wörter", items:[
+    ["i","und"],["ali","aber"],["ili","oder"],["jer","weil"],["ako","wenn, falls"],["kad","wenn, als"],["sa","mit"],["bez","ohne"],
+    ["u","in"],["na","auf"],["za","für"],["od","von"],["do","bis"],["iz","aus"],["kod","bei"],["ovdje","hier"],["tamo","dort"],
+    ["ovo","das hier"],["to","das"],["moj","mein"],["tvoj","dein"],["naš","unser"],["vaš","euer, Ihr"],["jako","sehr"],["malo","wenig, ein bisschen"],
+    ["puno","viel"],["sve","alles"],["nešto","etwas"],["ništa","nichts"],["neko","jemand"],["niko","niemand"],["još","noch"],["već","schon"],
+    ["samo","nur"],["opet","wieder"],["možda","vielleicht"],["naravno","natürlich"],["tačno","genau"]]},
+  {id:"glagoli2", bs:"Još glagola", de:"Weitere Verben", verbs:true, note:"Angezeigt mit der Ich-Form.", items:[
+    ["gledati","schauen",["gledam"]],["slušati","zuhören",["slušam"]],["čitati","lesen",["čitam"]],["pisati","schreiben",["pišem"]],
+    ["kuhati","kochen",["kuham"]],["platiti","bezahlen",["platim"]],["otvoriti","öffnen",["otvorim"]],["zatvoriti","schließen",["zatvorim"]],
+    ["početi","anfangen",["počnem"]],["završiti","beenden",["završim"]],["uzeti","nehmen",["uzmem"]],["dati","geben",["dam"]],
+    ["kazati","sagen",["kažem"]],["misliti","denken",["mislim"]],["osjećati","fühlen",["osjećam"]],["sjediti","sitzen",["sjedim"]],
+    ["stajati","stehen",["stojim"]],["putovati","reisen",["putujem"]],["igrati","spielen",["igram"]],["voziti","fahren",["vozim"]],
+    ["nazvati","anrufen",["nazovem"]],["pomoći","helfen",["pomognem"]],["tražiti","suchen",["tražim"]],["naći","finden",["nađem"]],
+    ["zaboraviti","vergessen",["zaboravim"]],["ostati","bleiben",["ostanem"]],["vratiti se","zurückkommen",["vratim se"]],["sresti","treffen",["sretnem"]]]},
+  {id:"porodica", bs:"Porodica", de:"Familie erweitert", note:"Nana, daidža und amidža sind typisch bosnische Wörter.", items:[
+    ["muž","Ehemann"],["žena","Frau, Ehefrau"],["sin","Sohn"],["kćerka","Tochter"],["djed","Opa"],["nana","Oma"],
+    ["tetka","Tante"],["daidža","Onkel (Bruder der Mutter)"],["amidža","Onkel (Bruder des Vaters)"],["rodbina","Verwandtschaft"]]},
+  {id:"tijelo", bs:"Tijelo i zdravlje", de:"Körper & Gesundheit", items:[
+    ["glava","Kopf"],["ruka","Hand, Arm"],["noga","Fuß, Bein"],["oko","Auge"],["uho","Ohr"],["zub","Zahn"],["stomak","Bauch"],
+    ["leđa","Rücken"],["Boli me glava.","Ich habe Kopfweh."],["Bolestan sam.","Ich bin krank."],["doktor","Arzt"],["lijek","Medikament"]]},
+  {id:"stvari", bs:"Stvari", de:"Dinge & Unterwegs", items:[
+    ["sto","Tisch"],["stolica","Stuhl"],["krevet","Bett"],["vrata","Tür"],["prozor","Fenster"],["ključ","Schlüssel"],["telefon","Telefon"],
+    ["novac","Geld"],["pare","Geld (umgangssprachlich)"],["torba","Tasche"],["knjiga","Buch"],["auto","Auto"],["autobus","Bus"],
+    ["voz","Zug"],["karta","Fahrkarte"],["kofer","Koffer"]]},
+  {id:"hrana2", bs:"Još hrane", de:"Mehr Essen", items:[
+    ["jaje","Ei"],["krompir","Kartoffel"],["luk","Zwiebel"],["paradajz","Tomate"],["krastavac","Gurke"],["salata","Salat"],["supa","Suppe"],
+    ["pita","Pita (gefüllter Teig)"],["burek","Burek (mit Fleisch)"],["ćevapi","Ćevapi"],["sladoled","Eis"],["čokolada","Schokolade"],
+    ["med","Honig"],["ulje","Öl"],["slatko","Süßes"]]},
+  {id:"boje", bs:"Boje", de:"Farben", note:"Männliche Grundform.", items:[
+    ["crven","rot"],["plav","blau"],["zelen","grün"],["žut","gelb"],["bijel","weiß"],["crn","schwarz"],["siv","grau"],["smeđ","braun"],
+    ["narandžast","orange"],["ljubičast","lila"],["roze","rosa"]]},
+  {id:"priroda", bs:"Priroda i vrijeme", de:"Natur & Wetter", items:[
+    ["sunce","Sonne"],["kiša","Regen"],["Pada kiša.","Es regnet."],["snijeg","Schnee"],["vjetar","Wind"],["Toplo je.","Es ist warm."],
+    ["Hladno je.","Es ist kalt."],["more","Meer"],["rijeka","Fluss"],["planina","Berg"],["drvo","Baum"],["nebo","Himmel"]]},
+  {id:"kalendar", bs:"Kalendar", de:"Monate & Zeitangaben", items:[
+    ["januar","Januar"],["februar","Februar"],["mart","März"],["april","April"],["maj","Mai"],["juni","Juni"],["juli","Juli"],
+    ["august","August"],["septembar","September"],["oktobar","Oktober"],["novembar","November"],["decembar","Dezember"],
+    ["mjesec","Monat"],["godina","Jahr"],["vikend","Wochenende"],["popodne","Nachmittag"],["navečer","abends"],["rano","früh"],["kasno","spät"],["uskoro","bald"]]}
+);
+
+/* ---- sentence frames ---- */
+const FRAMES = [
+  {id:"zelim", bs:"Želim …", de:"Ich möchte …", note:"kafa → kafu, voda → vodu: weibliche Wörter auf -a enden hier auf -u.", items:[
+    ["Želim kafu.","Ich möchte einen Kaffee.","Kaffee"],["Želim čaj.","Ich möchte einen Tee.","Tee"],["Želim vodu.","Ich möchte Wasser.","Wasser"],
+    ["Želim sok.","Ich möchte einen Saft.","Saft"],["Želim pivo.","Ich möchte ein Bier.","Bier"],["Želim pitu.","Ich möchte Pita.","Pita"]]},
+  {id:"treba", bs:"Treba mi …", de:"Ich brauche …", note:"Wörtlich: „mir ist nötig …“. Das Ding bleibt in der Grundform.", items:[
+    ["Treba mi pomoć.","Ich brauche Hilfe.","Hilfe"],["Treba mi taksi.","Ich brauche ein Taxi.","Taxi"],["Treba mi karta.","Ich brauche eine Fahrkarte.","Fahrkarte"],
+    ["Treba mi apoteka.","Ich brauche eine Apotheke.","Apotheke"],["Treba mi odmor.","Ich brauche Erholung.","Erholung"]]},
+  {id:"gdje", bs:"Gdje je …?", de:"Wo ist …?", items:[
+    ["Gdje je stanica?","Wo ist die Haltestelle?","Haltestelle"],["Gdje je apoteka?","Wo ist die Apotheke?","Apotheke"],["Gdje je toalet?","Wo ist die Toilette?","Toilette"],
+    ["Gdje je hotel?","Wo ist das Hotel?","Hotel"],["Gdje je banka?","Wo ist die Bank?","Bank"]]},
+  {id:"imate", bs:"Imate li …?", de:"Haben Sie …?", items:[
+    ["Imate li jelovnik?","Haben Sie eine Speisekarte?","Speisekarte"],["Imate li slobodan sto?","Haben Sie einen freien Tisch?","freier Tisch"],
+    ["Imate li sitno?","Haben Sie Kleingeld?","Kleingeld"],["Imate li kartu grada?","Haben Sie einen Stadtplan?","Stadtplan"]]},
+  {id:"idemu", bs:"Idem u …", de:"Ich gehe in …", note:"Nach u (wohin?) enden weibliche Wörter auf -u: prodavnica → prodavnicu.", items:[
+    ["Idem u grad.","Ich gehe in die Stadt.","Stadt"],["Idem u prodavnicu.","Ich gehe in den Laden.","Laden"],["Idem u apoteku.","Ich gehe in die Apotheke.","Apotheke"],
+    ["Idem u banku.","Ich gehe zur Bank.","Bank"]]},
+  {id:"idemna", bs:"Idem na …", de:"Ich gehe zu …", items:[
+    ["Idem na posao.","Ich gehe zur Arbeit.","Arbeit"],["Idem na pijacu.","Ich gehe auf den Markt.","Markt"],["Idem na kafu.","Ich gehe auf einen Kaffee.","Kaffee"],
+    ["Idem na stanicu.","Ich gehe zur Haltestelle.","Haltestelle"]]},
+  {id:"bio", bs:"Bio sam u …", de:"Ich war in …", note:"Wo? → grad wird gradu, prodavnica wird prodavnici. Als Mann sagst du bio sam.", items:[
+    ["Bio sam u gradu.","Ich war in der Stadt.","Stadt"],["Bio sam u Sarajevu.","Ich war in Sarajevo.","Sarajevo"],["Bio sam u prodavnici.","Ich war im Laden.","Laden"],
+    ["Bio sam u kafani.","Ich war im Café.","Café"],["Bio sam na poslu.","Ich war bei der Arbeit.","Arbeit"]]},
+  {id:"hocu", bs:"Hoću da …", de:"Ich will …", note:"Nach da folgt die Ich-Form: jedem, spavam, idem.", items:[
+    ["Hoću da jedem.","Ich will essen.","essen"],["Hoću da spavam.","Ich will schlafen.","schlafen"],["Hoću da idem kući.","Ich will nach Hause gehen.","nach Hause gehen"],
+    ["Hoću da učim bosanski.","Ich will Bosnisch lernen.","Bosnisch lernen"]]},
+  {id:"mozes", bs:"Možeš li …?", de:"Kannst du …?", items:[
+    ["Možeš li ponoviti?","Kannst du das wiederholen?","wiederholen"],["Možeš li govoriti sporije?","Kannst du langsamer sprechen?","langsamer sprechen"],
+    ["Možeš li mi pomoći?","Kannst du mir helfen?","mir helfen"],["Možeš li to napisati?","Kannst du das aufschreiben?","aufschreiben"]]},
+  {id:"volim", bs:"Volim …", de:"Ich mag …", items:[
+    ["Volim kafu.","Ich mag Kaffee.","Kaffee"],["Volim more.","Ich mag das Meer.","Meer"],["Volim muziku.","Ich mag Musik.","Musik"],["Volim ćevape.","Ich mag Ćevapi.","Ćevapi"]]},
+  {id:"danas", bs:"Danas sam …", de:"Heute bin ich …", note:"Männliche Formen: umoran, sretan, zauzet, gladan.", items:[
+    ["Danas sam umoran.","Heute bin ich müde.","müde"],["Danas sam sretan.","Heute bin ich glücklich.","glücklich"],["Danas sam zauzet.","Heute bin ich beschäftigt.","beschäftigt"],
+    ["Danas sam gladan.","Heute habe ich Hunger.","hungrig"]]},
+  {id:"kosta", bs:"Koliko košta …?", de:"Wie viel kostet …?", items:[
+    ["Koliko košta kafa?","Wie viel kostet der Kaffee?","Kaffee"],["Koliko košta ovo?","Wie viel kostet das?","das hier"],["Koliko košta karta?","Wie viel kostet die Fahrkarte?","Fahrkarte"],
+    ["Koliko košta kilo jabuka?","Wie viel kostet ein Kilo Äpfel?","ein Kilo Äpfel"]]},
+  {id:"nemam", bs:"Nemam …", de:"Ich habe kein …", note:"Nach nemam steht das Ding im Genitiv: vrijeme → vremena.", items:[
+    ["Nemam vremena.","Ich habe keine Zeit.","Zeit"],["Nemam para.","Ich habe kein Geld.","Geld"],["Nemam pojma.","Ich habe keine Ahnung.","Ahnung"],["Nemam problema.","Ich habe keine Probleme.","Probleme"]]}
+];
+
+/* ---- learning path: order of the 30-day plan, advanced by mastery ---- */
+const PHASES = {1:"Laute & erste Sätze", 2:"Alltag & Verben", 3:"Essen, Orte, Vergangenheit", 4:"Persönliche Sätze"};
+const LESSONS = [
+  {id:"l01", ph:1, t:"Begrüßen", items:[["Zdravo!","Hallo!"],["Dobar dan.","Guten Tag."],["Dobro jutro.","Guten Morgen."],["Hvala.","Danke."],["Molim.","Bitte."],["Doviđenja.","Auf Wiedersehen."]]},
+  {id:"l02", ph:1, t:"Sich vorstellen", items:[["Kako se zoveš?","Wie heißt du?"],["Zovem se {ime}.","Ich heiße {ime}."],["Drago mi je.","Freut mich."],["Odakle si?","Woher kommst du?"],["Ja sam iz Njemačke.","Ich bin aus Deutschland."]]},
+  {id:"l03", ph:1, t:"Ja, nein, nochmal bitte", items:[["Da.","Ja."],["Ne.","Nein."],["Izvinite.","Entschuldigen Sie."],["Ne razumijem.","Ich verstehe nicht."],["Možete li ponoviti?","Können Sie das wiederholen?"],["Govorim malo bosanski.","Ich spreche ein bisschen Bosnisch."]]},
+  {id:"l04", ph:1, t:"Wie geht's?", items:[["Kako si?","Wie geht es dir?"],["Dobro sam, hvala.","Mir geht es gut, danke."],["A ti?","Und dir?"],["Umoran sam.","Ich bin müde."],["Sretan sam.","Ich bin glücklich."]]},
+  {id:"l05", ph:1, t:"Zahlen 0 bis 10", nums:[0, 10]},
+  {id:"l06", ph:1, t:"Fragewörter I", items:[["Ko je to?","Wer ist das?"],["Šta je ovo?","Was ist das?"],["Gdje si?","Wo bist du?"],["Kada dolaziš?","Wann kommst du?"],["Kako se kaže …?","Wie sagt man …?"]]},
+  {id:"l07", ph:1, t:"Fragewörter II", items:[["Zašto?","Warum?"],["Koliko košta?","Wie viel kostet das?"],["Koji autobus?","Welcher Bus?"],["Kuda ideš?","Wohin gehst du?"],["Otkad?","Seit wann?"]]},
+  {id:"l08", ph:2, t:"Sein und haben", items:[["Ti si moj prijatelj.","Du bist mein Freund."],["On je ovdje.","Er ist hier."],["Mi smo kod kuće.","Wir sind zu Hause."],["Imam pitanje.","Ich habe eine Frage."],["Imaš li vremena?","Hast du Zeit?"],["Nemam vremena.","Ich habe keine Zeit."]]},
+  {id:"l09", ph:2, t:"Ich möchte, ich brauche", frames:["zelim","treba"]},
+  {id:"l10", ph:2, t:"Zahlen 11 bis 20", nums:[11, 20]},
+  {id:"l11", ph:2, t:"Wohin gehst du?", frames:["idemu","idemna"]},
+  {id:"l12", ph:2, t:"Wollen und können", frames:["hocu","mozes"]},
+  {id:"l13", ph:2, t:"Zahlen bis 100", numsList:[21, 30, 34, 40, 47, 50, 60, 75, 90, 100]},
+  {id:"l14", ph:2, t:"Heute, morgen, gestern", items:[["danas","heute"],["sutra","morgen"],["jučer","gestern"],["sada","jetzt"],["kasnije","später"],["Vidimo se sutra.","Bis morgen."]]},
+  {id:"l15", ph:3, t:"Im Café", items:[["Jednu kafu, molim.","Einen Kaffee, bitte."],["Želim čaj s limunom.","Ich möchte Tee mit Zitrone."],["Jednu negaziranu vodu, molim.","Ein stilles Wasser, bitte."],["Imate li kolače?","Haben Sie Kuchen?"],["Račun, molim.","Die Rechnung, bitte."],["Hvala, bilo je odlično.","Danke, es war ausgezeichnet."]]},
+  {id:"l16", ph:3, t:"Auf dem Markt", items:[["Dajte mi kilo jabuka.","Geben Sie mir ein Kilo Äpfel."],["Pola kile paradajza, molim.","Ein halbes Kilo Tomaten, bitte."],["Je li ovo svježe?","Ist das frisch?"],["To je preskupo.","Das ist zu teuer."],["Uzet ću to.","Ich nehme das."],["Imate li sitno?","Haben Sie Kleingeld?"]]},
+  {id:"l17", ph:3, t:"Preise in KM", prices:[1, 2, 3, 5, 10, 21, 22]},
+  {id:"l18", ph:3, t:"Wo ist …? Haben Sie …?", frames:["gdje","imate"]},
+  {id:"l19", ph:3, t:"Unterwegs", items:[["Kako da dođem do centra?","Wie komme ich ins Zentrum?"],["Je li daleko?","Ist es weit?"],["Idite pravo, pa lijevo.","Gehen Sie geradeaus, dann links."],["Koji tramvaj ide na Baščaršiju?","Welche Tram fährt zur Baščaršija?"],["Izgubio sam se.","Ich habe mich verlaufen."]]},
+  {id:"l20", ph:3, t:"Ich war …", frames:["bio"]},
+  {id:"l21", ph:3, t:"Was ich gemacht habe", items:[["Radio sam.","Ich habe gearbeitet."],["Jeo sam.","Ich habe gegessen."],["Spavao sam.","Ich habe geschlafen."],["Išao sam u grad.","Ich bin in die Stadt gegangen."],["Gledao sam film.","Ich habe einen Film geschaut."],["Učio sam bosanski.","Ich habe Bosnisch gelernt."]]},
+  {id:"l22", ph:4, t:"Wie es mir geht", frames:["danas","volim"]},
+  {id:"l23", ph:4, t:"Gefühle", items:[["Drago mi je što si tu.","Schön, dass du da bist."],["Nedostaješ mi.","Ich vermisse dich."],["Sretan sam s tobom.","Ich bin glücklich mit dir."],["Ponosan sam.","Ich bin stolz."],["Volim te.","Ich liebe dich."]]},
+  {id:"l24", ph:4, t:"Über mich", personal:true}
+];
+
+const PHRASES = [
+  {id:"upoznavanje", de:"Kennenlernen", items:[
+    ["Kako se zoveš?","Wie heißt du?"],["Zovem se {ime}.","Ich heiße {ime}."],["Drago mi je.","Freut mich."],["Odakle si?","Woher kommst du?"],
+    ["Ja sam iz Njemačke.","Ich bin aus Deutschland."],["Živim u Njemačkoj.","Ich wohne in Deutschland."],["Učim bosanski.","Ich lerne Bosnisch."],
+    ["Govorim malo bosanski.","Ich spreche ein bisschen Bosnisch."],["Ne razumijem. Možete li ponoviti?","Ich verstehe nicht. Können Sie das wiederholen?"],
+    ["Govorite li njemački?","Sprechen Sie Deutsch?"]]},
+  {id:"kafana", de:"Im Café", items:[
+    ["Jednu kafu, molim.","Einen Kaffee, bitte."],["Želim čaj s limunom.","Ich möchte Tee mit Zitrone."],["Jednu negaziranu vodu, molim.","Ein stilles Wasser, bitte."],
+    ["Imate li kolače?","Haben Sie Kuchen?"],["Koliko košta?","Wie viel kostet das?"],["Račun, molim.","Die Rechnung, bitte."],["Hvala, bilo je odlično.","Danke, es war ausgezeichnet."]]},
+  {id:"pijaca", de:"Auf dem Markt", items:[
+    ["Dajte mi kilo jabuka.","Geben Sie mir ein Kilo Äpfel."],["Pola kile paradajza, molim.","Ein halbes Kilo Tomaten, bitte."],["Je li ovo svježe?","Ist das frisch?"],
+    ["To je preskupo.","Das ist zu teuer."],["Uzet ću to.","Ich nehme das."],["Imate li sitno?","Haben Sie Kleingeld?"]]},
+  {id:"grad", de:"Unterwegs", items:[
+    ["Gdje je stanica?","Wo ist die Haltestelle?"],["Kako da dođem do centra?","Wie komme ich ins Zentrum?"],["Je li daleko?","Ist es weit?"],
+    ["Idite pravo, pa lijevo.","Gehen Sie geradeaus, dann links."],["Koji tramvaj ide na Baščaršiju?","Welche Tram fährt zur Baščaršija?"],["Izgubio sam se.","Ich habe mich verlaufen."]]},
+  {id:"osjecaji", de:"Wie es mir geht", items:[
+    ["Dobro sam, hvala. A ti?","Mir geht's gut, danke. Und dir?"],["Umoran sam.","Ich bin müde."],["Sretan sam.","Ich bin glücklich."],["Gladan sam.","Ich habe Hunger."],
+    ["Bio sam na poslu.","Ich war bei der Arbeit."],["Sutra radim.","Morgen arbeite ich."],["Nedostaješ mi.","Ich vermisse dich."],["Volim te.","Ich liebe dich."]]}
+];
+const SOUNDS = [
+  {g:"č", how:"hartes tsch wie in Tschüss", ex:[["čaj","Tee"],["čovjek","Mensch"]]},
+  {g:"ć", how:"weiches tsch, Zunge vorn an den Zähnen, fast wie tj", ex:[["kuća","Haus"],["noć","Nacht"]]},
+  {g:"dž", how:"hartes dsch wie in Dschungel", ex:[["džep","Hosentasche"],["džamija","Moschee"]]},
+  {g:"đ", how:"weiches dsch, fast wie dj", ex:[["đak","Schüler"],["rođendan","Geburtstag"]]},
+  {g:"š", how:"sch wie in Schule", ex:[["šuma","Wald"],["škola","Schule"]]},
+  {g:"ž", how:"stimmhaftes sch wie das j in Journal", ex:[["žena","Frau"],["život","Leben"]]},
+  {g:"lj", how:"l und j zu einem Laut verschmolzen, wie in Ljubljana", ex:[["ljubav","Liebe"],["ljeto","Sommer"]]},
+  {g:"nj", how:"wie gn in Champagner", ex:[["konj","Pferd"],["knjiga","Buch"]]},
+  {g:"c", how:"immer wie deutsches z", ex:[["cvijet","Blume"],["ulica","Straße"]]},
+  {g:"z", how:"stimmhaftes s wie in Sonne", ex:[["zima","Winter"],["zdravo","Hallo"]]},
+  {g:"s", how:"immer scharfes s wie in Bus", ex:[["sok","Saft"],["sestra","Schwester"]]},
+  {g:"h", how:"ch wie in Bach, auch am Wortanfang", ex:[["hvala","Danke"],["hljeb","Brot"]]},
+  {g:"r", how:"gerollt; kann allein eine Silbe tragen", ex:[["srce","Herz"],["prst","Finger"]]},
+  {g:"v", how:"wie deutsches w", ex:[["voda","Wasser"],["volim","ich liebe"]]},
+  {g:"j", how:"wie deutsches j", ex:[["ja","ich"],["jabuka","Apfel"]]}
+];
+const wordItems = (cat) => cat.items.map(x => cat.verbs ? {bs:x[0], de:x[1], conj:x[2]} : {bs:x[0], de:x[1], ex:x[2] || "", exde:x[3] || ""});
+const LMAP = {"č":"tsch","ć":"tj","đ":"dj","š":"sch","ž":"zh","c":"z","z":"s","s":"ss","h":"ch","v":"w"};
+function bsToLaut(s){ const t = String(s).toLowerCase(), V = /[aeiou]/; let o = ""; for (let i = 0; i < t.length; i++){ if (t[i] === "d" && t[i + 1] === "ž"){ o += "dsch"; i++; continue; } if (t[i] === "s"){ o += V.test(t[i - 1] || "") && V.test(t[i + 1] || "") ? "ss" : "s"; continue; } o += LMAP[t[i]] ?? t[i]; } return o; }
+const ONES = ["nula","jedan","dva","tri","četiri","pet","šest","sedam","osam","devet"];
+const TEENS = ["deset","jedanaest","dvanaest","trinaest","četrnaest","petnaest","šesnaest","sedamnaest","osamnaest","devetnaest"];
+const TENS = ["","","dvadeset","trideset","četrdeset","pedeset","šezdeset","sedamdeset","osamdeset","devedeset"];
+const HUNDS = ["","sto","dvjesto","trista","četiristo","petsto","šeststo","sedamsto","osamsto","devetsto"];
+function below1000(n, fem){
+  const out = [], hd = Math.floor(n / 100), r = n % 100;
+  if (hd) out.push(HUNDS[hd]);
+  if (r >= 10 && r < 20) out.push(TEENS[r - 10]);
+  else { const t = Math.floor(r / 10), o = r % 10; if (t >= 2) out.push(TENS[t]); if (o) out.push(fem && o === 1 ? "jedna" : fem && o === 2 ? "dvije" : ONES[o]); }
+  return out.join(" ");
+}
+function plural(n, one, few, many){ const l2 = n % 100, l = n % 10; if (l2 >= 11 && l2 <= 14) return many; if (l === 1) return one; if (l >= 2 && l <= 4) return few; return many; }
+function num2bs(n, fem){
+  if (n === 0) return "nula";
+  const th = Math.floor(n / 1000), r = n % 1000, out = [];
+  if (th === 1) out.push("hiljadu"); else if (th > 1) out.push(below1000(th, true) + " " + plural(th, "hiljada", "hiljade", "hiljada"));
+  if (r) out.push(below1000(r, fem));
+  return out.join(" ");
+}
+const priceBs = (n) => num2bs(n, true) + " " + plural(n, "marka", "marke", "maraka");
+const NUM_RANGES = [["0-10","0–10",0,10],["11-20","11–20",11,20],["0-100","bis 100",0,100],["100-1000","bis 1000",100,1000],["1000-9999","Tausender",1000,9999]];
+const WEEKDAYS = ["nedjelja","ponedjeljak","utorak","srijeda","četvrtak","petak","subota"];
+const DAY_ABBR = ["N","P","U","S","Č","P","S"];
+const MONTHS = ["januar","februar","mart","april","maj","juni","juli","august","septembar","oktobar","novembar","decembar"];
+const BOX_DAYS = [0, 0, 1, 3, 7, 14, 30];
+const DAY = 86400000;
+const REC_LANGS = [["hr-HR","Kroatisch"],["bs-BA","Bosnisch"],["sr-RS","Serbisch"]];
+
+/* ================= icons ================= */
+const I = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg>',
+  learn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4z"/><path d="M7 9v5c0 1.7 2.2 3 5 3s5-1.3 5-3V9"/></svg>',
+  train:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  speak:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
+  starOn:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'
+};
+
+/* ================= helpers ================= */
+const $ = (id) => document.getElementById(id);
+function h(tag, props, ...kids){
+  const e = document.createElement(tag);
+  if (props) for (const k in props){
+    const v = props[k];
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v;
+    else if (k === "text") e.textContent = v;
+    else if (k === "html") e.innerHTML = v;
+    else if (k.startsWith("on") && typeof v === "function") e.addEventListener(k.slice(2), v);
+    else if (typeof v === "boolean") e[k] = v;
+    else e.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return e;
+}
+function iconBtn(icon, label, onclick, cls){ return h("button", {class: cls || "pill", type:"button", "aria-label": label, html: icon + (cls === "ibtn" ? "" : `<span>${label}</span>`), onclick}); }
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+function dayKey(d){ d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function startOfDay(t){ const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); }
+function clip(s, n){ s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+let toastTimer;
+function toast(msg){ const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, 3800); }
+const CYR = {"а":"a","б":"b","в":"v","г":"g","д":"d","ђ":"đ","е":"e","ж":"ž","з":"z","и":"i","ј":"j","к":"k","л":"l","љ":"lj","м":"m","н":"n","њ":"nj","о":"o","п":"p","р":"r","с":"s","т":"t","ћ":"ć","у":"u","ф":"f","х":"h","ц":"c","ч":"č","џ":"dž","ш":"š"};
+function normWords(s){
+  s = String(s || "").toLowerCase().normalize("NFC").replace(/[Ѐ-ӿ]/g, ch => CYR[ch] ?? ch);
+  return s.replace(/[.,!?;:"„“”'’…()\[\]«»–—-]/g, " ").split(/\s+/).filter(Boolean);
+}
+const loose = (w) => w.replace(/[čć]/g, "c").replace(/dž/g, "dz").replace(/đ/g, "dj").replace(/š/g, "s").replace(/ž/g, "z");
+function compare(target, said){
+  const T = normWords(target), A = normWords(said), n = T.length, m = A.length;
+  const dp = Array.from({length: n + 1}, () => new Array(m + 1).fill(0));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+    dp[i][j] = loose(T[i]) === loose(A[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  const res = []; let i = 0, j = 0;
+  while (i < n){
+    if (j < m && loose(T[i]) === loose(A[j])){ res.push({w:T[i], s: T[i] === A[j] ? "ok" : "near"}); i++; j++; }
+    else if (j < m && dp[i][j + 1] >= dp[i + 1][j]) j++;
+    else { res.push({w:T[i], s:"miss"}); i++; }
+  }
+  const got = res.reduce((a, r) => a + (r.s === "ok" ? 1 : r.s === "near" ? 0.85 : 0), 0);
+  return {words: res, score: n ? Math.round(got / n * 100) : 0};
+}
+
+/* ================= state ================= */
+const DEFAULT_SETTINGS = {laut:true, de:true, rate:0.9, voice:"", recLang:0, mic:true, autoCheck:true, hideText:false, hmPause:"normal"};
+function freshProfile(){ return {name:"", goal:15, onboarded:false, settings:{...DEFAULT_SETTINGS}}; }
+let S = store.get("pricaj-app", null);
+if (!S || typeof S !== "object") S = {profile: freshProfile(), vocab:{}, days:{}};
+S.profile = Object.assign(freshProfile(), S.profile || {});
+S.profile.settings = Object.assign({...DEFAULT_SETTINGS}, S.profile.settings || {});
+S.vocab = S.vocab || {}; S.days = S.days || {};
+const P = () => S.profile, ST = () => S.profile.settings;
+let saveTimer;
+function save(){ clearTimeout(saveTimer); saveTimer = setTimeout(() => store.set("pricaj-app", S), 200); }
+try{ if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+
+/* practice time */
+const PRACTICE = new Set(["shadow","cards","sounds","quiz","numbers","words","session","listen","frames"]);
+let lastAct = 0;
+const today = () => { const k = dayKey(); if (!S.days[k]) S.days[k] = {sec:0, spoken:0}; return k; };
+["pointerdown","keydown","input"].forEach(ev => document.addEventListener(ev, () => lastAct = Date.now(), {passive:true, capture:true}));
+setInterval(() => {
+  if (document.visibilityState !== "visible" || !PRACTICE.has(view) || Date.now() - lastAct > 90000) return;
+  S.days[today()].sec += 5; save();
+}, 5000);
+function countSpoken(){ const k = today(); S.days[k].spoken = (S.days[k].spoken || 0) + 1; save(); }
+function streak(){
+  let n = 0, t = Date.now();
+  const ok = (k) => S.days[k] && S.days[k].sec >= 60;
+  if (!ok(dayKey(new Date(t)))) t -= DAY;
+  while (ok(dayKey(new Date(t)))){ n++; t -= DAY; }
+  return n;
+}
+const dueItems = () => Object.values(S.vocab).filter(v => (v.due || 0) <= Date.now());
+
+/* ================= speech output ================= */
+let voices = [], voice = null, playingBtn = null;
+const synth = window.speechSynthesis || null;
+function loadVoices(){
+  if (!synth) return;
+  try{ voices = synth.getVoices() || []; }catch(e){ voices = []; }
+  const isOurs = (v) => /^(hr|bs|sr)/i.test((v.lang || "").replace("_", "-"));
+  voice = (ST().voice && voices.find(v => v.voiceURI === ST().voice)) || voices.find(v => /^bs/i.test(v.lang)) || voices.find(v => /^hr/i.test(v.lang)) || voices.find(v => /^sr/i.test(v.lang) && /latn/i.test(v.lang)) || voices.find(isOurs) || null;
+}
+const ourVoices = () => voices.filter(v => /^(hr|bs|sr)/i.test((v.lang || "").replace("_", "-")));
+const canSpeak = () => !!(synth && voice);
+function markPlaying(btn){ if (playingBtn) playingBtn.classList.remove("playing"); playingBtn = btn || null; if (playingBtn) playingBtn.classList.add("playing"); }
+function stopSpeaking(){ try{ synth && synth.cancel(); }catch(e){} markPlaying(null); }
+function speak(text, slow, btn){
+  if (!text || !canSpeak()) return;
+  lastAct = Date.now();
+  try{
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(String(text));
+    u.voice = voice; u.lang = voice.lang; u.rate = slow ? Math.min(0.7, ST().rate) : ST().rate;
+    u.onend = u.onerror = () => { if (playingBtn === btn) markPlaying(null); };
+    markPlaying(btn); synth.speak(u);
+  }catch(e){ markPlaying(null); }
+}
+function speakBtn(label, text, slow){ if (!canSpeak()) return null; const b = iconBtn(I.speak, label, () => speak(text, slow, b)); return b; }
+const speakIcon = (text) => canSpeak() ? iconBtn(I.speak, "Anhören", (e) => speak(text, false, e.currentTarget), "ibtn") : null;
+
+/* ================= speech input ================= */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+let rec = null, recOn = false, micBroken = false, micTarget = null;
+const micAvailable = () => !!SR && ST().mic && !micBroken;
+function setMicUi(state){ document.querySelectorAll(".mic").forEach(b => { b.dataset.state = state; b.setAttribute("aria-label", state === "listening" ? "Aufnahme beenden" : "Sprechen"); }); updateHint(); }
+function micBtn(target){
+  const b = h("button", {class:"mic", type:"button", "aria-label":"Sprechen", html: I.mic});
+  b.hidden = !micAvailable(); b.dataset.state = recOn ? "listening" : "idle";
+  b.addEventListener("click", () => micClick(target));
+  return b;
+}
+function micClick(target){
+  if (recOn && rec){ try{ rec.stop(); }catch(e){} return; }
+  stopSpeaking();
+  micTarget = target; target.fromMic = false;
+  const base = target.input.value ? target.input.value.trim() + " " : "";
+  try{
+    rec = new SR();
+    rec.lang = REC_LANGS[ST().recLang][0]; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+    rec.onresult = (e) => {
+      let fin = "", inter = "";
+      for (let i = 0; i < e.results.length; i++){ const r = e.results[i]; if (r.isFinal) fin += r[0].transcript; else inter += r[0].transcript; }
+      if (target.live){ target.live.textContent = inter; target.live.hidden = !inter; }
+      if (fin){ target.input.value = (base + fin).trim(); target.fromMic = true; }
+      lastAct = Date.now();
+    };
+    rec.onerror = (e) => {
+      const c = e.error;
+      if (c === "not-allowed" || c === "service-not-allowed"){ micBroken = true; toast("Das Mikrofon ist hier nicht erlaubt. Nutze das Mikrofon deiner Tastatur."); render(); }
+      else if (c === "language-not-supported"){ toast("Diese Sprache bietet die Spracherkennung nicht an. Stell in den Einstellungen Kroatisch ein."); }
+      else if (c === "no-speech") toast("Nichts gehört. Tippe nochmal und sprich direkt los.");
+      else if (c !== "aborted") toast("Spracherkennung hat nicht geklappt. Das Tastatur-Mikrofon geht immer.");
+    };
+    rec.onend = () => {
+      recOn = false; setMicUi("idle");
+      if (target.live) target.live.hidden = true;
+      if (target.fromMic && target.input.value.trim() && document.contains(target.input)){ if (ST().autoCheck && target.onDone) target.onDone(); else target.input.focus(); }
+    };
+    rec.start(); recOn = true; setMicUi("listening");
+  }catch(e){ recOn = false; micBroken = true; toast("Spracherkennung ist hier nicht verfügbar. Nutze das Mikrofon deiner Tastatur."); render(); }
+}
+function updateHint(){
+  const el = document.querySelector("[data-hint]"); if (!el) return;
+  el.textContent = recOn ? "Ich höre zu. Antippen, wenn du fertig bist." :
+    micAvailable() ? `Mikrofon antippen oder Tastatur-Diktat nutzen · ${REC_LANGS[ST().recLang][1]}` :
+    "Tipp: Sprich über das Mikrofon deiner Tastatur (Sprache Kroatisch).";
+}
+function diacriticKeys(input){
+  const wrap = h("div", {class:"keys"});
+  for (const k of ["č","ć","dž","đ","š","ž"]){
+    const b = h("button", {type:"button", text:k});
+    b.addEventListener("pointerdown", (e) => e.preventDefault());
+    b.onclick = () => {
+      const s = input.selectionStart ?? input.value.length, en = input.selectionEnd ?? s;
+      input.value = input.value.slice(0, s) + k + input.value.slice(en);
+      input.setSelectionRange(s + k.length, s + k.length); input.focus();
+    };
+    wrap.append(b);
+  }
+  return wrap;
+}
+function answerBox(onCheck, opts){
+  opts = opts || {};
+  const input = h("input", {class:"textin", placeholder: opts.placeholder || "Sprechen oder schreiben", "aria-label":"Deine Antwort", autocomplete:"off", autocapitalize:"off", autocorrect:"off", spellcheck:"false", inputmode: opts.numeric ? "numeric" : null});
+  const live = h("div", {class:"live", hidden:true});
+  const target = {input, live, fromMic:false, onDone: () => check()};
+  const check = () => { const t = input.value.trim(); if (!t){ input.focus(); return; } onCheck(t); };
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter"){ e.preventDefault(); check(); } });
+  const box = h("div", {class:"answer"}, live, opts.numeric ? null : diacriticKeys(input),
+    h("div", {class:"bar"}, h("div", {class:"field", style:"flex:1"}, input, h("button", {class:"send", type:"button", "aria-label":"Prüfen", html: I.send, onclick: check})), opts.numeric ? null : micBtn(target)),
+    opts.numeric ? null : h("div", {class:"hint", "data-hint":""}));
+  return {box, input};
+}
+function diffView(res){
+  return h("div", {class:"stack", style:"justify-items:center"},
+    h("div", {class:"score " + (res.score >= 85 ? "good" : res.score >= 55 ? "mid" : "low"), text: res.score + " %"}),
+    h("div", {class:"diff"}, res.words.map(w => h("span", {class: w.s, text: w.w}))),
+    h("p", {class:"muted small", text: res.words.some(w => w.s === "near") ? "Gewellt: erkannt, aber ohne passende Häkchen. Das kann an der Erkennung liegen oder an č/ć, š, ž." : res.words.some(w => w.s === "miss") ? "Durchgestrichen: kam nicht an. Hör dir den Satz nochmal langsam an." : "Alles angekommen."}));
+}
+
+/* ================= vocabulary (Heft) ================= */
+function findVocab(bs){ const k = normWords(bs).join(" "); return Object.values(S.vocab).find(v => normWords(v.bs).join(" ") === k); }
+function addVocab(item, quiet){
+  if (!item || !item.bs) return false;
+  if (findVocab(item.bs)){ if (!quiet) toast("Steht schon im Heft."); return false; }
+  const id = newId(), now = Date.now();
+  S.vocab[id] = {id, bs: clip(item.bs, 200), de: clip(item.de, 200), laut: clip(item.laut || bsToLaut(item.bs), 200), box:1, due: now, added: now, src: item.src || ""};
+  save(); if (!quiet) toast("Ins Heft gelegt.");
+  return true;
+}
+const vocabOf = (it, src) => ({bs: it.bs, de: it.de, laut: it.laut || bsToLaut(it.bs), src: src || "Grundwortschatz"});
+function starBtn(item){
+  const b = h("button", {class:"ibtn", type:"button"});
+  const paint = () => { const on = !!findVocab(item.bs); b.innerHTML = on ? I.starOn : I.star; b.setAttribute("aria-label", on ? "Im Heft" : "Merken"); b.style.color = on ? "var(--gold)" : ""; };
+  b.onclick = () => { if (!findVocab(item.bs)) addVocab(item); paint(); };
+  paint(); return b;
+}
+
+/* ================= router ================= */
+let view = "home", arg = null;
+const TABS = [["home","Start",I.home],["learn","Lernen",I.learn],["train","Üben",I.train],["book","Heft",I.book]];
+const PARENT = {words:"learn", numbers:"learn", sounds:"learn", frames:"learn", quiz:"train", cards:"train", shadow:"train", listen:"train", settings:"home", path:"home", session:"home"};
+function go(v, a){
+  if (recOn && rec) try{ rec.abort(); }catch(e){}
+  if (typeof hmStop === "function") hmStop();
+  stopSpeaking();
+  view = v; arg = a === undefined ? null : a; micTarget = null;
+  render(); $("main").scrollTop = 0;
+}
+function applyBodyClasses(){ document.body.classList.toggle("hide-laut", !ST().laut); document.body.classList.toggle("hide-de", !ST().de); }
+function render(){
+  if (!P().onboarded) view = "onboard"; else if (view === "onboard") view = "home";
+  const hdr = $("hdr"), main = $("main"), bottom = $("bottom");
+  hdr.textContent = ""; main.textContent = ""; bottom.textContent = "";
+  (VIEWS[view] || VIEWS.home)(hdr, main);
+  if (TABS.some(t => t[0] === view)){
+    const nav = h("nav", {class:"tabs", "aria-label":"Bereiche"});
+    for (const [id, label, icon] of TABS) nav.append(h("button", {type:"button", html: icon + `<span>${label}</span>`, "aria-current": id === view ? "page" : null, onclick: () => go(id)}));
+    bottom.append(nav);
+  }
+  updateHint();
+}
+function header(hdr, title, sub, opts){
+  opts = opts || {};
+  if (opts.back) hdr.append(iconBtn(I.back, "Zurück", opts.onBack || (() => go(opts.backTo || PARENT[view] || "home")), "ibtn"));
+  hdr.append(h("div", {class:"ttl"}, opts.brand ? h("h1", {html:'Pričaj <span>bosanski</span>'}) : h("h1", {text:title}), sub ? h("div", {class:"sub", text:sub}) : null));
+  if (opts.gear) hdr.append(iconBtn(I.gear, "Einstellungen", () => go("settings"), "ibtn"));
+}
+function segControl(options, get, set){
+  const seg = h("div", {class:"seg", role:"group"});
+  const paint = () => { for (const b of seg.children) b.setAttribute("aria-pressed", String(b.dataset.v === String(get()))); };
+  for (const [v, label] of options) seg.append(h("button", {type:"button", "data-v": String(v), text: label, onclick: () => { set(v); paint(); }}));
+  paint(); return seg;
+}
+function pillChoice(options, get, set){
+  const row = h("div", {class:"row", role:"group"});
+  const paint = () => row.querySelectorAll("button").forEach(b => { const on = b.dataset.v === String(get()); b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
+  for (const [v, l] of options) row.append(h("button", {class:"pill", type:"button", "data-v": String(v), text: l, onclick: () => { set(v); paint(); }}));
+  paint(); return row;
+}
+const act = (title, text, badge, fn) => h("button", {class:"action", type:"button", onclick: fn}, h("b", {text:title}), h("small", {text}), badge ? h("span", {class:"badge", text: badge}) : null);
+function voiceNote(){
+  if (canSpeak()) return null;
+  return h("p", {class:"note", text: synth ? "Für das Vorlesen fehlt eine kroatische oder bosnische Stimme. iPhone: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Kroatisch, dort eine Stimme laden. Danach die App neu öffnen." : "Dieser Browser kann nicht vorlesen."});
+}
+
+/* ================= views ================= */
+const VIEWS = {};
+
+VIEWS.onboard = (hdr, main) => {
+  header(hdr, "", null, {brand:true});
+  const name = h("input", {class:"textin", id:"onbName", placeholder:"Dein Vorname", maxlength:"40", value: P().name, autocomplete:"given-name"});
+  let goal = P().goal;
+  main.append(h("section", {class:"onb"},
+    h("div", {class:"stack"}, h("h2", {text:"Dobro došao!"}), h("p", {class:"lead", text:"Zwei kurze Angaben, dann geht's los. Alles läuft auch ohne Internet."})),
+    h("label", {class:"stack", for:"onbName"}, h("span", {class:"cap", text:"Wie heißt du?"}), name, h("small", {class:"muted", text:"Für die Begrüßung und Sätze wie „Zovem se …“. Leer lassen geht auch."})),
+    h("div", {class:"stack"}, h("span", {class:"cap", text:"Tagesziel in Minuten"}), segControl([[5,"5"],[10,"10"],[15,"15"],[20,"20"],[30,"30"]], () => goal, (v) => goal = v)),
+    h("button", {class:"btn block", type:"button", text:"Los geht's", onclick: () => { Object.assign(S.profile, {name: clip(name.value, 40), goal, onboarded:true}); save(); view = "home"; render(); }})));
+};
+
+VIEWS.home = (hdr, main) => {
+  header(hdr, "", null, {brand:true, gear:true});
+  const now = new Date(), d = S.days[dayKey(now)] || {sec:0, spoken:0};
+  const mins = Math.floor(d.sec / 60), goal = P().goal, frac = Math.min(1, d.sec / (goal * 60)), st = streak();
+  const C = 2 * Math.PI * 38, vocabN = Object.keys(S.vocab).length, due = dueItems().length;
+  main.append(h("section", {class:"hello"}, h("h2", {text: P().name ? `Zdravo, ${P().name}!` : "Zdravo!"}),
+    h("p", {text: `${WEEKDAYS[now.getDay()]}, ${now.getDate()}. ${MONTHS[now.getMonth()]}`})));
+  const week = h("div", {class:"week"}), secs = [];
+  for (let i = 6; i >= 0; i--){ const dd = new Date(now.getTime() - i * DAY); secs.push([dd, (S.days[dayKey(dd)] || {}).sec || 0]); }
+  const max = Math.max(goal * 60, ...secs.map(x => x[1]));
+  secs.forEach(([dd, s], i) => week.append(h("div", {class:"col"},
+    h("div", {class:"bar" + (s >= goal * 60 ? " hit" : "") + (i === 6 ? " now" : ""), style:`height:${Math.max(4, s / max * 64)}px`}), h("span", {text: DAY_ABBR[dd.getDay()]}))));
+  main.append(h("section", {class:"card stack"},
+    h("div", {class:"today"}, h("div", {html:`<svg class="ring${frac >= 1 ? " done" : ""}" viewBox="0 0 92 92" role="img" aria-label="${mins} von ${goal} Minuten heute"><circle class="track" cx="46" cy="46" r="38" fill="none" stroke-width="9"/><circle class="val" cx="46" cy="46" r="38" fill="none" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - frac)}" transform="rotate(-90 46 46)"/><text x="46" y="50" text-anchor="middle" font-size="22">${mins}</text><text class="unit" x="46" y="66" text-anchor="middle" font-size="10">von ${goal} Min</text></svg>`}),
+      h("div", {class:"stats"}, h("b", {text: frac >= 1 ? "Tagesziel geschafft" : `Noch ${Math.max(1, goal - mins)} Min bis zum Ziel`}),
+        h("span", {class:"muted small", text: `${st} ${st === 1 ? "Tag" : "Tage"} in Folge · ${d.spoken || 0} Sätze gesprochen`}),
+        h("span", {class:"muted small", text: `${vocabN} Einträge im Heft`}))), week));
+  const cur = currentLesson(), doneN = Object.keys(S.path.done).length;
+  main.append(h("section", {class:"card stack", style:"border-color:var(--accent);background:var(--accent-soft)"},
+    h("span", {class:"cap", text: cur ? `Abschnitt ${cur.ph}: ${PHASES[cur.ph]}` : "Lernpfad geschafft"}),
+    h("h3", {style:"font-size:1.25rem", text: cur ? `Etappe ${lessonNo(cur)}: ${cur.t}` : "Wiederholen hält dich fit"}),
+    h("p", {class:"muted small", text: cur ? `${due ? due + " Wiederholungen, dann neue" : "Neue"} Sätze, Hören und Sprechen, kurzer Abschlusstest. Etwa 15 Minuten.` : (due ? `${due} Karten sind fällig.` : "Heute ist nichts fällig.")}),
+    h("div", {class:"prog"}, LESSONS.map(L => h("i", {class: S.path.done[L.id] ? "done" : L === cur ? "cur" : ""}))),
+    h("div", {class:"row"}, h("button", {class:"btn", type:"button", text:"Heute lernen", onclick: () => startLesson(cur, "full")}),
+      h("button", {class:"btn ghost", type:"button", text:`Lernpfad (${doneN}/${LESSONS.length})`, onclick: () => go("path")}))));
+  main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Frei üben"}), h("div", {class:"grid2"},
+    act("Hören & Sagen", "Deutsch hören, Bosnisch sagen, Lösung hören", null, () => go("listen")),
+    act("Satzbaukästen", "Želim …, Treba mi …, Bio sam u …", null, () => go("frames")),
+    act("Wiederholen", vocabN ? `${vocabN} Karten im Heft` : "Füllt sich automatisch", due ? `${due} fällig` : null, () => go("cards")),
+    act("Quiz", "Ein Wort, vier Antworten", null, () => go("quiz")),
+    act("Zahlen", "Hören, wählen, sagen, Preise", null, () => go("numbers")),
+    act("Nachsprechen", "Alltagssätze hören und nachsprechen", null, () => go("shadow")))));
+  const vn = voiceNote(); if (vn) main.append(vn);
+  main.append(h("p", {class:"note"}, "Gespräche mit dem Tutor gibt es in der Claude-Version (braucht Internet): ", h("a", {href: TUTOR_URL, target:"_blank", rel:"noopener", style:"color:var(--accent);font-weight:600", text:"Tutor öffnen"})));
+};
+
+VIEWS.learn = (hdr, main) => {
+  header(hdr, "Lernen", "Nachschlagen und anhören", {gear:true});
+  main.append(h("div", {class:"stack"},
+    act("Lernpfad", `24 Etappen in der Reihenfolge deines 30-Tage-Plans. ${Object.keys(S.path.done).length} geschafft.`, null, () => go("path")),
+    act("Grundwortschatz", `${WORDS.length} Themen mit ${WORDS.reduce((a, c) => a + c.items.length, 0)} Einträgen: Fragewörter, Verben, häufige kleine Wörter, Familie, Körper, Farben, Wetter und mehr.`, null, () => go("words")),
+    act("Satzbaukästen", `${FRAMES.length} feste Satzanfänge zum Abwandeln, z. B. Želim …, Treba mi …, Bio sam u …`, null, () => go("frames")),
+    act("Zahlen", "Zahlentafel von 0 bis 9999 und vier Übungen, auch Preise in KM.", null, () => go("numbers")),
+    act("Laute", "Die Laute, die es im Deutschen nicht gibt, mit Beispielwörtern.", null, () => go("sounds"))));
+  const vn = voiceNote(); if (vn) main.append(vn);
+};
+VIEWS.train = (hdr, main) => {
+  header(hdr, "Üben", "Kurze Einheiten, auch offline", {gear:true});
+  const due = dueItems().length, total = Object.keys(S.vocab).length;
+  main.append(h("div", {class:"stack"},
+    act("Hören & Sagen", "Vorgabe auf Deutsch, Pause zum Sprechen, dann die Lösung. Sätze kommen in wachsenden Abständen wieder.", null, () => go("listen")),
+    act("Quiz", "Ein Wort, vier Antworten. Aus dem Grundwortschatz, Zahlen oder deinem Heft.", null, () => go("quiz")),
+    act("Wiederholen", total ? `Karteikarten aus deinem Heft mit Wiederholungsplan. ${total} Einträge.` : "Karteikarten aus deinem Heft. Merke dir zuerst Wörter mit dem Stern.", due ? `${due} fällig` : null, () => go("cards")),
+    act("Nachsprechen", "Alltagssätze hören, nachsprechen und Wort für Wort abgleichen.", null, () => go("shadow"))));
+};
+
+/* ---------- words ---------- */
+let openVerb = null;
+VIEWS.words = (hdr, main) => {
+  const cat = WORDS.find(c => c.id === arg);
+  if (!cat){
+    header(hdr, "Grundwortschatz", "Antippen, anhören, merken, abfragen", {back:true});
+    main.append(h("div", {class:"grid2"}, WORDS.map(c => h("button", {class:"scen", type:"button", onclick: () => go("words", c.id)},
+      h("b", {text: c.de}), h("span", {text: c.bs}), h("small", {text: `${c.items.length} ${c.verbs ? "Verben mit allen Formen" : "Einträge"}`})))));
+    return;
+  }
+  header(hdr, cat.de, cat.bs, {back:true, backTo:"words"});
+  const items = wordItems(cat);
+  main.append(h("div", {class:"row"},
+    h("button", {class:"btn", type:"button", text:"Quiz dazu", onclick: () => go("quiz", {src: cat.id})}),
+    h("button", {class:"btn sec", type:"button", text:"Alle ins Heft", onclick: () => { let n = 0; for (const it of items) if (addVocab(vocabOf(it), true)) n++; toast(n ? `${n} Einträge ins Heft gelegt.` : "Alles steht schon im Heft."); render(); }})));
+  main.append(h("p", {class:"muted small", text: [cat.note, cat.verbs ? (cat.items[0][2].length > 1 ? "„Alle Formen“ zeigt die Gegenwart: ich, du, er/sie, wir, ihr, sie." : "") : (cat.items.some(x => x[2]) ? "Beispielsatz antippen zum Anhören." : ""), "Die Lautschrift mit ≈ ist eine grobe Hilfe ohne Betonung."].filter(Boolean).join(" ")}));
+  const vn = voiceNote(); if (vn) main.append(vn);
+  main.append(h("div", {class:"list"}, items.map(wordRow)));
+};
+function wordRow(it){
+  const open = it.conj && it.conj.length > 1 && openVerb === it.bs;
+  const body = h("div", {class:"grow wrow"}, h("b", {text: it.bs}), h("small", {class:"laut", text:"≈ " + bsToLaut(it.bs)}), h("small", {text: it.de}));
+  if (it.ex){ const ex = h("div", {class:"ex", role:"button", tabindex:"0"}, h("b", {text: it.ex}), " · " + it.exde); ex.onclick = () => speak(it.ex, false, null); body.append(ex); }
+  if (it.conj && it.conj.length === 1){ body.append(h("small", {text: "ich: " + it.conj[0]})); }
+  else if (it.conj){
+    if (open) body.append(h("div", {class:"conj"}, it.conj.flatMap((f, i) => [h("span", {text: PRON[i]}), h("b", {text: f})])));
+    body.append(h("button", {class:"tbtn", type:"button", style:"justify-self:start;margin-top:4px", text: open ? "Formen ausblenden" : "Alle Formen", onclick: () => { openVerb = open ? null : it.bs; render(); }}));
+  }
+  const say = open && it.conj.length > 1 ? it.conj.map((f, i) => PRON[i].split(",")[0] + " " + f).join(", ") : it.conj && it.conj.length === 1 ? it.bs + ", ja " + it.conj[0] : it.bs;
+  return h("div", {class:"li"}, body, speakIcon(say), starBtn(vocabOf(it)));
+}
+
+/* ---------- sounds ---------- */
+VIEWS.sounds = (hdr, main) => {
+  header(hdr, "Laute", "Antippen zum Anhören, dann nachsprechen", {back:true});
+  const vn = voiceNote(); if (vn) main.append(vn);
+  main.append(h("div", {class:"list"}, SOUNDS.map(s => h("div", {class:"card sound"}, h("div", {class:"glyph", text: s.g}),
+    h("div", null, h("p", {text: s.how}), h("div", {class:"ex"}, s.ex.map(([w, de]) => { const b = h("button", {class:"chip", type:"button"}, h("b", {text:w}), h("small", {text:de})); b.onclick = () => speak(w, true, null); return b; })))))));
+};
+
+/* ---------- quiz ---------- */
+let QZ = null;
+function quizSources(){ const n = Object.values(S.vocab).filter(v => v.bs && v.de).length; return [["alle","Alles gemischt"], ...WORDS.map(c => [c.id, c.de]), ["zahlen","Zahlen bis 100"], ["heft", `Mein Heft (${n})`]]; }
+function quizPool(src){
+  if (src === "heft") return Object.values(S.vocab).filter(v => v.bs && v.de).map(v => ({bs: v.bs, de: v.de, laut: v.laut}));
+  if (src === "zahlen"){ const out = []; for (let n = 0; n <= 100; n++) out.push({bs: num2bs(n), de: String(n)}); return out; }
+  if (src === "alle") return WORDS.flatMap(wordItems);
+  const c = WORDS.find(x => x.id === src); return c ? wordItems(c) : [];
+}
+function numDistractors(n, lo, hi){
+  const c = new Set(), add = (x) => { if (x !== n && x >= lo && x <= hi) c.add(x); };
+  if (n >= 11 && n <= 19) add((n - 10) * 10);
+  if (n % 10 === 0 && n >= 20 && n <= 90) add(10 + n / 10);
+  if (n >= 10 && n < 100) add((n % 10) * 10 + Math.floor(n / 10));
+  [1, -1, 10, -10, 100, -100, 2, -2].forEach(d => add(n + d));
+  const out = shuffle([...c]).slice(0, 3); let guard = 0;
+  while (out.length < 3 && guard++ < 300){ const x = lo + Math.floor(Math.random() * (hi - lo + 1)); if (x !== n && !out.includes(x)) out.push(x); }
+  return out;
+}
+function buildQuestions(pool, dir, src){
+  const field = dir === "de-bs" ? "bs" : "de", backup = WORDS.flatMap(wordItems);
+  return shuffle(pool).slice(0, 10).map(item => {
+    let opts;
+    if (src === "zahlen" && /^\d+$/.test(item.de)){ const n = Number(item.de); opts = [n, ...numDistractors(n, 0, 100)].map(x => field === "de" ? String(x) : num2bs(x)); }
+    else {
+      const uniq = [];
+      for (const o of shuffle(pool).concat(shuffle(backup))){ if (o[field] && o[field] !== item[field] && !uniq.includes(o[field])) uniq.push(o[field]); if (uniq.length === 3) break; }
+      opts = [item[field], ...uniq];
+    }
+    return {item, answer: item[field], opts: shuffle(opts)};
+  });
+}
+function startQuiz(src, dir, pool){
+  pool = pool || quizPool(src);
+  if (!pool.length){ toast(src === "heft" ? "In deinem Heft steht noch nichts mit Übersetzung." : "Keine Wörter gefunden."); return; }
+  if (dir === "audio" && !canSpeak()) toast("Vorlesen gibt es gerade nicht, darum siehst du das Wort.");
+  QZ = {phase:"run", src, dir, qs: buildQuestions(pool, dir, src), i:0, score:0, combo:0, best:0, picked:null, wrong:[], spoke:null};
+  render();
+}
+function pickQuiz(o){
+  const q = QZ.qs[QZ.i], idx = QZ.i, my = QZ;
+  QZ.picked = o;
+  if (o === q.answer){ QZ.score++; QZ.combo++; QZ.best = Math.max(QZ.best, QZ.combo); render(); speak(q.item.bs, false, null);
+    setTimeout(() => { if (QZ === my && QZ.i === idx && QZ.phase === "run" && view === "quiz") nextQuiz(); }, 1200); }
+  else { QZ.combo = 0; QZ.wrong.push(q.item); autoAdd(q.item, "Quiz", true); render(); speak(q.item.bs, false, null); }
+}
+function nextQuiz(){ QZ.picked = null; if (QZ.i < QZ.qs.length - 1) QZ.i++; else QZ.phase = "done"; render(); }
+VIEWS.quiz = (hdr, main) => {
+  if (arg && arg.src){ QZ = {phase:"setup", src: arg.src, dir: (QZ && QZ.dir) || "bs-de"}; arg = null; }
+  if (!QZ) QZ = {phase:"setup", src:"alle", dir:"bs-de"};
+  header(hdr, "Quiz", QZ.phase === "run" ? `Frage ${QZ.i + 1} von ${QZ.qs.length}` : "Ein Wort, vier Antworten", {back:true, onBack: QZ.phase === "setup" ? null : () => { stopSpeaking(); QZ.phase = "setup"; render(); }});
+  if (QZ.phase === "setup"){
+    main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Wörter aus"}), pillChoice(quizSources(), () => QZ.src, (v) => QZ.src = v)),
+      h("section", {class:"stack"}, h("span", {class:"cap", text:"Richtung"}), pillChoice([["bs-de","Bosnisch → Deutsch"],["de-bs","Deutsch → Bosnisch"],["audio","Hören → Deutsch"]], () => QZ.dir, (v) => QZ.dir = v)),
+      h("button", {class:"btn block", type:"button", text:"10 Fragen starten", onclick: () => startQuiz(QZ.src, QZ.dir)}));
+    return;
+  }
+  if (QZ.phase === "done"){
+    const n = QZ.qs.length, pct = Math.round(QZ.score / n * 100);
+    main.append(h("section", {class:"card practice"}, h("span", {class:"cap", text:"Ergebnis"}), h("div", {class:"score " + (pct >= 80 ? "good" : pct >= 50 ? "mid" : "low"), text: `${QZ.score} / ${n}`}),
+      h("p", {class:"muted", text: QZ.best >= 3 ? `Längste Serie: ${QZ.best} richtig in Folge` : QZ.wrong.length ? "Die verpassten Wörter stehen unten." : "Alles richtig."})));
+    if (QZ.wrong.length) main.append(h("span", {class:"cap", text:"Nochmal anschauen"}), h("div", {class:"list"}, QZ.wrong.map(it => h("div", {class:"li"}, h("div", {class:"grow"}, h("b", {text: it.bs}), h("small", {text: it.de})), speakIcon(it.bs), starBtn(vocabOf(it, "Quiz"))))));
+    main.append(h("div", {class:"row"},
+      QZ.wrong.length ? h("button", {class:"btn", type:"button", text:"Fehler nochmal", onclick: () => startQuiz(QZ.src, QZ.dir, QZ.wrong.slice())}) : null,
+      h("button", {class: QZ.wrong.length ? "btn ghost" : "btn", type:"button", text:"Neue Runde", onclick: () => startQuiz(QZ.src, QZ.dir)}),
+      h("button", {class:"btn ghost", type:"button", text:"Andere Auswahl", onclick: () => { QZ.phase = "setup"; render(); }})));
+    return;
+  }
+  const q = QZ.qs[QZ.i], dir = QZ.dir, answered = QZ.picked != null, card = h("section", {class:"card practice"});
+  card.append(h("div", {class:"quizhead"}, h("span", {text: `${QZ.score} richtig`}), QZ.combo >= 2 ? h("span", {class:"combo", text: `${QZ.combo} in Folge`}) : h("span")),
+    h("div", {class:"prog"}, QZ.qs.map((x, i) => h("i", {class: i < QZ.i ? "done" : i === QZ.i ? "cur" : ""}))));
+  if (dir === "audio"){
+    card.append(h("span", {class:"cap", text:"Hör zu: Was heißt das?"}));
+    if (canSpeak()) card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", q.item.bs, false), speakBtn("Langsam", q.item.bs, true)));
+    if (!canSpeak() || answered) card.append(h("div", {class:"bs", text: q.item.bs}));
+  } else {
+    card.append(h("span", {class:"cap", text: dir === "bs-de" ? "Was heißt das?" : "Wie heißt das auf Bosnisch?"}), h("div", {class:"bs", style:"font-size:1.9rem", text: dir === "bs-de" ? q.item.bs : q.item.de}));
+    if (dir === "bs-de") card.append(h("div", {class:"laut", text: "≈ " + bsToLaut(q.item.bs)}));
+  }
+  const opts = h("div", {class:"opts"});
+  for (const o of q.opts){
+    const b = h("button", {class:"opt", type:"button", text: o});
+    if (answered){ b.disabled = true; b.classList.add(o === q.answer ? "right" : o === QZ.picked ? "wrong" : "dim"); } else b.onclick = () => pickQuiz(o);
+    opts.append(b);
+  }
+  card.append(opts);
+  if (answered && QZ.picked !== q.answer) card.append(h("p", {class:"muted", text: `${q.item.bs} = ${q.item.de}`}),
+    h("div", {class:"row", style:"justify-content:center"}, speakIcon(q.item.bs), starBtn(vocabOf(q.item, "Quiz")), h("button", {class:"btn", type:"button", text: QZ.i < QZ.qs.length - 1 ? "Weiter" : "Ergebnis", onclick: nextQuiz})));
+  main.append(card);
+  if (dir === "audio" && !answered && canSpeak() && QZ.spoke !== QZ.i){ QZ.spoke = QZ.i; setTimeout(() => speak(q.item.bs, false, card.querySelector(".pill")), 150); }
+};
+
+/* ---------- numbers ---------- */
+let NM = null;
+const NUM_MODES = [["pick","Hören & wählen"],["type","Hören & tippen"],["say","Zahl sagen"],["price","Preise sagen"]];
+function numRef(){
+  const rng = (a, b, s) => { const o = []; for (let x = a; x <= b; x += s) o.push(x); return o; };
+  const sec = (title, nums, fn) => h("div", {class:"stack"}, h("span", {class:"cap", text: title}), h("div", {class:"numgrid"}, nums.map(n => {
+    const w = fn ? fn(n) : num2bs(n); const b = h("button", {type:"button"}, h("b", {text: fn ? `${n} KM` : String(n)}), h("small", {text: w})); b.onclick = () => speak(w, true, null); return b; })));
+  return h("details", {class:"card"}, h("summary", {text:"Zahlentafel"}), h("div", {class:"stack"},
+    sec("0 bis 20", rng(0, 20, 1)), sec("Zehner", rng(30, 90, 10)), sec("Zusammengesetzt", [21, 34, 47, 58, 99]),
+    sec("Hunderter", rng(100, 900, 100)), sec("Tausender", [1000, 2000, 5000, 1250]), sec("Preise: jedna marka · dvije marke · pet maraka", [1, 2, 3, 5, 11, 21, 22, 25], priceBs)));
+}
+function sayScore(n, said, target){
+  const digits = said.match(/\d+/g), letters = said.replace(/\b(km|kn)\b/gi, "").match(/\p{L}{3,}/gu);
+  if (digits && !letters && Number(digits.join("")) === n) return {words: normWords(target).map(w => ({w, s:"ok"})), score:100, viaDigits:true};
+  const cleaned = said.replace(/(^|\s)i(?=\s|$)/gi, " ");
+  let best = compare(target, cleaned);
+  if (target.startsWith("hiljadu")){ const alt = compare("jedna hiljada" + target.slice(7), cleaned); if (alt.score > best.score) best = alt; }
+  return best;
+}
+function startNumbers(){
+  const r = NM.mode === "price" ? ["", "", 1, 100] : (NUM_RANGES.find(x => x[0] === NM.range) || NUM_RANGES[2]);
+  const lo = r[2], hi = r[3], qs = []; let guard = 0;
+  while (qs.length < 10 && guard++ < 1000){ const x = lo + Math.floor(Math.random() * (hi - lo + 1)); if (!qs.includes(x) || (hi - lo < 10 && qs[qs.length - 1] !== x)) qs.push(x); }
+  NM = {...NM, phase:"run", qs, i:0, res:[], opts: qs.map(n => shuffle([n, ...numDistractors(n, lo, hi)])), picked:null, result:null, typed:"", spoke:null};
+  render();
+}
+function numNext(){ NM.picked = null; NM.result = null; NM.typed = ""; if (NM.i < NM.qs.length - 1) NM.i++; else NM.phase = "done"; render(); }
+VIEWS.numbers = (hdr, main) => {
+  if (!NM) NM = {phase:"setup", mode:"pick", range:"0-100"};
+  const modeName = NUM_MODES.find(m => m[0] === NM.mode)[1];
+  header(hdr, "Zahlen", NM.phase === "run" ? `${NM.i + 1} von ${NM.qs.length} · ${modeName}` : "Brojevi", {back:true, onBack: NM.phase === "setup" ? null : () => { stopSpeaking(); NM.phase = "setup"; render(); }});
+  if (NM.phase === "setup"){
+    main.append(numRef(),
+      h("section", {class:"stack"}, h("span", {class:"cap", text:"Übung"}), pillChoice(NUM_MODES, () => NM.mode, (v) => { NM.mode = v; render(); })),
+      NM.mode !== "price" ? h("section", {class:"stack"}, h("span", {class:"cap", text:"Zahlenbereich"}), pillChoice(NUM_RANGES.map(x => [x[0], x[1]]), () => NM.range, (v) => NM.range = v))
+        : h("p", {class:"muted small", text:"Preise von 1 bis 100 KM, mit der passenden Endung: marka, marke oder maraka."}),
+      (NM.mode === "pick" || NM.mode === "type") && !canSpeak() ? h("p", {class:"note", text:"Ohne Stimme siehst du die Zahl als Wort und wählst oder tippst die Ziffern."}) : null,
+      h("button", {class:"btn block", type:"button", text:"10 Zahlen starten", onclick: startNumbers}));
+    return;
+  }
+  if (NM.phase === "done"){
+    const ok = (i) => (NM.res[i] || 0) >= 85, right = NM.qs.filter((x, i) => ok(i)).length;
+    main.append(h("section", {class:"card practice"}, h("span", {class:"cap", text:"Ergebnis"}), h("div", {class:"score " + (right >= 8 ? "good" : right >= 5 ? "mid" : "low"), text: `${right} / ${NM.qs.length}`})));
+    main.append(h("div", {class:"list"}, NM.qs.map((n, i) => { const w = NM.mode === "price" ? priceBs(n) : num2bs(n);
+      return h("div", {class:"li"}, h("div", {class:"grow"}, h("b", {text: NM.mode === "price" ? `${n} KM` : String(n)}), h("small", {text: w})),
+        h("span", {class:"cap", style: `color:var(${ok(i) ? "--ok" : "--bad"})`, text: ok(i) ? "richtig" : "üben"}), speakIcon(w)); })));
+    main.append(h("div", {class:"row"}, h("button", {class:"btn", type:"button", text:"Neue Runde", onclick: startNumbers}), h("button", {class:"btn ghost", type:"button", text:"Andere Übung", onclick: () => { NM.phase = "setup"; render(); }})));
+    return;
+  }
+  const n = NM.qs[NM.i], mode = NM.mode, word = mode === "price" ? priceBs(n) : num2bs(n);
+  const answered = NM.res[NM.i] !== undefined, listen = mode === "pick" || mode === "type", card = h("section", {class:"card practice"});
+  card.append(h("div", {class:"prog"}, NM.qs.map((x, i) => h("i", {class: i < NM.i ? "done" : i === NM.i ? "cur" : ""}))));
+  if (listen){
+    card.append(h("span", {class:"cap", text: !canSpeak() ? "Welche Zahl ist das?" : mode === "pick" ? "Welche Zahl hörst du?" : "Schreib die Zahl, die du hörst"}));
+    if (canSpeak()) card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", word, false), speakBtn("Langsam", word, true)));
+    if (!canSpeak() || answered) card.append(h("div", {class:"bs", text: word}));
+  } else card.append(h("span", {class:"cap", text: mode === "price" ? "Koliko košta? Sag den Preis" : "Sag die Zahl auf Bosnisch"}), h("div", {class:"bignum", text: mode === "price" ? `${n} KM` : String(n)}));
+  if (mode === "pick"){
+    const opts = h("div", {class:"opts"});
+    for (const o of NM.opts[NM.i]){
+      const b = h("button", {class:"opt", type:"button", style:"font-variant-numeric:tabular-nums;font-size:1.5rem", text: String(o)});
+      if (answered){ b.disabled = true; b.classList.add(o === n ? "right" : o === NM.picked ? "wrong" : "dim"); }
+      else b.onclick = () => { NM.picked = o; NM.res[NM.i] = o === n ? 100 : 0; if (o !== n) autoAdd({bs: word, de: String(n)}, "Zahlen", true); render(); if (o === n){ const i = NM.i, my = NM; setTimeout(() => { if (NM === my && NM.phase === "run" && NM.i === i && view === "numbers") numNext(); }, 1200); } };
+      opts.append(b);
+    }
+    card.append(opts);
+    if (answered && NM.res[NM.i] === 0) card.append(h("div", {class:"row", style:"justify-content:center"}, speakBtn("Nochmal hören", word, true), h("button", {class:"btn", type:"button", text: NM.i < NM.qs.length - 1 ? "Weiter" : "Ergebnis", onclick: numNext})));
+  } else if (!answered){
+    const ab = answerBox((t) => {
+      if (mode === "type"){ const got = Number((t.match(/\d+/g) || []).join("")); NM.res[NM.i] = got === n ? 100 : 0; NM.typed = t; }
+      else { countSpoken(); NM.result = sayScore(n, t, word); NM.res[NM.i] = NM.result.score; }
+      if (NM.res[NM.i] < 85) autoAdd({bs: word, de: mode === "price" ? `${n} KM` : String(n)}, "Zahlen", true);
+      render(); if (mode !== "type") speak(word, false, null);
+    }, mode === "type" ? {numeric:true, placeholder:"Zahl eingeben"} : {});
+    card.append(ab.box);
+    if (mode !== "type") card.append(h("button", {class:"tbtn", type:"button", text:"Lösung zeigen", onclick: () => { NM.res[NM.i] = 0; NM.result = null; render(); speak(word, false, null); }}));
+  } else {
+    if (mode === "type"){ const good = NM.res[NM.i] === 100; card.append(h("div", {class:"score " + (good ? "good" : "low"), text: good ? "Richtig" : `Nicht ${clip(NM.typed, 12)}`}), h("div", {class:"bignum", text: String(n)})); }
+    else {
+      if (NM.result) card.append(diffView(NM.result));
+      card.append(h("div", {class:"bs", text: word}), h("div", {class:"laut", text: "≈ " + bsToLaut(word)}));
+      if (NM.result && NM.result.viaDigits) card.append(h("p", {class:"muted small", text:"Die Erkennung hat Ziffern geschrieben. Die Zahl stimmt, die Endungen ließen sich so nicht prüfen."}));
+      if (mode === "price") card.append(h("p", {class:"muted small", text:"Endung: auf 1 → jedna marka, auf 2–4 → marke (dvije, tri, četiri), sonst maraka. 11 bis 14 immer maraka."}));
+    }
+    card.append(h("div", {class:"row", style:"justify-content:center"}, speakBtn("Anhören", word, false), speakBtn("Langsam", word, true),
+      mode !== "type" ? h("button", {class:"btn ghost", type:"button", text:"Nochmal", onclick: () => { delete NM.res[NM.i]; NM.result = null; render(); }}) : null,
+      h("button", {class:"btn", type:"button", text: NM.i < NM.qs.length - 1 ? "Weiter" : "Ergebnis", onclick: numNext})));
+  }
+  main.append(card);
+  if (listen && !answered && canSpeak() && NM.spoke !== NM.i){ NM.spoke = NM.i; setTimeout(() => speak(word, false, card.querySelector(".pill")), 150); }
+};
+
+/* ---------- shadowing (fixed sentences) ---------- */
+let SH = null;
+function phraseItems(topic){
+  const nm = P().name;
+  const fill = (s) => s.replace(/\{ime\}/g, nm);
+  const groups = topic === "mix" ? PHRASES : PHRASES.filter(p => p.id === topic);
+  let items = groups.flatMap(g => g.items).filter(x => nm || !x[0].includes("{ime}")).map(x => ({bs: fill(x[0]), de: fill(x[1])}));
+  if (topic === "pitanja") items = wordItems(WORDS[0]).map(x => ({bs: x.ex, de: x.exde}));
+  return items;
+}
+function startShadow(topic){
+  const items = shuffle(phraseItems(topic)).slice(0, 6);
+  SH = {phase:"run", topic, items, i:0, scores: new Array(items.length).fill(undefined), result:null, revealed:false, spokeIdx:null};
+  render();
+}
+function shadowNext(){ SH.result = null; SH.revealed = false; if (SH.i < SH.items.length - 1) SH.i++; else SH.phase = "done"; render(); }
+VIEWS.shadow = (hdr, main) => {
+  if (!SH) SH = {phase:"setup", topic:"mix"};
+  header(hdr, "Nachsprechen", "Hören, nachsprechen, abgleichen", {back:true, onBack: SH.phase === "setup" ? null : () => { stopSpeaking(); SH.phase = "setup"; render(); }});
+  if (SH.phase === "setup"){
+    const hide = h("input", {type:"checkbox", class:"switch", id:"optHide", checked: ST().hideText});
+    hide.onchange = () => { ST().hideText = hide.checked; save(); };
+    main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Thema"}), pillChoice([["mix","Gemischt"], ...PHRASES.map(p => [p.id, p.de]), ["pitanja","Fragen"]], () => SH.topic, (v) => SH.topic = v)),
+      h("div", {class:"card set"}, h("div", {class:"setrow"}, h("label", {for:"optHide"}, "Text erst nach dem Hören zeigen", h("small", {text:"Trainiert das Ohr: erst hören, sprechen, dann lesen"})), hide)),
+      h("button", {class:"btn block", type:"button", text:"6 Sätze starten", onclick: () => startShadow(SH.topic)}));
+    const vn = voiceNote(); if (vn) main.append(vn);
+    return;
+  }
+  if (SH.phase === "done"){
+    const vals = SH.scores.filter(x => typeof x === "number"), avg = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : null;
+    main.append(h("section", {class:"card practice"}, h("span", {class:"cap", text:"Runde geschafft"}),
+      avg != null ? h("div", {class:"score " + (avg >= 85 ? "good" : avg >= 55 ? "mid" : "low"), text: avg + " %"}) : h("h2", {text:"Gut gemacht"}),
+      h("p", {class:"muted", text: avg != null ? "Durchschnitt der abgeglichenen Sätze" : "Alle Sätze laut gesprochen"})));
+    main.append(h("div", {class:"list"}, SH.items.map((it, i) => h("div", {class:"li"}, h("div", {class:"grow"}, h("b", {text: it.bs}), h("small", {text: it.de})),
+      h("span", {class:"cap", text: typeof SH.scores[i] === "number" ? SH.scores[i] + " %" : "–"}), starBtn(vocabOf(it, "Nachsprechen"))))));
+    main.append(h("div", {class:"row"}, h("button", {class:"btn", type:"button", text:"Neue Runde", onclick: () => startShadow(SH.topic)}), h("button", {class:"btn ghost", type:"button", text:"Anderes Thema", onclick: () => { SH.phase = "setup"; render(); }})));
+    return;
+  }
+  const it = SH.items[SH.i], card = h("section", {class:"card practice"}), showText = !ST().hideText || SH.revealed || !canSpeak();
+  main.append(h("div", {class:"prog"}, SH.items.map((x, i) => h("i", {class: i < SH.i ? "done" : i === SH.i ? "cur" : ""}))));
+  card.append(h("span", {class:"cap", text:`Satz ${SH.i + 1} von ${SH.items.length}`}));
+  if (showText){ card.append(h("div", {class:"bs", text: it.bs}), h("div", {class:"laut", text:"≈ " + bsToLaut(it.bs)}), h("div", {class:"de", text: it.de})); }
+  else card.append(h("div", {class:"veil"}, h("p", {text:"Erst hören, dann nachsprechen."}), h("button", {class:"tbtn", type:"button", style:"margin-top:8px", text:"Text zeigen", onclick: () => { SH.revealed = true; render(); }})));
+  card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true), starBtn(vocabOf(it, "Nachsprechen"))));
+  if (SH.result){
+    card.append(diffView(SH.result), h("div", {class:"row", style:"justify-content:center"},
+      h("button", {class:"btn ghost", type:"button", text:"Nochmal", onclick: () => { SH.result = null; render(); }}),
+      h("button", {class:"btn", type:"button", text: SH.i < SH.items.length - 1 ? "Weiter" : "Fertig", onclick: shadowNext})));
+  } else {
+    const ab = answerBox((t) => { countSpoken(); SH.result = compare(it.bs, t); SH.scores[SH.i] = SH.result.score; if (SH.result.score < 70) autoAdd(it, "Nachsprechen", true); SH.revealed = true; render(); });
+    card.append(ab.box, h("button", {class:"tbtn", type:"button", text:"Laut gesagt, ohne Abgleich weiter", onclick: () => { SH.scores[SH.i] = null; countSpoken(); shadowNext(); }}));
+  }
+  main.append(card);
+  if (SH.spokeIdx !== SH.i && canSpeak()){ SH.spokeIdx = SH.i; setTimeout(() => speak(it.bs, false, card.querySelector(".pill")), 150); }
+};
+
+/* ---------- flashcards ---------- */
+let CD = null;
+VIEWS.cards = (hdr, main) => {
+  header(hdr, "Wiederholen", CD && CD.phase === "run" ? `${CD.done} geschafft · ${CD.queue.length} offen` : "Karteikarten aus deinem Heft", {back:true, onBack: CD && CD.phase !== "setup" ? () => { stopSpeaking(); CD = null; render(); } : null});
+  const all = Object.values(S.vocab), due = dueItems();
+  if (!CD || CD.phase === "setup"){
+    if (!all.length){
+      main.append(h("div", {class:"card empty stack"}, h("h3", {text:"Dein Heft ist noch leer"}),
+        h("p", {text:"Tippe im Grundwortschatz, im Quiz oder beim Nachsprechen auf den Stern. Oder trag im Heft eigene Wörter ein."}),
+        h("div", {class:"row", style:"justify-content:center"}, h("button", {class:"btn", type:"button", text:"Zum Grundwortschatz", onclick: () => go("words")}), h("button", {class:"btn ghost", type:"button", text:"Zum Heft", onclick: () => go("book")}))));
+      return;
+    }
+    let dir = (CD && CD.dir) || "de";
+    main.append(h("section", {class:"card stack"}, h("div", {class:"spread"}, h("b", {text: due.length ? `${due.length} Karten fällig` : "Heute nichts fällig"}), h("span", {class:"muted small", text:`${all.length} im Heft`})),
+      h("p", {class:"muted small", text:"Gewusste Karten kommen in wachsenden Abständen wieder: morgen, in 3, 7, 14 und 30 Tagen."})),
+      h("section", {class:"stack"}, h("span", {class:"cap", text:"Richtung"}), pillChoice([["de","Deutsch → Bosnisch"],["listen","Hören → Deutsch"]], () => dir, (v) => dir = v)),
+      h("button", {class:"btn block", type:"button", text: due.length ? `${Math.min(20, due.length)} fällige Karten üben` : "10 zufällige Karten üben", onclick: () => {
+        const pool = due.length ? due.sort((a, b) => (a.due || 0) - (b.due || 0)).slice(0, 20) : shuffle(all).slice(0, 10);
+        CD = {phase:"run", dir, queue: pool.map(x => x.id), done:0, good:0, hard:0, again:0, revealed:false, result:null, requeued:{}, spoke:null}; render(); }}));
+    return;
+  }
+  if (CD.phase === "done"){
+    main.append(h("section", {class:"card practice"}, h("span", {class:"cap", text:"Fertig für jetzt"}), h("h2", {text:`${CD.done} Karten wiederholt`}),
+      h("p", {class:"muted", text:`${CD.good} gewusst · ${CD.hard} schwer · ${CD.again} nochmal`}),
+      h("div", {class:"row", style:"justify-content:center"}, h("button", {class:"btn", type:"button", text:"Noch eine Runde", onclick: () => { CD = null; render(); }}), h("button", {class:"btn ghost", type:"button", text:"Zum Start", onclick: () => go("home")}))));
+    return;
+  }
+  const it = S.vocab[CD.queue[0]];
+  if (!it){ CD.queue.shift(); if (!CD.queue.length) CD.phase = "done"; return render(); }
+  const card = h("section", {class:"card practice"}), listen = CD.dir === "listen" && canSpeak();
+  card.append(h("span", {class:"cap", text: listen ? "Hör zu: Was heißt das?" : "Wie sagst du das auf Bosnisch?"}));
+  if (listen) card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true)));
+  else card.append(h("div", {class:"bs", text: it.de || "(ohne Übersetzung)"}));
+  if (CD.revealed){
+    card.append(h("div", {class:"bs", text: it.bs}), h("div", {class:"laut", text: "≈ " + (it.laut || bsToLaut(it.bs))}));
+    if (listen && it.de) card.append(h("p", {style:"font-size:1.1rem", text: it.de}));
+    if (!listen) card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true)));
+    if (CD.result) card.append(diffView(CD.result));
+    const nd = (b) => { const d = BOX_DAYS[Math.min(6, b)]; return d <= 1 ? "morgen" : `in ${d} Tagen`; };
+    card.append(h("div", {class:"rate"},
+      h("button", {class:"r1", type:"button", onclick: () => rateCard(it, "again")}, "Nochmal", h("small", {text:"gleich wieder"})),
+      h("button", {class:"r2", type:"button", onclick: () => rateCard(it, "hard")}, "Schwer", h("small", {text:"morgen"})),
+      h("button", {class:"r3", type:"button", onclick: () => rateCard(it, "good")}, "Gewusst", h("small", {text: nd((it.box || 1) + 1)}))));
+  } else {
+    if (!listen) card.append(answerBox((t) => { countSpoken(); CD.result = compare(it.bs, t); CD.revealed = true; render(); speak(it.bs, false, null); }).box);
+    card.append(h("button", {class: listen ? "btn" : "tbtn", type:"button", text:"Aufdecken", onclick: () => { CD.revealed = true; render(); if (!listen) speak(it.bs, false, null); }}));
+  }
+  main.append(card);
+  if (listen && !CD.revealed && CD.spoke !== it.id){ CD.spoke = it.id; setTimeout(() => speak(it.bs, false, card.querySelector(".pill")), 150); }
+};
+function rateCard(it, r){
+  const now = Date.now();
+  if (r === "again"){ it.box = 1; it.due = now; CD.again++; if (!CD.requeued[it.id]){ CD.requeued[it.id] = 1; CD.queue.push(it.id); } }
+  else if (r === "hard"){ it.box = Math.max(1, it.box || 1); it.due = startOfDay(now) + DAY; CD.hard++; }
+  else { it.box = Math.min(6, (it.box || 1) + 1); it.due = startOfDay(now) + BOX_DAYS[it.box] * DAY; CD.good++; }
+  save(); CD.queue.shift(); CD.done++; CD.revealed = false; CD.result = null; CD.spoke = null;
+  if (!CD.queue.length) CD.phase = "done";
+  render();
+}
+
+/* ---------- book (Heft) ---------- */
+let bookQ = "", confirmDel = null;
+VIEWS.book = (hdr, main) => {
+  header(hdr, "Heft", "Deine Wörter und Sätze", {gear:true});
+  const bs = h("input", {class:"textin", id:"addBs", placeholder:"Bosnisch, z. B. Hvala lijepa", autocomplete:"off", autocapitalize:"off", autocorrect:"off"});
+  const de = h("input", {class:"textin", id:"addDe", placeholder:"Deutsch, z. B. Vielen Dank", autocomplete:"off"});
+  const pers = h("input", {type:"checkbox", class:"switch", id:"addPers"});
+  const add = () => { if (!bs.value.trim()){ bs.focus(); return; } if (addVocab({bs: bs.value.trim(), de: de.value.trim(), src: pers.checked ? "Über mich" : "Eigener Eintrag"})){ const v = findVocab(bs.value.trim()); if (v && pers.checked){ v.personal = true; save(); } bs.value = ""; de.value = ""; render(); } };
+  const q = h("input", {class:"textin", id:"bookQ", placeholder:"Im Heft suchen", value: bookQ, autocomplete:"off"});
+  const listBox = h("div", {class:"list"});
+  const paint = () => {
+    listBox.textContent = "";
+    const term = loose(normWords(q.value).join(" "));
+    let items = Object.values(S.vocab).sort((a, b) => (b.added || 0) - (a.added || 0));
+    if (term) items = items.filter(v => loose(normWords(v.bs + " " + v.de).join(" ")).includes(term));
+    if (!items.length){ listBox.append(h("p", {class:"empty", text: Object.keys(S.vocab).length ? "Nichts passt dazu." : "Noch leer. Trag oben etwas ein oder tippe in den Übungen auf den Stern."})); return; }
+    for (const v of items) listBox.append(h("div", {class:"li"},
+      h("div", {class:"grow"}, h("b", {text: v.bs}), v.de ? h("small", {text: v.de}) : null, h("small", {class:"laut", text: "≈ " + (v.laut || bsToLaut(v.bs))}), v.src ? h("small", {text: v.src + (v.personal && v.src !== "Über mich" ? " · persönlich" : "")}) : null,
+        h("span", {class:"boxdots", title:`Stufe ${v.box || 1} von 6`}, [1,2,3,4,5,6].map(i => h("i", {class: i <= (v.box || 1) ? "on" : ""})))),
+      speakIcon(v.bs),
+      confirmDel === v.id ? h("button", {class:"btn danger", type:"button", style:"padding:7px 12px", text:"Löschen", onclick: () => { delete S.vocab[v.id]; confirmDel = null; save(); render(); }})
+        : iconBtn(I.trash, "Löschen", () => { confirmDel = v.id; render(); setTimeout(() => { if (confirmDel === v.id){ confirmDel = null; if (view === "book") render(); } }, 4000); }, "ibtn")));
+  };
+  q.addEventListener("input", () => { bookQ = q.value; paint(); });
+  de.addEventListener("keydown", (e) => { if (e.key === "Enter"){ e.preventDefault(); add(); } });
+  main.append(h("section", {class:"card stack"}, h("span", {class:"cap", text:"Eigenen Eintrag hinzufügen"}), bs, diacriticKeysAlways(bs), de,
+      h("div", {class:"setrow"}, h("label", {for:"addPers"}, "Persönlicher Satz", h("small", {text:"Kommt in der Etappe „Über mich“ dran"})), pers),
+      h("button", {class:"btn", type:"button", html: I.plus + "<span>Ins Heft</span>", onclick: add})), importBox(),
+    h("section", {class:"stack"}, h("span", {class:"cap", text:`Im Heft (${Object.keys(S.vocab).length})`}), q), listBox);
+  paint();
+};
+function diacriticKeysAlways(input){ const k = diacriticKeys(input); k.style.display = "flex"; return k; }
+
+/* ---------- settings ---------- */
+VIEWS.settings = (hdr, main) => {
+  header(hdr, "Einstellungen", null, {back:true});
+  const s = ST();
+  const sw = (id, label, help, key, after) => {
+    const inp = h("input", {type:"checkbox", class:"switch", id, checked: !!s[key]});
+    inp.onchange = () => { s[key] = inp.checked; save(); applyBodyClasses(); if (after) after(); };
+    return h("div", {class:"setrow"}, h("label", {for:id}, label, help ? h("small", {text:help}) : null), inp);
+  };
+  const name = h("input", {class:"textin", id:"setName", placeholder:"Dein Vorname", maxlength:"40", value: P().name});
+  name.addEventListener("change", () => { P().name = clip(name.value, 40); save(); toast("Gespeichert."); });
+  const rate = h("input", {type:"range", id:"setRate", min:"0.6", max:"1.2", step:"0.05", value: s.rate});
+  const rv = h("span", {class:"val", text: Number(s.rate).toFixed(2) + "×"});
+  rate.oninput = () => { s.rate = Number(rate.value); rv.textContent = s.rate.toFixed(2) + "×"; };
+  rate.onchange = () => { save(); speak("Dobar dan, kako si?", false, null); };
+  const ours = ourVoices();
+  const voiceSel = h("select", {class:"textin", id:"setVoice"}, ours.length ? ours.map(v => h("option", {value: v.voiceURI, text: `${v.name} (${v.lang})`, selected: voice && v.voiceURI === voice.voiceURI})) : h("option", {value:"", text:"Keine passende Stimme gefunden"}));
+  voiceSel.disabled = !ours.length;
+  voiceSel.onchange = () => { s.voice = voiceSel.value; save(); loadVoices(); speak("Dobar dan, kako si?", false, null); };
+  const recSel = h("select", {class:"textin", id:"setRec"}, REC_LANGS.map(([code, label], i) => h("option", {value: String(i), text: label, selected: i === s.recLang})));
+  recSel.onchange = () => { s.recLang = Number(recSel.value); save(); };
+  let armed = false;
+  const reset = h("button", {class:"btn ghost", type:"button", text:"Alle Daten löschen"});
+  reset.onclick = () => { if (!armed){ armed = true; reset.className = "btn danger"; reset.textContent = "Wirklich alles löschen?"; return; } S = {profile: freshProfile(), vocab:{}, days:{}, path:{done:{}}}; store.set("pricaj-app", S); toast("Alles gelöscht."); go("onboard"); };
+  main.append(
+    h("section", {class:"card set"}, h("h3", {text:"Du"}),
+      h("label", {class:"stack", for:"setName"}, h("span", {class:"cap", text:"Name"}), name),
+      h("div", {class:"stack"}, h("span", {class:"cap", text:"Tagesziel in Minuten"}), segControl([[5,"5"],[10,"10"],[15,"15"],[20,"20"],[30,"30"]], () => P().goal, (v) => { P().goal = v; save(); }))),
+    h("section", {class:"card set"}, h("h3", {text:"Anzeige"}), sw("setLaut", "Lautschrift zeigen", "Grobe deutsche Aussprache-Hilfe", "laut"), sw("setDe", "Übersetzung zeigen", null, "de")),
+    h("section", {class:"card set"}, h("h3", {text:"Hören"}),
+      h("div", {class:"setrow"}, h("label", {for:"setVoice"}, "Stimme", h("small", {text:"Kroatische Stimmen klingen fast wie Bosnisch"})), voiceSel),
+      h("div", {class:"setrow"}, h("label", {for:"setRate"}, "Sprechtempo"), rate, rv),
+      h("div", {class:"setrow"}, h("span", {class:"lbl"}, "Bedenkzeit bei Hören & Sagen"), segControl([["kurz","kurz"],["normal","normal"],["lang","lang"]], () => s.hmPause, (v) => { s.hmPause = v; save(); })),
+      canSpeak() ? null : h("p", {class:"note", text:"iPhone: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Kroatisch, dort eine Stimme laden. Danach die App neu öffnen. Die genaue Bezeichnung der Menüs kann je nach iOS-Version leicht abweichen."})),
+    h("section", {class:"card set"}, h("h3", {text:"Sprechen"}),
+      SR ? sw("setMic", "Mikrofon-Knopf zeigen", "Nutzt die Spracherkennung des Browsers. Klappt sie nicht, geht das Tastatur-Mikrofon immer.", "mic", () => { micBroken = false; }) : h("p", {class:"muted small", text:"Dieser Browser hat keine eigene Spracherkennung. Nutze das Mikrofon deiner Tastatur."}),
+      SR ? h("div", {class:"setrow"}, h("label", {for:"setRec"}, "Sprache der Erkennung", h("small", {text:"Bosnisch wird nicht überall angeboten, Kroatisch fast immer"})), recSel) : null,
+      sw("setAuto", "Nach dem Sprechen sofort prüfen", null, "autoCheck")),
+    h("section", {class:"card set"}, h("h3", {text:"Daten"}), h("p", {class:"muted small", text:"Alles liegt nur auf diesem Gerät, die App braucht nach dem ersten Öffnen kein Internet."}), reset));
+};
+
+
+/* ================= learning path, frames, listening mode ================= */
+const normKey = (s) => normWords(s).join(" ");
+S.path = S.path || {done:{}};
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+/* automatic review: everything learned or missed lands in the Heft */
+function autoAdd(item, src, dueNow){
+  if (!item || !item.bs) return;
+  const ex = findVocab(item.bs), now = Date.now();
+  if (ex){ if (dueNow){ ex.box = 1; ex.due = now; save(); } return; }
+  const id = newId();
+  S.vocab[id] = {id, bs: clip(item.bs, 200), de: clip(item.de, 200), laut: clip(item.laut || bsToLaut(item.bs), 200), box:1, due: dueNow ? now : startOfDay(now) + DAY, added: now, src: src || "", personal: !!item.personal};
+  save();
+}
+function rateItem(it, r){
+  const now = Date.now();
+  if (r === "again"){ it.box = 1; it.due = now; }
+  else if (r === "hard"){ it.box = Math.max(1, it.box || 1); it.due = startOfDay(now) + DAY; }
+  else { it.box = Math.min(6, (it.box || 1) + 1); it.due = startOfDay(now) + BOX_DAYS[it.box] * DAY; }
+  save();
+}
+const nextLabel = (b) => { const d = BOX_DAYS[Math.min(6, b)]; return d <= 1 ? "morgen" : `in ${d} Tagen`; };
+
+function lessonItems(L){
+  const nm = P().name, fill = (s) => s.replace(/\{ime\}/g, nm);
+  if (L.nums){ const out = []; for (let n = L.nums[0]; n <= L.nums[1]; n++) out.push({bs: num2bs(n), de: String(n)}); return out; }
+  if (L.numsList) return L.numsList.map(n => ({bs: num2bs(n), de: String(n)}));
+  if (L.prices) return L.prices.map(n => ({bs: priceBs(n), de: `${n} KM`}));
+  if (L.frames) return L.frames.flatMap(id => { const f = FRAMES.find(x => x.id === id); return f ? f.items.map(x => ({bs: x[0], de: x[1], cue: x[2], frame: f.bs})) : []; });
+  if (L.personal) return Object.values(S.vocab).filter(v => v.personal).sort((a, b) => (a.added || 0) - (b.added || 0)).slice(0, 8).map(v => ({bs: v.bs, de: v.de, laut: v.laut}));
+  return L.items.filter(x => nm || !x[0].includes("{ime}")).map(x => ({bs: fill(x[0]), de: fill(x[1])}));
+}
+const currentLesson = () => LESSONS.find(L => !S.path.done[L.id]) || null;
+const lessonNo = (L) => LESSONS.indexOf(L) + 1;
+function checkBackup(){ return WORDS.flatMap(wordItems).concat(FRAMES.flatMap(f => f.items.map(x => ({bs: x[0], de: x[1]})))); }
+function buildCheck(items){
+  const backup = checkBackup();
+  return shuffle(items).slice(0, 8).map(item => {
+    let opts; const m = String(item.de).match(/^(\d+)( KM)?$/);
+    if (m){ const n = Number(m[1]); opts = [n, ...numDistractors(n, Math.max(m[2] ? 1 : 0, n - 20), n + 20)].map(x => m[2] ? `${x} KM` : String(x)); }
+    else { const uniq = []; for (const o of shuffle(items).concat(shuffle(backup))){ if (o.de && o.de !== item.de && !uniq.includes(o.de)) uniq.push(o.de); if (uniq.length === 3) break; } opts = [item.de, ...uniq]; }
+    return {item, answer: item.de, opts: shuffle(opts)};
+  });
+}
+
+/* ---------- listening mode engine (Pimsleur principle: prompt, pause, answer, growing gaps) ---------- */
+let HM = null;
+const HM_STOP = {};
+const deVoiceOf = () => voices.find(v => /^de/i.test((v.lang || "").replace("_", "-"))) || null;
+function primeSpeech(){ try{ if (synth){ const u = new SpeechSynthesisUtterance(" "); u.volume = 0; synth.speak(u); } }catch(e){} }
+function sayP(text, v, rate){
+  return new Promise((resolve) => {
+    const len = String(text).length;
+    if (!synth || !v){ setTimeout(resolve, 700 + len * 70); return; }
+    let done = false;
+    const fin = () => { if (!done){ done = true; clearTimeout(t); resolve(); } };
+    const t = setTimeout(fin, 2500 + len * 160 / (rate || 1));
+    try{ const u = new SpeechSynthesisUtterance(String(text)); u.voice = v; u.lang = v.lang; u.rate = rate || 1; u.onend = u.onerror = fin; synth.speak(u); }catch(e){ fin(); }
+  });
+}
+async function hmGuard(my){ while (HM && HM.token === my && HM.paused) await sleep(150); if (!HM || HM.token !== my) throw HM_STOP; }
+async function hmWait(ms, my){ let t = 0; while (t < ms){ if (!HM || HM.token !== my) throw HM_STOP; if (!HM.paused) t += 100; await sleep(100); } }
+function hmCreate(items, offsets){
+  const offs = offsets || [0, 2, 5, 9], ev = [];
+  items.forEach((it, j) => offs.forEach((o, r) => ev.push({it, r, pos: j * 3 + o + r * 0.01})));
+  ev.sort((a, b) => a.pos - b.pos);
+  HM = {events: ev, pos: 0, paused: false, running: false, finished: false, stage: "", token: null, cur: null, paint: null, onDone: null};
+  return HM;
+}
+function hmPaint(){ if (HM && HM.paint) HM.paint(); }
+async function hmRun(){
+  const my = {}; HM.token = my; HM.running = true; HM.finished = false;
+  const bsV = voice, deV = deVoiceOf(), mult = ({kurz:0.75, normal:1, lang:1.4})[ST().hmPause] || 1;
+  const think = (s) => (1600 + normWords(s).length * 550) * mult;
+  try{
+    while (HM.pos < HM.events.length){
+      const ev = HM.events[HM.pos]; HM.cur = ev;
+      if (ev.r === 0){
+        HM.stage = "hear"; hmPaint(); await sayP(ev.it.bs, bsV, Math.min(0.75, ST().rate)); await hmGuard(my);
+        HM.stage = "repeat"; hmPaint(); await hmWait(think(ev.it.bs), my);
+        HM.stage = "again"; hmPaint(); await sayP(ev.it.bs, bsV, ST().rate); await hmGuard(my);
+      } else {
+        HM.stage = "prompt"; hmPaint(); if (deV) await sayP(ev.it.de, deV, 1); else await hmWait(1500, my); await hmGuard(my);
+        HM.stage = "think"; hmPaint(); await hmWait(think(ev.it.bs), my);
+        HM.stage = "answer"; hmPaint(); await sayP(ev.it.bs, bsV, ST().rate); await hmGuard(my); countSpoken();
+      }
+      await hmWait(900, my); HM.pos++; lastAct = Date.now();
+    }
+    HM.running = false; HM.finished = true; HM.stage = "done"; hmPaint();
+  }catch(e){ if (e !== HM_STOP) throw e; }
+}
+function hmStop(){ if (HM){ HM.token = null; HM.running = false; } try{ synth && synth.cancel(); }catch(e){} }
+function hmPanel(onDone, doneLabel){
+  const STAGE = {hear:"Hör zu", repeat:"Sprich nach", again:"Nochmal hören", prompt:"Wie sagt man das?", think:"Sag es laut auf Bosnisch", answer:"So heißt es", done:"Fertig"};
+  const cap = h("span", {class:"cap", text:"Hören & Sagen"});
+  const de = h("div", {class:"de", style:"font-size:1.15rem;color:var(--fg)"});
+  const bs = h("div", {class:"bs", style:"font-size:1.6rem;min-height:2.1em"});
+  const laut = h("div", {class:"laut"});
+  const prog = h("div", {class:"prog"});
+  const btns = h("div", {class:"row", style:"justify-content:center"});
+  const card = h("section", {class:"card practice"}, prog, cap, de, bs, laut, btns);
+  const paint = () => {
+    if (!HM) return;
+    const n = HM.events.length, ev = HM.cur;
+    prog.textContent = ""; const segs = 12; for (let i = 0; i < segs; i++) prog.append(h("i", {class: (i + 1) / segs <= HM.pos / n ? "done" : ""}));
+    cap.textContent = HM.running || HM.finished ? (STAGE[HM.stage] || "") : "Hören & Sagen";
+    const showBs = ["hear","repeat","again","answer"].includes(HM.stage);
+    de.textContent = ev ? ev.it.de : (HM.finished ? "" : "Die App sagt dir einen Satz auf Deutsch. In der Pause sagst du ihn laut auf Bosnisch, dann hörst du die Lösung. Neue Sätze hörst du zuerst und sprichst sie nach. Sätze kommen in wachsenden Abständen wieder.");
+    bs.textContent = ev && showBs ? ev.it.bs : (ev && !HM.finished ? "…" : "");
+    laut.textContent = ev && showBs ? "≈ " + (ev.it.laut || bsToLaut(ev.it.bs)) : "";
+    if (HM.finished){ de.textContent = `${n} Durchgänge geschafft.`; bs.textContent = ""; laut.textContent = ""; }
+    btns.textContent = "";
+    if (!HM.running && !HM.finished) btns.append(h("button", {class:"btn", type:"button", text: HM.pos ? "Weiter" : "Start", onclick: () => { primeSpeech(); HM.paused = false; hmRun(); }}));
+    else if (HM.running) btns.append(h("button", {class:"btn ghost", type:"button", text: HM.paused ? "Fortsetzen" : "Pause", onclick: () => { HM.paused = !HM.paused; paint(); }}));
+    if (HM.finished || (onDone && HM.running)) btns.append(h("button", {class: HM.finished ? "btn" : "tbtn", type:"button", text: HM.finished ? (doneLabel || "Fertig") : "Überspringen", onclick: () => { hmStop(); onDone && onDone(); }}));
+  };
+  HM.paint = paint; paint();
+  const out = [card];
+  if (!canSpeak()) out.push(h("p", {class:"note", text:"Ohne bosnische oder kroatische Stimme läuft der Hör-Modus nur mit Text. Unter Einstellungen steht, wie du eine Stimme lädst."}));
+  else if (!deVoiceOf()) out.push(h("p", {class:"note", text:"Keine deutsche Stimme gefunden: Die deutsche Vorgabe steht dann nur als Text da."}));
+  return out;
+}
+
+/* ---------- path overview ---------- */
+VIEWS.path = (hdr, main) => {
+  header(hdr, "Lernpfad", `${Object.keys(S.path.done).length} von ${LESSONS.length} Etappen geschafft`, {back:true});
+  const cur = currentLesson();
+  main.append(h("p", {class:"muted small", text:"Die Reihenfolge folgt deinem 30-Tage-Plan, aber ohne Kalender: Weiter geht es, wenn du eine Etappe im Abschlusstest zu mindestens 80 % schaffst. Was du schon kannst, überspringst du mit „Kann ich schon“."}));
+  for (const ph of [1, 2, 3, 4]){
+    main.append(h("span", {class:"cap", text: `Abschnitt ${ph}: ${PHASES[ph]}`}));
+    main.append(h("div", {class:"list"}, LESSONS.filter(L => L.ph === ph).map(L => {
+      const done = !!S.path.done[L.id], isCur = cur === L;
+      return h("div", {class:"li", style: "flex-wrap:wrap" + (isCur ? ";border-color:var(--accent)" : "")},
+        h("div", {class:"grow", style:"flex:1 1 170px"}, h("b", {text: `${lessonNo(L)}. ${L.t}`}), h("small", {text: done ? "geschafft" : isCur ? "als Nächstes" : L.personal ? "deine eigenen Sätze" : `${lessonItems(L).length} Sätze oder Wörter`})),
+        !done ? h("button", {class:"tbtn", type:"button", text:"Kann ich schon", onclick: () => startLesson(L, "test")}) : null,
+        h("button", {class: isCur ? "btn" : "btn ghost", type:"button", style:"padding:8px 14px", text: done ? "Wiederholen" : "Start", onclick: () => startLesson(L, "full")}));
+    })));
+  }
+  main.append(h("button", {class:"btn ghost", type:"button", text:"Fortschritt zurücksetzen", onclick: (e) => {
+    if (e.target.dataset.armed){ S.path.done = {}; save(); render(); } else { e.target.dataset.armed = "1"; e.target.textContent = "Wirklich zurücksetzen?"; e.target.className = "btn danger"; }
+  }}));
+};
+
+/* ---------- today's session ---------- */
+let SE = null;
+function startLesson(L, mode){
+  hmStop();
+  if (!L){ startReviewSession(); return; }
+  const items = lessonItems(L);
+  if (!items.length){ SE = {lesson: L, empty: true}; go("session"); return; }
+  const keys = new Set(items.map(i => normKey(i.bs)));
+  const rev = mode === "test" ? [] : dueItems().filter(v => !keys.has(normKey(v.bs))).sort((a, b) => (a.due || 0) - (b.due || 0)).slice(0, 8).map(v => v.id);
+  const steps = [];
+  if (rev.length) steps.push({t:"review", ids: rev});
+  if (mode !== "test"){
+    steps.push({t:"intro", items});
+    steps.push({t:"listen", items: items.slice(0, 8).concat(rev.slice(0, 2).map(id => ({bs: S.vocab[id].bs, de: S.vocab[id].de, laut: S.vocab[id].laut})))});
+  }
+  steps.push({t:"check", qs: buildCheck(items)});
+  SE = {lesson: L, mode, steps, si: 0, ii: 0, queue: null, requeued: {}, revealed: false, result: null, picked: null, score: 0, spoke: null, items};
+  go("session");
+}
+function startReviewSession(){
+  const due = dueItems().sort((a, b) => (a.due || 0) - (b.due || 0));
+  if (!due.length){ toast("Alle Etappen geschafft und nichts fällig. Morgen geht es mit Wiederholungen weiter."); return; }
+  const rev = due.slice(0, 15).map(v => v.id);
+  SE = {lesson: null, mode: "review", steps: [{t:"review", ids: rev}, {t:"listen", items: rev.slice(0, 8).map(id => ({bs: S.vocab[id].bs, de: S.vocab[id].de, laut: S.vocab[id].laut}))}], si: 0, ii: 0, queue: null, requeued: {}, revealed: false, result: null, picked: null, score: 0, spoke: null, items: []};
+  go("session");
+}
+function seNextStep(){
+  const st = SE.steps[SE.si];
+  if (st && st.t === "intro") for (const it of st.items) autoAdd(it, "Lernpfad", false);
+  hmStop();
+  SE.si++; SE.ii = 0; SE.queue = null; SE.revealed = false; SE.result = null; SE.picked = null; SE.spoke = null;
+  render(); $("main").scrollTop = 0;
+}
+const STEP_NAME = {review:"Wiederholen", intro:"Neue Sätze", listen:"Hören & Sagen", check:"Abschlusstest"};
+VIEWS.session = (hdr, main) => {
+  if (!SE){ view = "home"; return VIEWS.home(hdr, main); }
+  const L = SE.lesson, title = L ? `Etappe ${lessonNo(L)}: ${L.t}` : "Wiederholung";
+  const st = SE.steps ? SE.steps[SE.si] : null;
+  header(hdr, title, st ? `Schritt ${SE.si + 1} von ${SE.steps.length} · ${STEP_NAME[st.t]}` : "", {back:true, onBack: () => { hmStop(); SE = null; go("home"); }});
+  if (SE.empty){
+    main.append(h("div", {class:"card stack"}, h("h3", {text:"Hier kommen deine eigenen Sätze hin"}),
+      h("p", {text:"Für diese Etappe brauchst du Sätze über dich selbst. Lass sie in der Claude-Version unter „Sprechen → Sätze über mich“ erstellen und übernimm sie per Code ins Heft. Oder trag sie im Heft selbst ein und setz das Häkchen „Persönlicher Satz“."}),
+      h("div", {class:"row"}, h("a", {class:"btn", href: TUTOR_URL, target:"_blank", rel:"noopener", style:"text-decoration:none", text:"Claude-Version öffnen"}), h("button", {class:"btn ghost", type:"button", text:"Zum Heft", onclick: () => { SE = null; go("book"); }}))));
+    return;
+  }
+  if (!st) return sessionDone(main);
+  main.append(h("div", {class:"prog"}, SE.steps.map((x, i) => h("i", {class: i < SE.si ? "done" : i === SE.si ? "cur" : ""}))));
+  ({review: stepReview, intro: stepIntro, listen: stepListen, check: stepCheck})[st.t](main, st);
+};
+function stepReview(main, st){
+  if (!SE.queue) SE.queue = st.ids.slice();
+  while (SE.queue.length && !S.vocab[SE.queue[0]]) SE.queue.shift();
+  if (!SE.queue.length) return seNextStep();
+  const it = S.vocab[SE.queue[0]], card = h("section", {class:"card practice"});
+  card.append(h("span", {class:"cap", text: `Wiederholen · noch ${SE.queue.length}`}), h("span", {class:"muted small", text:"Wie sagst du das auf Bosnisch?"}), h("div", {class:"bs", text: it.de || "(ohne Übersetzung)"}));
+  if (SE.revealed){
+    card.append(h("div", {class:"bs", text: it.bs}), h("div", {class:"laut", text: "≈ " + (it.laut || bsToLaut(it.bs))}),
+      h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true)));
+    if (SE.result) card.append(diffView(SE.result));
+    const rate = (r) => { rateItem(it, r); SE.queue.shift(); if (r === "again" && !SE.requeued[it.id]){ SE.requeued[it.id] = 1; SE.queue.push(it.id); } SE.revealed = false; SE.result = null; render(); };
+    card.append(h("div", {class:"rate"},
+      h("button", {class:"r1", type:"button", onclick: () => rate("again")}, "Nochmal", h("small", {text:"gleich wieder"})),
+      h("button", {class:"r2", type:"button", onclick: () => rate("hard")}, "Schwer", h("small", {text:"morgen"})),
+      h("button", {class:"r3", type:"button", onclick: () => rate("good")}, "Gewusst", h("small", {text: nextLabel((it.box || 1) + 1)}))));
+  } else {
+    card.append(answerBox((t) => { countSpoken(); SE.result = compare(it.bs, t); SE.revealed = true; render(); speak(it.bs, false, null); }).box,
+      h("button", {class:"tbtn", type:"button", text:"Aufdecken", onclick: () => { SE.revealed = true; render(); speak(it.bs, false, null); }}));
+  }
+  main.append(card);
+}
+function stepIntro(main, st){
+  const it = st.items[SE.ii], card = h("section", {class:"card practice"});
+  card.append(h("span", {class:"cap", text: `Neu · ${SE.ii + 1} von ${st.items.length}`}));
+  if (it.frame) card.append(h("span", {class:"pill on", text: `${it.frame}  ·  ${it.cue}`}));
+  card.append(h("div", {class:"bs", text: it.bs}), h("div", {class:"laut", text: "≈ " + (it.laut || bsToLaut(it.bs))}), h("div", {class:"de", text: it.de}),
+    h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true)));
+  const next = () => { SE.result = null; SE.spoke = null; if (SE.ii < st.items.length - 1){ SE.ii++; render(); } else seNextStep(); };
+  if (SE.result){
+    card.append(diffView(SE.result), h("div", {class:"row", style:"justify-content:center"},
+      h("button", {class:"btn ghost", type:"button", text:"Nochmal", onclick: () => { SE.result = null; render(); }}),
+      h("button", {class:"btn", type:"button", text:"Weiter", onclick: next})));
+  } else {
+    card.append(h("p", {class:"muted small", text:"Hör zu und sprich nach."}),
+      answerBox((t) => { countSpoken(); SE.result = compare(it.bs, t); render(); }).box,
+      h("button", {class:"tbtn", type:"button", text:"Laut gesagt, weiter", onclick: () => { countSpoken(); next(); }}));
+  }
+  main.append(card);
+  if (SE.spoke !== SE.ii && canSpeak()){ SE.spoke = SE.ii; setTimeout(() => speak(it.bs, false, card.querySelector(".pill:not(.on)")), 200); }
+}
+function stepListen(main, st){
+  if (!HM || HM.owner !== st){ hmCreate(st.items, [0, 2, 5]); HM.owner = st; }
+  main.append(...hmPanel(seNextStep, "Weiter"));
+}
+function stepCheck(main, st){
+  const q = st.qs[SE.ii], answered = SE.picked != null, card = h("section", {class:"card practice"});
+  card.append(h("div", {class:"quizhead"}, h("span", {text: `Frage ${SE.ii + 1} von ${st.qs.length}`}), h("span", {text: `${SE.score} richtig`})));
+  if (canSpeak()){
+    card.append(h("span", {class:"cap", text:"Hör zu: Was heißt das?"}), h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", q.item.bs, false), speakBtn("Langsam", q.item.bs, true)));
+    if (answered) card.append(h("div", {class:"bs", text: q.item.bs}));
+  } else card.append(h("span", {class:"cap", text:"Was heißt das?"}), h("div", {class:"bs", text: q.item.bs}));
+  const next = () => { SE.picked = null; SE.spoke = null; if (SE.ii < st.qs.length - 1){ SE.ii++; render(); } else seNextStep(); };
+  const opts = h("div", {class:"opts"});
+  for (const o of q.opts){
+    const b = h("button", {class:"opt", type:"button", text: o});
+    if (answered){ b.disabled = true; b.classList.add(o === q.answer ? "right" : o === SE.picked ? "wrong" : "dim"); }
+    else b.onclick = () => {
+      SE.picked = o;
+      if (o === q.answer){ SE.score++; render(); const idx = SE.ii, my = SE; setTimeout(() => { if (SE === my && SE.ii === idx && SE.picked != null && view === "session") next(); }, 1100); }
+      else { autoAdd(q.item, "Abschlusstest", true); render(); speak(q.item.bs, false, null); }
+    };
+    opts.append(b);
+  }
+  card.append(opts);
+  if (answered && SE.picked !== q.answer) card.append(h("p", {class:"muted", text: `${q.item.bs} = ${q.item.de}`}), h("button", {class:"btn", type:"button", text:"Weiter", onclick: next}));
+  main.append(card);
+  if (canSpeak() && !answered && SE.spoke !== SE.ii){ SE.spoke = SE.ii; setTimeout(() => speak(q.item.bs, false, card.querySelector(".pill")), 200); }
+}
+function sessionDone(main){
+  const L = SE.lesson, check = SE.steps.find(s => s.t === "check");
+  let passed = false, pct = null;
+  if (check){ pct = Math.round(SE.score / check.qs.length * 100); passed = pct >= 80; }
+  if (L && passed && !S.path.done[L.id]){ S.path.done[L.id] = dayKey(); save(); }
+  const next = currentLesson();
+  main.append(h("section", {class:"card practice"},
+    h("span", {class:"cap", text: L ? (passed ? "Etappe geschafft" : "Fast") : "Wiederholung fertig"}),
+    pct != null ? h("div", {class:"score " + (pct >= 80 ? "good" : pct >= 50 ? "mid" : "low"), text: pct + " %"}) : h("h2", {text:"Gut gemacht"}),
+    h("p", {class:"muted", text: !L ? "Die Karten kommen nach Plan wieder." : passed ? (next ? `Als Nächstes: Etappe ${lessonNo(next)}, ${next.t}.` : "Du hast alle Etappen geschafft. Ab jetzt hält dich „Heute lernen“ mit Wiederholungen fit.") : "Unter 80 %: Die Etappe kommt beim nächsten Mal nochmal, die verpassten Sätze sind schon in der Wiederholung."}),
+    h("div", {class:"row", style:"justify-content:center"},
+      h("button", {class:"btn", type:"button", text:"Zum Start", onclick: () => { SE = null; go("home"); }}),
+      L && !passed ? h("button", {class:"btn ghost", type:"button", text:"Gleich nochmal", onclick: () => startLesson(L, "full")}) : null)));
+}
+
+/* ---------- standalone listening mode ---------- */
+let HMsrc = "pfad";
+VIEWS.listen = (hdr, main) => {
+  header(hdr, "Hören & Sagen", "Vorgabe auf Deutsch, du sprichst, dann die Lösung", {back:true, onBack: HM && HM.standalone ? () => { hmStop(); HM = null; render(); } : null});
+  if (HM && HM.standalone){ main.append(...hmPanel(() => { HM = null; render(); }, "Neue Runde")); return; }
+  const learned = LESSONS.filter(L => S.path.done[L.id]).flatMap(lessonItems);
+  const sources = {
+    pfad: ["Gelerntes aus dem Pfad", learned],
+    faellig: ["Fällige Karten", dueItems().map(v => ({bs: v.bs, de: v.de, laut: v.laut}))],
+    heft: ["Ganzes Heft", Object.values(S.vocab).filter(v => v.de).map(v => ({bs: v.bs, de: v.de, laut: v.laut}))],
+    baukasten: ["Satzbaukästen", FRAMES.flatMap(f => f.items.map(x => ({bs: x[0], de: x[1]})))],
+    alltag: ["Alltagssätze", PHRASES.flatMap(g => g.items).filter(x => !x[0].includes("{ime}")).map(x => ({bs: x[0], de: x[1]}))]
+  };
+  main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Sätze aus"}), pillChoice(Object.entries(sources).map(([k, v]) => [k, `${v[0]} (${v[1].length})`]), () => HMsrc, (v) => HMsrc = v)),
+    h("section", {class:"stack"}, h("span", {class:"cap", text:"Bedenkzeit"}), pillChoice([["kurz","kurz"],["normal","normal"],["lang","lang"]], () => ST().hmPause, (v) => { ST().hmPause = v; save(); })),
+    h("p", {class:"muted small", text:"8 Sätze, jeder kommt viermal: erst zum Nachsprechen, dann als Abruf in wachsenden Abständen. Etwa 8 bis 10 Minuten. Der Bildschirm sollte dabei anbleiben."}),
+    h("button", {class:"btn block", type:"button", text:"Runde vorbereiten", onclick: () => {
+      const pool = sources[HMsrc][1];
+      if (!pool.length){ toast(HMsrc === "pfad" ? "Noch keine Etappe geschafft. Nimm erst die Satzbaukästen oder Alltagssätze." : "Hier ist gerade nichts drin."); return; }
+      hmCreate(shuffle(pool).slice(0, 8)); HM.standalone = true; render();
+    }}));
+  const vn = voiceNote(); if (vn) main.append(vn);
+};
+
+/* ---------- sentence frames ---------- */
+let DR = null;
+VIEWS.frames = (hdr, main) => {
+  const f = FRAMES.find(x => x.id === arg);
+  if (!f){
+    header(hdr, "Satzbaukästen", "Ein Rahmen, viele Sätze", {back:true});
+    main.append(h("p", {class:"muted small", text:"Jeder Baukasten ist ein fester Satzanfang mit austauschbarem Ende. Wer in solchen Blöcken spricht, wird schneller flüssig, und die Endungen lernst du nebenbei übers Hören."}));
+    main.append(h("div", {class:"grid2"}, FRAMES.map(x => h("button", {class:"scen", type:"button", onclick: () => go("frames", x.id)}, h("b", {text: x.bs}), h("span", {text: x.de}), h("small", {text: `${x.items.length} Sätze`})))));
+    return;
+  }
+  if (DR && DR.f === f) return frameDrill(hdr, main, f);
+  header(hdr, f.bs, f.de, {back:true, backTo:"frames"});
+  main.append(h("button", {class:"btn block", type:"button", text:"Üben: Satz bilden und sagen", onclick: () => { DR = {f, items: shuffle(f.items), i: 0, result: null, score: []}; render(); }}));
+  if (f.note) main.append(h("p", {class:"note", text: f.note}));
+  main.append(h("div", {class:"list"}, f.items.map(x => h("div", {class:"li"}, h("div", {class:"grow"}, h("b", {text: x[0]}), h("small", {text: x[1]})), speakIcon(x[0]), starBtn({bs: x[0], de: x[1], src:"Satzbaukasten"})))));
+}
+function frameDrill(hdr, main, f){
+  header(hdr, f.bs, `${DR.i + 1} von ${DR.items.length}`, {back:true, onBack: () => { DR = null; render(); }});
+  if (DR.i >= DR.items.length){
+    const avg = DR.score.length ? Math.round(DR.score.reduce((a, b) => a + b, 0) / DR.score.length) : null;
+    main.append(h("section", {class:"card practice"}, h("span", {class:"cap", text:"Baukasten geschafft"}), avg != null ? h("div", {class:"score " + (avg >= 85 ? "good" : avg >= 55 ? "mid" : "low"), text: avg + " %"}) : h("h2", {text:"Gut gemacht"}),
+      h("div", {class:"row", style:"justify-content:center"}, h("button", {class:"btn", type:"button", text:"Nochmal", onclick: () => { DR = {f, items: shuffle(f.items), i: 0, result: null, score: []}; render(); }}), h("button", {class:"btn ghost", type:"button", text:"Andere Baukästen", onclick: () => { DR = null; go("frames"); }}))));
+    return;
+  }
+  const x = DR.items[DR.i], card = h("section", {class:"card practice"});
+  card.append(h("div", {class:"prog"}, DR.items.map((y, i) => h("i", {class: i < DR.i ? "done" : i === DR.i ? "cur" : ""}))),
+    h("span", {class:"cap", text:"Bilde den Satz und sag ihn laut"}), h("div", {class:"bs", text: f.bs}), h("span", {class:"pill on", text: x[2]}), h("div", {class:"de", text: x[1]}));
+  if (DR.result){
+    card.append(h("div", {class:"bs", text: x[0]}), speakBtn("Anhören", x[0], false), diffView(DR.result),
+      h("div", {class:"row", style:"justify-content:center"}, h("button", {class:"btn ghost", type:"button", text:"Nochmal", onclick: () => { DR.result = null; render(); }}),
+        h("button", {class:"btn", type:"button", text:"Weiter", onclick: () => { DR.i++; DR.result = null; render(); }})));
+  } else {
+    card.append(answerBox((t) => { countSpoken(); DR.result = compare(x[0], t); DR.score[DR.i] = DR.result.score; if (DR.result.score < 70) autoAdd({bs: x[0], de: x[1]}, "Satzbaukasten", true); render(); speak(x[0], false, null); }).box,
+      h("button", {class:"tbtn", type:"button", text:"Lösung zeigen", onclick: () => { DR.result = {words: normWords(x[0]).map(w => ({w, s:"miss"})), score: 0}; DR.score[DR.i] = 0; autoAdd({bs: x[0], de: x[1]}, "Satzbaukasten", true); render(); speak(x[0], false, null); }}));
+  }
+  main.append(card);
+}
+
+/* ---------- import of personal sentences / Heft from the Claude version ---------- */
+function decodeImport(code){
+  const m = String(code).trim().match(/PRICAJ:([A-Za-z0-9+/=_-]+)/);
+  if (!m) throw new Error("Kein gültiger Code. Er beginnt mit PRICAJ:");
+  const b64 = m[1].replace(/-/g, "+").replace(/_/g, "/");
+  const bin = atob(b64), bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const data = JSON.parse(new TextDecoder().decode(bytes));
+  if (!data || !Array.isArray(data.items)) throw new Error("Der Code enthält keine Sätze.");
+  return data.items;
+}
+function importBox(){
+  const ta = h("textarea", {class:"textin", rows:"3", placeholder:"Code aus der Claude-Version hier einfügen (beginnt mit PRICAJ:)", style:"resize:vertical"});
+  return h("details", {class:"card"}, h("summary", {text:"Sätze aus der Claude-Version übernehmen"}), h("div", {class:"stack"},
+    h("p", {class:"muted small", text:"In der Claude-Version unter „Sprechen → Sätze über mich“ oder im Heft auf „Für die iPhone-App kopieren“ tippen, dann hier einfügen."}), ta,
+    h("button", {class:"btn", type:"button", text:"Übernehmen", onclick: () => {
+      try{
+        const items = decodeImport(ta.value); let n = 0;
+        for (const it of items){ if (!it || !it.bs) continue; const ex = findVocab(it.bs); if (ex){ if (it.p && !ex.personal){ ex.personal = true; n++; } continue; } autoAdd({bs: it.bs, de: it.de || "", laut: it.laut || "", personal: !!it.p}, it.p ? "Über mich" : "Claude-Version", false); n++; }
+        save(); toast(n ? `${n} Einträge übernommen.` : "Alles war schon im Heft."); ta.value = ""; render();
+      }catch(e){ toast(e.message || "Der Code ließ sich nicht lesen."); }
+    }})));
+}
+
+/* ================= boot ================= */
+applyBodyClasses();
+loadVoices();
+if (synth) try{ synth.addEventListener("voiceschanged", () => { const had = canSpeak(); loadVoices(); if (had !== canSpeak() && !["quiz","numbers","shadow","cards"].includes(view)) render(); }); }catch(e){}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden"){ clearTimeout(saveTimer); store.set("pricaj-app", S); } });
+render();
+if ("serviceWorker" in navigator && location.protocol !== "file:"){
+  const hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register("sw.js").then((reg) => {
+    reg.addEventListener("updatefound", () => {
+      const w = reg.installing; if (!w) return;
+      w.addEventListener("statechange", () => {
+        if (w.state === "activated" && hadController){
+          const t = $("toast"); t.hidden = false; t.textContent = "";
+          t.append("Neue Version da. ", h("button", {class:"tbtn", type:"button", style:"margin-left:6px;color:var(--fg)", text:"Jetzt laden", onclick: () => location.reload()}));
+          clearTimeout(toastTimer);
+        }
+      });
+    });
+  }).catch(() => {});
+}
+})();
+</script>
+</body>
+</html>

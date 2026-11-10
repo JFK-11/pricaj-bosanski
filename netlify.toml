@@ -1,0 +1,14 @@
+# Netlify veröffentlicht nur den Ordner app/. Kein Build-Schritt nötig.
+[build]
+  publish = "app"
+
+# Service Worker und Startseite nie zwischenspeichern, sonst kommen Updates nicht an.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-cache"

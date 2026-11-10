@@ -1,0 +1,1885 @@
+<title>Pričaj bosanski</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: phone-first app — header, scrolling view, bottom tab bar (or composer in practice views). Flag blue + gold. */
+:root{
+  --bg:#f3f4f8; --surface:#ffffff; --surface-2:#e8ebf4; --line:#d5dae8;
+  --fg:#151a2e; --muted:#5b6380; --accent:#2340a8; --accent-ink:#ffffff; --accent-soft:#e2e7f8;
+  --gold:#e3a915; --gold-soft:#fbefc9; --gold-ink:#1b1500; --ok:#1d7a4f; --ok-soft:#dcf1e6; --warn:#8a5f00; --bad:#b3372f; --bad-soft:#f8e1de;
+  --shade:rgba(15,20,40,.45);
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1220; --surface:#171d33; --surface-2:#20284a; --line:#2c355c;
+  --fg:#e8eaf4; --muted:#9aa2c2; --accent:#8da2f5; --accent-ink:#0e1220; --accent-soft:#232c55;
+  --gold:#f2c552; --gold-soft:#3a3214; --gold-ink:#1b1500; --ok:#6fd3a0; --ok-soft:#163327; --warn:#e8c066; --bad:#f08a80; --bad-soft:#3d1d1b;
+  --shade:rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1220; --surface:#171d33; --surface-2:#20284a; --line:#2c355c;
+  --fg:#e8eaf4; --muted:#9aa2c2; --accent:#8da2f5; --accent-ink:#0e1220; --accent-soft:#232c55;
+  --gold:#f2c552; --gold-soft:#3a3214; --gold-ink:#1b1500; --ok:#6fd3a0; --ok-soft:#163327; --warn:#e8c066; --bad:#f08a80; --bad-soft:#3d1d1b;
+  --shade:rgba(0,0,0,.6); color-scheme:dark}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0}
+.app{height:100%;max-width:720px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;min-height:0}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:var(--fg)}
+button:focus-visible,input:focus-visible,select:focus-visible,.word:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.15}
+p{margin:0}
+.cap{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+
+/* header */
+.hdr{display:flex;align-items:center;gap:8px;padding-block:12px 10px;min-height:56px;border-bottom:1px solid var(--line)}
+.hdr .ttl{flex:1;min-width:0}
+.hdr h1{font-size:1.3rem;font-weight:700;letter-spacing:-.01em}
+.hdr h1 span{color:var(--accent)}
+.hdr .sub{font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ibtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:38px;height:38px;display:grid;place-items:center;flex:none}
+.ibtn svg{width:18px;height:18px}
+.tbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:.9rem;flex:none}
+
+/* main */
+.main{overflow-y:auto;min-height:0;padding-block:16px 20px;display:grid;grid-auto-rows:max-content;gap:18px;align-content:start}
+.main.chatmode{padding-block:14px}
+
+/* tab bar */
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);padding-block:6px 4px}
+.tabs button{border:0;background:transparent;display:grid;justify-items:center;gap:2px;padding:4px 0;font-size:.74rem;color:var(--muted);font-weight:600}
+.tabs svg{width:23px;height:23px}
+.tabs button[aria-current="page"]{color:var(--accent)}
+
+/* cards & blocks */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stack{display:grid;gap:10px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spread{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:560px){.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.btn{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:10px 18px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.sec{background:var(--surface-2);color:var(--fg)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.btn.gold{background:var(--gold);color:var(--gold-ink)}
+.btn.danger{background:var(--bad);color:var(--surface)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn svg{width:17px;height:17px}
+.btn.block{width:100%}
+.pill{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:5px 12px;font-size:.88rem;display:inline-flex;align-items:center;gap:6px}
+.pill svg{width:15px;height:15px}
+.pill.playing{border-color:var(--gold);background:var(--gold-soft)}
+.pill.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface);max-width:100%}
+.seg button{border:0;background:transparent;padding:7px 12px;font-size:.9rem;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.field{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px 4px 4px 12px;gap:6px;min-width:0}
+.field input{flex:1;min-width:0;border:0;background:transparent;padding:8px 0;outline:none}
+.textin{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;outline:none}
+.textin:focus{border-color:var(--accent)}
+.note{font-size:.88rem;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:9px 11px}
+.empty{color:var(--muted);text-align:center;padding:18px 8px}
+
+/* home */
+.hello h2{font-size:1.9rem;letter-spacing:-.015em}
+.hello p{color:var(--muted);margin-top:2px}
+.today{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.ring{width:92px;height:92px}
+.ring .track{stroke:var(--surface-2)}
+.ring .val{stroke:var(--accent);transition:stroke-dashoffset .6s}
+.ring.done .val{stroke:var(--gold)}
+.ring text{fill:var(--fg);font-family:var(--display);font-weight:700}
+.ring .unit{fill:var(--muted);font-family:var(--body);font-weight:400}
+.stats{display:grid;gap:4px}
+.stats b{font-family:var(--display);font-size:1.15rem}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:84px;margin-top:4px}
+.week .col{display:grid;gap:4px;justify-items:center;align-self:stretch;grid-template-rows:1fr auto}
+.week .bar{width:100%;max-width:26px;border-radius:6px 6px 3px 3px;background:var(--surface-2);align-self:end;min-height:4px}
+.week .bar.hit{background:var(--accent)}
+.week .bar.now{outline:2px solid var(--gold);outline-offset:1px}
+.week span{font-size:.72rem;color:var(--muted);font-weight:600}
+.action{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px;display:grid;gap:3px;align-content:start}
+.action:hover{border-color:var(--accent)}
+.action b{font-family:var(--display);font-size:1.02rem}
+.action small{color:var(--muted);font-size:.84rem;line-height:1.3}
+.action .badge{justify-self:start;background:var(--gold-soft);color:var(--warn);border-radius:999px;font-size:.75rem;font-weight:600;padding:1px 8px;margin-top:3px}
+.resume{display:grid;gap:6px;border-color:var(--accent);background:var(--accent-soft)}
+.resume .bsline{font-family:var(--display);font-size:1.1rem}
+
+/* scenarios */
+.scen{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:2px;align-content:start}
+.scen:hover{border-color:var(--accent)}
+.scen b{font-family:var(--display);font-size:1.02rem;font-weight:600;line-height:1.2}
+.scen span{font-size:.88rem;font-weight:600;color:var(--accent)}
+.scen small{color:var(--muted);font-size:.82rem;line-height:1.3}
+.list{display:grid;gap:8px}
+.li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center}
+.li .grow{flex:1;min-width:0}
+.li .grow b{display:block;overflow-wrap:anywhere}
+.li .grow small{display:block;color:var(--muted);font-size:.84rem;overflow-wrap:anywhere}
+.boxdots{display:inline-flex;gap:3px;margin-top:4px}
+.boxdots i{width:6px;height:6px;border-radius:50%;background:var(--line)}
+.boxdots i.on{background:var(--ok)}
+
+/* chat */
+.chat{display:grid;gap:14px}
+.msg{max-width:90%;min-width:0;display:grid;gap:6px}
+.msg.me{justify-self:end;background:var(--accent);color:var(--accent-ink);border-radius:16px 16px 4px 16px;padding:9px 13px;overflow-wrap:anywhere}
+.msg.me .via{font-size:.72rem;opacity:.8}
+.grade{justify-self:end;font-size:.75rem;font-weight:600;border-radius:999px;padding:2px 9px;margin-top:-8px}
+.grade.richtig{background:var(--ok-soft);color:var(--ok)}
+.grade.fast{background:var(--gold-soft);color:var(--warn)}
+.grade.falsch{background:var(--bad-soft);color:var(--bad)}
+.grade.deutsch{background:var(--surface-2);color:var(--muted)}
+.msg.tutor{justify-self:start;background:var(--surface);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:11px 13px}
+.fix{background:var(--gold-soft);border-radius:10px;padding:8px 10px;font-size:.92rem;display:grid;gap:3px}
+.fix .cap{color:var(--warn)}
+.fix s{opacity:.7}
+.bs{font-family:var(--display);font-size:1.3rem;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.word{cursor:pointer;border-radius:4px;text-decoration:underline dotted color-mix(in srgb, var(--muted) 60%, transparent);text-underline-offset:4px;text-decoration-thickness:1.5px}
+.word:hover,.word.sel{background:var(--accent-soft)}
+.laut{font-size:.92rem;color:var(--accent);font-style:italic;overflow-wrap:anywhere}
+.de{font-size:.92rem;color:var(--muted)}
+body.hide-laut .laut, body.hide-de .de{display:none}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px}
+.sugg{display:grid;gap:6px;margin-top:4px;padding-top:8px;border-top:1px dashed var(--line)}
+.chip{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:7px 10px;display:grid;gap:1px}
+.chip b{font-weight:600}
+.chip small{color:var(--muted)}
+body.hide-de .chip small{display:none}
+.msg.err{justify-self:start;background:var(--bad-soft);color:var(--bad);border-radius:12px;padding:9px 12px;font-size:.92rem}
+.msg.err button{margin-top:6px;border:1px solid currentColor;background:transparent;border-radius:999px;padding:4px 12px;font-size:.88rem;color:inherit;justify-self:start}
+.typing{justify-self:start;display:flex;gap:5px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:16px 16px 16px 4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+/* composer */
+.composer{border-top:1px solid var(--line);padding-block:8px 10px;display:grid;gap:7px}
+.helpers{display:flex;gap:6px;flex-wrap:wrap}
+.live{font-size:.95rem;color:var(--muted);font-style:italic}
+.keys{display:none;gap:6px;flex-wrap:wrap}
+.composer:focus-within .keys,.answer:focus-within .keys{display:flex}
+.keys button{border:1px solid var(--line);background:var(--surface);border-radius:8px;min-width:40px;padding:5px 8px;font-weight:600}
+.bar{display:flex;align-items:center;gap:8px}
+.bar .field{flex:1;border-radius:999px}
+.send{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;width:38px;height:38px;display:grid;place-items:center;flex:none}
+.send:disabled{opacity:.35;cursor:default}
+.send svg{width:18px;height:18px}
+.mic{width:58px;height:58px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;flex:none;position:relative;transition:background .15s}
+.mic svg{width:25px;height:25px}
+.mic[data-state="listening"],.mic[data-state="starting"],.mic[data-state="finishing"]{background:var(--gold);color:var(--gold-ink)}
+.mic[data-state="listening"]::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:3px solid var(--gold);animation:ring 1.4s ease-out infinite}
+@keyframes ring{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+.mic[hidden]{display:none}
+.hint{font-size:.8rem;color:var(--muted);text-align:center}
+
+/* practice cards */
+.prog{display:flex;gap:5px}
+.prog i{flex:1;height:5px;border-radius:3px;background:var(--surface-2)}
+.prog i.done{background:var(--accent)}
+.prog i.cur{background:var(--gold)}
+.practice{display:grid;gap:12px;text-align:center;justify-items:center;padding:20px 14px}
+.practice .bs{font-size:1.6rem}
+.practice .de{font-size:1rem}
+.veil{border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--muted);width:100%}
+.answer{display:grid;gap:8px;width:100%}
+.diff{font-family:var(--display);font-size:1.3rem;line-height:1.5;display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:center}
+.diff .ok{color:var(--ok)}
+.diff .near{color:var(--warn);text-decoration:underline wavy;text-underline-offset:5px}
+.diff .miss{color:var(--bad);text-decoration:line-through;opacity:.8}
+.score{font-family:var(--display);font-size:2.2rem;font-weight:700}
+.score.good{color:var(--ok)}.score.mid{color:var(--warn)}.score.low{color:var(--bad)}
+.rate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.rate button{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 4px;display:grid;gap:1px;font-weight:600}
+.rate button small{font-weight:400;color:var(--muted);font-size:.78rem}
+.rate .r1{border-color:var(--bad)} .rate .r2{border-color:var(--gold)} .rate .r3{border-color:var(--ok)}
+.sound{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start}
+.sound .glyph{font-family:var(--display);font-size:2rem;font-weight:700;color:var(--accent);text-align:center;line-height:1.1}
+.sound .ex{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+
+/* settings form */
+.set{display:grid;gap:14px}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.setrow label,.setrow .lbl{flex:1;min-width:0}
+.setrow small{display:block;color:var(--muted);font-size:.8rem}
+.switch{appearance:none;width:44px;height:26px;border-radius:999px;background:var(--line);position:relative;flex:none;cursor:pointer;transition:background .15s;margin:0}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:left .15s}
+.switch:checked{background:var(--accent)}
+.switch:checked::after{left:21px}
+input[type=range]{accent-color:var(--accent);width:140px}
+.val{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem;min-width:3.2em;text-align:right}
+select.textin{width:auto}
+.sync{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted)}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.sync.cloud i{background:var(--ok)} .sync.error i{background:var(--bad)}
+
+/* onboarding */
+.onb{display:grid;gap:22px;padding-block:20px}
+.onb h2{font-size:2.1rem;letter-spacing:-.02em}
+.onb .lead{color:var(--muted);font-size:1.05rem}
+
+/* quiz, numbers, words */
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:14px 10px;font-weight:600;font-size:1.08rem;min-height:68px;overflow-wrap:anywhere;transition:border-color .15s, background .15s}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.opt:disabled{cursor:default}
+.opt.dim{opacity:.45}
+.quizhead{display:flex;justify-content:space-between;align-items:center;width:100%;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.combo{color:var(--warn);font-weight:600}
+.bignum{font-family:var(--display);font-size:3.2rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.numgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px}
+.numgrid button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 4px;display:grid;gap:0;text-align:center}
+.numgrid b{font-family:var(--display);font-size:1.1rem;font-variant-numeric:tabular-nums}
+.numgrid small{color:var(--muted);font-size:.78rem;overflow-wrap:anywhere}
+details.card > summary{cursor:pointer;font-weight:600;list-style-position:inside}
+details.card[open] > summary{margin-bottom:10px}
+.conj{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:.95rem;margin-top:8px}
+.conj span{color:var(--muted)}
+.conj b{font-weight:600}
+.wrow{display:grid;gap:3px}
+.wrow .ex{font-size:.9rem;color:var(--muted)}
+.wrow .ex b{color:var(--fg);font-weight:600}
+.catgrid .scen b{font-size:1rem}
+
+/* sheet & toast */
+.shade{position:fixed;inset:0;background:var(--shade);z-index:30;display:grid;align-items:end;justify-items:center}
+.sheet{background:var(--bg);width:100%;max-width:720px;max-height:82vh;overflow-y:auto;border-radius:18px 18px 0 0;
+  padding:16px max(16px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));display:grid;grid-auto-rows:max-content;gap:12px}
+.sheet .grab{width:40px;height:4px;border-radius:2px;background:var(--line);justify-self:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom, 0px));background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:.9rem;width:max-content;max-width:min(90vw,460px);text-align:center;z-index:40}
+@media (prefers-reduced-motion: reduce){.mic[data-state="listening"]::after,.typing i{animation:none}.ring .val{transition:none}}
+</style>
+
+<div class="app">
+  <div class="hdr" id="hdr"></div>
+  <main class="main" id="main"></main>
+  <div id="bottom"></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+"use strict";
+
+/* ================= content ================= */
+const SCENARIOS = [
+  {id:"upoznavanje", bs:"Upoznavanje", de:"Kennenlernen", hint:"Name, Herkunft, Wohnort, Beruf",
+   role:"Du bist eine freundliche Person in Sarajevo, die ihn gerade kennenlernt. Frag nach Name, Herkunft, Wohnort und Beruf."},
+  {id:"kafana", bs:"U kafani", de:"Im Café", hint:"Bestellen, nachfragen, bezahlen",
+   role:"Du bist Kellner in einer Kafana in Sarajevo, er ist Gast. Nimm die Bestellung auf (kafa, čaj, sok, kolači), am Ende wird bezahlt."},
+  {id:"pijaca", bs:"Na pijaci", de:"Auf dem Markt", hint:"Obst, Gemüse, Mengen, Preise",
+   role:"Du verkaufst Obst und Gemüse auf einer Pijaca, er kauft ein. Übe Zahlen, Mengen (kilo, pola kile) und Preise in KM."},
+  {id:"grad", bs:"Po gradu", de:"Weg fragen", hint:"Richtungen, Orte, Tram",
+   role:"Du bist Passant in Sarajevo, er fragt nach dem Weg (Baščaršija, stanica, apoteka, pošta). Übe lijevo, desno, pravo, blizu, daleko, tramvaj."},
+  {id:"za-stolom", bs:"Za stolom", de:"Am Esstisch", hint:"Zu Gast, Essen loben, höflich ablehnen",
+   role:"Er ist zu Gast bei einer bosnischen Familie. Du bist Gastgeber, bietest Essen und Trinken an (pita, sarma, ćevapi, kafa), er bedankt sich, lobt und lehnt höflich ab."},
+  {id:"moj-dan", bs:"Moj dan", de:"Mein Tag", hint:"Erzählen, was war",
+   role:"Frag ihn, wie sein Tag oder Wochenende war und was er gemacht hat. Übe die Vergangenheit mit maskulinen Formen (bio sam, radio sam, išao sam, jeo sam)."},
+  {id:"osjecaji", bs:"Osjećaji", de:"Gefühle", hint:"Sagen, wie es dir geht",
+   role:"Ein ruhiges, persönliches Gespräch über Gefühle und Wünsche. Übe Sätze wie Sretan sam, Drago mi je, Nedostaješ mi, Ponosan sam, Volim te."},
+  {id:"slobodno", bs:"Slobodan razgovor", de:"Freies Gespräch", hint:"Du bestimmst das Thema",
+   role:"Freies Alltagsgespräch. Frag ihn zu Beginn, worüber er sprechen möchte, und folge seinem Thema."}
+];
+const LEVELS = {
+  pocetnik:"Einsteiger (erste Wochen). Sehr kurze, einfache Sätze mit höchstens 6–8 Wörtern, häufigste Wörter, Präsens. Höchstens ein neues Wort pro Runde.",
+  osnove:"Grundlagen. Kennt Grundwortschatz und einfache Sätze. Kurze Sätze, auch Vergangenheit, ab und zu ein neues Wort.",
+  dalje:"Fortgeschritten. Natürliche Sätze in normalem Tempo, breiterer Wortschatz, weiterhin klar und alltagsnah."
+};
+const LEVEL_NAME = {pocetnik:"Einsteiger", osnove:"Grundlagen", dalje:"Weiter"};
+const SOUNDS = [
+  {g:"č", how:"hartes tsch wie in Tschüss", ex:[["čaj","Tee"],["čovjek","Mensch"]]},
+  {g:"ć", how:"weiches tsch, Zunge vorn an den Zähnen, fast wie tj", ex:[["kuća","Haus"],["noć","Nacht"]]},
+  {g:"dž", how:"hartes dsch wie in Dschungel", ex:[["džep","Hosentasche"],["džamija","Moschee"]]},
+  {g:"đ", how:"weiches dsch, fast wie dj", ex:[["đak","Schüler"],["rođendan","Geburtstag"]]},
+  {g:"š", how:"sch wie in Schule", ex:[["šuma","Wald"],["škola","Schule"]]},
+  {g:"ž", how:"stimmhaftes sch wie das j in Journal", ex:[["žena","Frau"],["život","Leben"]]},
+  {g:"lj", how:"l und j zu einem Laut verschmolzen, wie in Ljubljana", ex:[["ljubav","Liebe"],["ljeto","Sommer"]]},
+  {g:"nj", how:"wie gn in Champagner", ex:[["konj","Pferd"],["knjiga","Buch"]]},
+  {g:"c", how:"immer wie deutsches z", ex:[["cvijet","Blume"],["ulica","Straße"]]},
+  {g:"z", how:"stimmhaftes s wie in Sonne", ex:[["zima","Winter"],["zdravo","Hallo"]]},
+  {g:"s", how:"immer scharfes s wie in Bus", ex:[["sok","Saft"],["sestra","Schwester"]]},
+  {g:"h", how:"ch wie in Bach, auch am Wortanfang", ex:[["hvala","Danke"],["hljeb","Brot"]]},
+  {g:"r", how:"gerollt; kann allein eine Silbe tragen", ex:[["srce","Herz"],["prst","Finger"]]},
+  {g:"v", how:"wie deutsches w", ex:[["voda","Wasser"],["volim","ich liebe"]]},
+  {g:"j", how:"wie deutsches j", ex:[["ja","ich"],["jabuka","Apfel"]]}
+];
+const WORDS = [
+  {id:"pitanja", bs:"Upitne riječi", de:"Fragewörter", items:[
+    ["ko?","wer?","Ko je to?","Wer ist das?"],
+    ["šta?","was?","Šta je ovo?","Was ist das?"],
+    ["gdje?","wo?","Gdje si?","Wo bist du?"],
+    ["kada?","wann?","Kada dolaziš?","Wann kommst du?"],
+    ["zašto?","warum?","Zašto učiš bosanski?","Warum lernst du Bosnisch?"],
+    ["kako?","wie?","Kako si?","Wie geht es dir?"],
+    ["koliko?","wie viel?","Koliko košta?","Wie viel kostet das?"],
+    ["koji?","welcher?","Koji autobus ide u centar?","Welcher Bus fährt ins Zentrum?"],
+    ["čiji?","wessen?","Čija je ovo torba?","Wessen Tasche ist das?"],
+    ["odakle?","woher?","Odakle si?","Woher kommst du?"],
+    ["kuda?","wohin?","Kuda ideš?","Wohin gehst du?"],
+    ["otkad?","seit wann?","Otkad živiš ovdje?","Seit wann wohnst du hier?"]]},
+  {id:"glagoli", bs:"Osnovni glagoli", de:"Grundverben", verbs:true, items:[
+    ["biti","sein",["sam","si","je","smo","ste","su"]],
+    ["imati","haben",["imam","imaš","ima","imamo","imate","imaju"]],
+    ["ići","gehen",["idem","ideš","ide","idemo","idete","idu"]],
+    ["htjeti","wollen",["hoću","hoćeš","hoće","hoćemo","hoćete","hoće"]],
+    ["moći","können",["mogu","možeš","može","možemo","možete","mogu"]],
+    ["znati","wissen",["znam","znaš","zna","znamo","znate","znaju"]],
+    ["raditi","arbeiten, machen",["radim","radiš","radi","radimo","radite","rade"]],
+    ["govoriti","sprechen",["govorim","govoriš","govori","govorimo","govorite","govore"]],
+    ["razumjeti","verstehen",["razumijem","razumiješ","razumije","razumijemo","razumijete","razumiju"]],
+    ["pričati","reden, erzählen",["pričam","pričaš","priča","pričamo","pričate","pričaju"]],
+    ["jesti","essen",["jedem","jedeš","jede","jedemo","jedete","jedu"]],
+    ["piti","trinken",["pijem","piješ","pije","pijemo","pijete","piju"]],
+    ["voljeti","lieben, mögen",["volim","voliš","voli","volimo","volite","vole"]],
+    ["živjeti","leben, wohnen",["živim","živiš","živi","živimo","živite","žive"]],
+    ["vidjeti","sehen",["vidim","vidiš","vidi","vidimo","vidite","vide"]],
+    ["čuti","hören",["čujem","čuješ","čuje","čujemo","čujete","čuju"]],
+    ["dolaziti","kommen",["dolazim","dolaziš","dolazi","dolazimo","dolazite","dolaze"]],
+    ["trebati","brauchen",["trebam","trebaš","treba","trebamo","trebate","trebaju"]],
+    ["učiti","lernen",["učim","učiš","uči","učimo","učite","uče"]],
+    ["kupiti","kaufen",["kupim","kupiš","kupi","kupimo","kupite","kupe"]],
+    ["čekati","warten",["čekam","čekaš","čeka","čekamo","čekate","čekaju"]],
+    ["spavati","schlafen",["spavam","spavaš","spava","spavamo","spavate","spavaju"]]]},
+  {id:"pozdravi", bs:"Pozdravi", de:"Begrüßen & Höflichkeit", items:[
+    ["zdravo","hallo"],["dobro jutro","guten Morgen"],["dobar dan","guten Tag"],["dobro veče","guten Abend"],["laku noć","gute Nacht"],
+    ["doviđenja","auf Wiedersehen"],["ćao","tschüss, hallo"],["vidimo se","bis bald"],["hvala","danke"],["hvala lijepa","vielen Dank"],
+    ["molim","bitte"],["izvinite","entschuldigen Sie"],["da","ja"],["ne","nein"],["može","geht klar"],["drago mi je","freut mich"]]},
+  {id:"ljudi", bs:"Ljudi", de:"Personen & Familie", items:[
+    ["ja","ich"],["ti","du"],["on","er"],["ona","sie (eine Person)"],["mi","wir"],["vi","ihr, Sie"],["oni","sie (mehrere)"],
+    ["mama","Mama"],["tata","Papa"],["brat","Bruder"],["sestra","Schwester"],["prijatelj","Freund"],["prijateljica","Freundin"],
+    ["porodica","Familie"],["dijete","Kind"],["čovjek","Mensch, Mann"]]},
+  {id:"vrijeme", bs:"Vrijeme", de:"Zeit & Wochentage", items:[
+    ["danas","heute"],["sutra","morgen"],["jučer","gestern"],["sada","jetzt"],["kasnije","später"],["uvijek","immer"],["nikad","nie"],
+    ["jutro","Morgen (Tageszeit)"],["veče","Abend"],["sedmica","Woche"],["ponedjeljak","Montag"],["utorak","Dienstag"],["srijeda","Mittwoch"],
+    ["četvrtak","Donnerstag"],["petak","Freitag"],["subota","Samstag"],["nedjelja","Sonntag"]]},
+  {id:"hrana", bs:"Hrana i piće", de:"Essen & Trinken", items:[
+    ["voda","Wasser"],["kafa","Kaffee"],["čaj","Tee"],["sok","Saft"],["pivo","Bier"],["mlijeko","Milch"],["hljeb","Brot"],["sir","Käse"],
+    ["meso","Fleisch"],["riba","Fisch"],["voće","Obst"],["povrće","Gemüse"],["jabuka","Apfel"],["šećer","Zucker"],["so","Salz"],["račun","Rechnung"]]},
+  {id:"mjesta", bs:"Mjesta", de:"Orte & Richtungen", items:[
+    ["kuća","Haus"],["stan","Wohnung"],["grad","Stadt"],["ulica","Straße"],["posao","Arbeit"],["prodavnica","Laden"],["pijaca","Markt"],
+    ["stanica","Haltestelle, Bahnhof"],["apoteka","Apotheke"],["bolnica","Krankenhaus"],["škola","Schule"],["restoran","Restaurant"],
+    ["lijevo","links"],["desno","rechts"],["pravo","geradeaus"],["blizu","nah"],["daleko","weit"]]},
+  {id:"opis", bs:"Opisi", de:"Eigenschaften", note:"Adjektive in der männlichen Grundform", items:[
+    ["dobar","gut"],["loš","schlecht"],["velik","groß"],["mali","klein"],["lijep","schön"],["nov","neu"],["star","alt"],["topao","warm"],
+    ["hladan","kalt"],["skup","teuer"],["jeftin","billig"],["brz","schnell"],["spor","langsam"],["sretan","glücklich"],["umoran","müde"],["gladan","hungrig"]]}
+];
+const PRON = ["ja","ti","on, ona","mi","vi","oni"];
+const wordItems = (cat) => cat.items.map(x => cat.verbs ? {bs:x[0], de:x[1], conj:x[2]} : {bs:x[0], de:x[1], ex:x[2] || "", exde:x[3] || ""});
+const LMAP = {"č":"tsch","ć":"tj","đ":"dj","š":"sch","ž":"zh","c":"z","z":"s","s":"ss","h":"ch","v":"w"};
+function bsToLaut(s){ const t = String(s).toLowerCase(), V = /[aeiou]/; let o = ""; for (let i = 0; i < t.length; i++){ if (t[i] === "d" && t[i + 1] === "ž"){ o += "dsch"; i++; continue; } if (t[i] === "s"){ o += V.test(t[i - 1] || "") && V.test(t[i + 1] || "") ? "ss" : "s"; continue; } o += LMAP[t[i]] ?? t[i]; } return o; }
+
+/* numbers */
+const ONES = ["nula","jedan","dva","tri","četiri","pet","šest","sedam","osam","devet"];
+const TEENS = ["deset","jedanaest","dvanaest","trinaest","četrnaest","petnaest","šesnaest","sedamnaest","osamnaest","devetnaest"];
+const TENS = ["","","dvadeset","trideset","četrdeset","pedeset","šezdeset","sedamdeset","osamdeset","devedeset"];
+const HUNDS = ["","sto","dvjesto","trista","četiristo","petsto","šeststo","sedamsto","osamsto","devetsto"];
+function below1000(n, fem){
+  const out = [], hd = Math.floor(n / 100), r = n % 100;
+  if (hd) out.push(HUNDS[hd]);
+  if (r >= 10 && r < 20) out.push(TEENS[r - 10]);
+  else { const t = Math.floor(r / 10), o = r % 10; if (t >= 2) out.push(TENS[t]); if (o) out.push(fem && o === 1 ? "jedna" : fem && o === 2 ? "dvije" : ONES[o]); }
+  return out.join(" ");
+}
+function plural(n, one, few, many){ const l2 = n % 100, l = n % 10; if (l2 >= 11 && l2 <= 14) return many; if (l === 1) return one; if (l >= 2 && l <= 4) return few; return many; }
+function num2bs(n, fem){
+  if (n === 0) return "nula";
+  const th = Math.floor(n / 1000), r = n % 1000, out = [];
+  if (th === 1) out.push("hiljadu");
+  else if (th > 1) out.push(below1000(th, true) + " " + plural(th, "hiljada", "hiljade", "hiljada"));
+  if (r) out.push(below1000(r, fem));
+  return out.join(" ");
+}
+const priceBs = (n) => num2bs(n, true) + " " + plural(n, "marka", "marke", "maraka");
+const NUM_RANGES = [["0-10","0–10",0,10],["11-20","11–20",11,20],["0-100","bis 100",0,100],["100-1000","bis 1000",100,1000],["1000-9999","Tausender",1000,9999]];
+const DICT_LANGS = ["bs","hr","sr"];
+const LANG_NAME = {bs:"Bosnisch", hr:"Kroatisch", sr:"Serbisch"};
+const WEEKDAYS = ["nedjelja","ponedjeljak","utorak","srijeda","četvrtak","petak","subota"];
+const DAY_ABBR = ["N","P","U","S","Č","P","S"];
+const MONTHS = ["januar","februar","mart","april","maj","juni","juli","august","septembar","oktobar","novembar","decembar"];
+const BOX_DAYS = [0, 0, 1, 3, 7, 14, 30];
+const DAY = 86400000;
+const LAUT_RULES = "Lautschrift: deutsche Annäherung, Silben mit Bindestrich, betonte Silbe in GROSSBUCHSTABEN. č = tsch, ć = weiches tj, dž = dsch, đ = weiches dj, š = sch, ž = zh (wie j in Journal), c = z, z = stimmhaftes s (schreibe s), s = ss, h = ch, v = w, j = j, lj = lj, nj = nj, r rollen.";
+
+/* ================= icons ================= */
+const I = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg>',
+  talk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/></svg>',
+  train:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  speak:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
+  starOn:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></svg>'
+};
+
+/* ================= helpers ================= */
+const $ = (id) => document.getElementById(id);
+function h(tag, props, ...kids){
+  const e = document.createElement(tag);
+  if (props) for (const k in props){
+    const v = props[k];
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v;
+    else if (k === "text") e.textContent = v;
+    else if (k === "html") e.innerHTML = v;
+    else if (k.startsWith("on") && typeof v === "function") e.addEventListener(k.slice(2), v);
+    else if (typeof v === "boolean") e[k] = v;
+    else e.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return e;
+}
+function iconBtn(icon, label, onclick, cls){ return h("button", {class: cls || "pill", type:"button", "aria-label": label, html: icon + (cls === "ibtn" ? "" : `<span>${label}</span>`), onclick}); }
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+function dayKey(d){ d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function startOfDay(t){ const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); }
+function clip(s, n){ s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+function fmtDate(t){ const d = new Date(t); return d.toLocaleDateString("de-DE", {day:"numeric", month:"short"}) + ", " + d.toLocaleTimeString("de-DE", {hour:"2-digit", minute:"2-digit"}); }
+let toastTimer;
+function toast(msg){ const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, 3800); }
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+/* text comparison for repeat/answer checks */
+const CYR = {"а":"a","б":"b","в":"v","г":"g","д":"d","ђ":"đ","е":"e","ж":"ž","з":"z","и":"i","ј":"j","к":"k","л":"l","љ":"lj","м":"m","н":"n","њ":"nj","о":"o","п":"p","р":"r","с":"s","т":"t","ћ":"ć","у":"u","ф":"f","х":"h","ц":"c","ч":"č","џ":"dž","ш":"š"};
+function normWords(s){
+  s = String(s || "").toLowerCase().normalize("NFC").replace(/[Ѐ-ӿ]/g, ch => CYR[ch] ?? ch);
+  return s.replace(/[.,!?;:"„“”'’…()\[\]«»–—-]/g, " ").split(/\s+/).filter(Boolean);
+}
+const loose = (w) => w.replace(/[čć]/g, "c").replace(/dž/g, "dz").replace(/đ/g, "dj").replace(/š/g, "s").replace(/ž/g, "z");
+function compare(target, said){
+  const T = normWords(target), A = normWords(said), n = T.length, m = A.length;
+  const dp = Array.from({length: n + 1}, () => new Array(m + 1).fill(0));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+    dp[i][j] = loose(T[i]) === loose(A[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  const res = []; let i = 0, j = 0;
+  while (i < n){
+    if (j < m && loose(T[i]) === loose(A[j])){ res.push({w:T[i], s: T[i] === A[j] ? "ok" : "near"}); i++; j++; }
+    else if (j < m && dp[i][j + 1] >= dp[i + 1][j]) j++;
+    else { res.push({w:T[i], s:"miss"}); i++; }
+  }
+  const got = res.reduce((a, r) => a + (r.s === "ok" ? 1 : r.s === "near" ? 0.85 : 0), 0);
+  return {words: res, score: n ? Math.round(got / n * 100) : 0};
+}
+
+/* ================= state & persistence ================= */
+const DEFAULT_SETTINGS = {laut:true, de:true, speak:true, autoSend:true, rate:0.85, quality:"schnell", keyboardSpoken:true, hideText:false};
+function freshProfile(){ return {name:"", level:"pocetnik", goal:15, onboarded:false, dictLang:0, settings:{...DEFAULT_SETTINGS}, upd:0}; }
+let S = store.get("pricaj2.state", null);
+if (!S || typeof S !== "object") S = {profile: freshProfile(), vocab:{}, days:{}, convs:{}};
+S.profile = Object.assign(freshProfile(), S.profile || {});
+S.profile.settings = Object.assign({...DEFAULT_SETTINGS}, S.profile.settings || {});
+S.vocab = S.vocab || {}; S.days = S.days || {}; S.convs = S.convs || {};
+const P = () => S.profile, ST = () => S.profile.settings;
+
+/* one-time import of the first version's local data */
+(() => {
+  const oldSet = store.get("pricaj.settings", null), oldConv = store.get("pricaj.conv", null);
+  if (oldSet){ for (const k of ["laut","de","speak","autoSend","rate","quality"]) if (k in oldSet) S.profile.settings[k] = oldSet[k]; store.del("pricaj.settings"); }
+  if (oldConv && oldConv.scenario && Array.isArray(oldConv.msgs) && oldConv.msgs.length){
+    const id = newId(), now = Date.now();
+    S.convs[id] = {id, scen: oldConv.scenario, custom:"", level: oldConv.level || "pocetnik", msgs: oldConv.msgs.filter(m => m.who !== "err"), turns: oldConv.turns || [], ev:null, created: now, upd: now};
+  }
+  if (oldConv) store.del("pricaj.conv");
+})();
+
+let saveTimer;
+function saveLocal(){ clearTimeout(saveTimer); saveTimer = setTimeout(() => store.set("pricaj2.state", S), 250); }
+
+let db = null, rootRef = null, syncState = "local";
+function setSync(s){ syncState = s; const el = document.querySelector("[data-sync]"); if (el) renderSyncInto(el); }
+const writer = {
+  pending: new Map(), running: false,
+  put(ref, data){ if (!ref) return; this.pending.set(ref.path, {ref, data}); this.run(); },
+  async run(){
+    if (this.running) return; this.running = true;
+    while (this.pending.size && db){
+      const [path, job] = this.pending.entries().next().value; this.pending.delete(path);
+      const go = () => job.data === null ? job.ref.delete() : job.ref.set(job.data);
+      try{ await go(); }
+      catch(e){
+        if (e && e.code === "unavailable"){ await sleep(700 + Math.random() * 900); try{ await go(); }catch(e2){ syncFail(e2); } }
+        else syncFail(e);
+      }
+    }
+    this.running = false;
+  }
+};
+function syncFail(e){
+  const c = e && e.code;
+  if (c === "quota_exceeded"){ toast("Der Speicher im Konto ist voll. Lösche alte Gespräche im Heft."); return; }
+  if (c === "resource_exhausted") return;
+  db = null; writer.pending.clear(); setSync("error");
+  toast("Speichern im Konto klappt gerade nicht. Deine Daten bleiben auf diesem Gerät.");
+}
+const vocabRef = (id) => rootRef && rootRef.collection("vocab").doc(id);
+const convRef = (id) => rootRef && rootRef.collection("convs").doc(id);
+const dayRef = (k) => rootRef && rootRef.collection("days").doc(k);
+function persistProfile(){ S.profile.upd = Date.now(); saveLocal(); if (db) writer.put(rootRef, JSON.parse(JSON.stringify(S.profile))); }
+function persistVocab(id){ saveLocal(); if (db) writer.put(vocabRef(id), S.vocab[id] ? {...S.vocab[id]} : null); }
+function trimConv(c){ return {...c, msgs: c.msgs.slice(-80), turns: c.turns.slice(-40)}; }
+function persistConv(id){
+  const c = S.convs[id];
+  if (c){ c.msgs = c.msgs.slice(-80); c.turns = c.turns.slice(-40); }
+  saveLocal(); if (db) writer.put(convRef(id), c ? JSON.parse(JSON.stringify(trimConv(c))) : null);
+}
+function persistDay(k){ saveLocal(); if (db && S.days[k]) writer.put(dayRef(k), {...S.days[k], d:k}); }
+
+async function loadCloud(){
+  if (!db || !rootRef) return;
+  setSync("loading");
+  let timedOut = false;
+  const timer = setTimeout(() => { timedOut = true; if (syncState === "loading") setSync("offline"); }, 10000);
+  try{
+    const root = await rootRef.get();
+    if (!root.exists){
+      clearTimeout(timer);
+      writer.put(rootRef, JSON.parse(JSON.stringify(S.profile)));
+      for (const id in S.vocab) persistVocab(id);
+      for (const id in S.convs) persistConv(id);
+      for (const k in S.days) persistDay(k);
+      setSync("cloud"); return;
+    }
+    const [v, c, d] = await Promise.all([
+      rootRef.collection("vocab").limit(1000).get(),
+      rootRef.collection("convs").orderBy("upd", "desc").limit(40).get(),
+      rootRef.collection("days").orderBy("d", "desc").limit(120).get()
+    ]);
+    clearTimeout(timer);
+    const cp = root.data() || {};
+    if ((cp.upd || 0) >= (S.profile.upd || 0)){
+      S.profile = Object.assign(freshProfile(), cp);
+      S.profile.settings = Object.assign({...DEFAULT_SETTINGS}, cp.settings || {});
+    } else writer.put(rootRef, JSON.parse(JSON.stringify(S.profile)));
+    mergeColl(S.vocab, v.docs, persistVocab);
+    mergeColl(S.convs, c.docs, persistConv);
+    const seen = new Set();
+    for (const doc of d.docs){
+      const x = doc.data() || {}; seen.add(doc.id);
+      const l = S.days[doc.id];
+      if (!l) S.days[doc.id] = {sec: x.sec || 0, spoken: x.spoken || 0};
+      else if ((l.sec || 0) > (x.sec || 0) || (l.spoken || 0) > (x.spoken || 0)){ l.sec = Math.max(l.sec || 0, x.sec || 0); l.spoken = Math.max(l.spoken || 0, x.spoken || 0); persistDay(doc.id); }
+      else { l.sec = x.sec || 0; l.spoken = x.spoken || 0; }
+    }
+    for (const k in S.days) if (!seen.has(k) && k >= dayKey(new Date(Date.now() - 119 * DAY))) persistDay(k);
+    saveLocal(); setSync("cloud"); applyBodyClasses(); rerender();
+  }catch(e){
+    clearTimeout(timer);
+    if (!timedOut) syncFail(e);
+  }
+}
+function mergeColl(local, docs, persist){
+  const seen = new Set();
+  for (const doc of docs){
+    const x = doc.data(); if (!x) continue; seen.add(doc.id);
+    const l = local[doc.id];
+    if (!l || (x.upd || 0) >= (l.upd || 0)) local[doc.id] = JSON.parse(JSON.stringify(x));
+    else persist(doc.id);
+  }
+  for (const id in local) if (!seen.has(id)) persist(id);
+}
+
+/* ================= practice time ================= */
+const PRACTICE = new Set(["chat","shadow","cards","sounds","quiz","numbers","words"]);
+let lastAct = 0, unflushed = 0;
+const today = () => { const k = dayKey(); if (!S.days[k]) S.days[k] = {sec:0, spoken:0}; return k; };
+["pointerdown","keydown","input"].forEach(ev => document.addEventListener(ev, () => lastAct = Date.now(), {passive:true, capture:true}));
+setInterval(() => {
+  if (document.visibilityState !== "visible" || !PRACTICE.has(view) || Date.now() - lastAct > 90000) return;
+  const k = today(); S.days[k].sec += 5; unflushed += 5;
+  if (unflushed >= 60){ unflushed = 0; persistDay(k); }
+}, 5000);
+function countSpoken(){ const k = today(); S.days[k].spoken = (S.days[k].spoken || 0) + 1; persistDay(k); }
+function flushTime(){ if (unflushed){ unflushed = 0; persistDay(today()); } }
+function streak(){
+  let n = 0, t = Date.now();
+  const ok = (k) => S.days[k] && S.days[k].sec >= 60;
+  if (!ok(dayKey(new Date(t)))) t -= DAY;
+  while (ok(dayKey(new Date(t)))){ n++; t -= DAY; }
+  return n;
+}
+const dueItems = () => Object.values(S.vocab).filter(v => (v.due || 0) <= Date.now());
+
+/* ================= capabilities ================= */
+let sample = null, dict = null, tts = null, ttsLang, ttsBlocked = false, sysVoice = null, caps = false;
+let playingBtn = null;
+
+function canSpeak(){ return !!tts || (!!sysVoice && !ttsBlocked); }
+function markPlaying(btn){ if (playingBtn) playingBtn.classList.remove("playing"); playingBtn = btn || null; if (playingBtn) playingBtn.classList.add("playing"); }
+function stopSpeaking(){
+  if (tts) tts.stop().catch(() => {});
+  else if (window.speechSynthesis) try{ speechSynthesis.cancel(); }catch(e){}
+  markPlaying(null);
+}
+function speak(text, slow, btn){
+  if (!text) return;
+  lastAct = Date.now();
+  const rate = slow ? 0.7 : ST().rate;
+  if (tts){
+    if (dict && dict.active()){ toast("Erst das Mikrofon beenden, dann anhören."); return; }
+    markPlaying(btn);
+    const opts = {rate}; if (ttsLang) opts.language = ttsLang;
+    tts.speak(text, opts).then(() => { if (playingBtn === btn) markPlaying(null); }).catch((e) => {
+      if (playingBtn === btn) markPlaying(null);
+      const c = e && e.code;
+      if (c === "not_granted" || c === "unavailable"){ tts = null; ttsBlocked = c === "not_granted"; rerender(); if (c === "not_granted") toast("Vorlesen ist für diese Seite ausgeschaltet."); }
+      else if (c === "busy") toast("Erst das Mikrofon beenden, dann anhören.");
+      else if (c === "no_gesture") toast("Tippe nochmal auf Anhören.");
+      else if (c === "rate_limited") toast("Gerade zu viel vorgelesen. Gleich nochmal versuchen.");
+      else if (c !== "stopped") toast("Vorlesen hat nicht geklappt.");
+    });
+    return;
+  }
+  if (sysVoice && !ttsBlocked){
+    try{
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.voice = sysVoice; u.lang = sysVoice.lang; u.rate = rate;
+      u.onend = u.onerror = () => { if (playingBtn === btn) markPlaying(null); };
+      markPlaying(btn); speechSynthesis.speak(u);
+    }catch(e){ markPlaying(null); }
+  }
+}
+function speakBtn(label, text, slow){
+  if (!canSpeak()) return null;
+  const b = iconBtn(I.speak, label, () => speak(text, slow, b));
+  return b;
+}
+function pickSystemVoice(){
+  if (!window.speechSynthesis) return;
+  try{
+    const vs = speechSynthesis.getVoices();
+    const find = (p) => vs.find(v => v.lang && v.lang.toLowerCase().replace("_", "-").startsWith(p));
+    sysVoice = find("bs") || find("hr") || find("sr-latn") || find("sr") || null;
+  }catch(e){ sysVoice = null; }
+}
+
+/* ---------- dictation ---------- */
+let micTarget = null, micBuffer = "", micState = "idle";
+function micBtn(target){
+  const b = h("button", {class:"mic", type:"button", "aria-label":"Sprechen", html: I.mic});
+  b.hidden = !dict; b.dataset.state = micState;
+  b.addEventListener("click", () => micClick(target));
+  return b;
+}
+function micClick(target){
+  if (!dict) return;
+  if (dict.active()){ dict.stop().catch(() => {}); return; }
+  micTarget = target; micBuffer = target.input.value;
+  const p = dict.start({language: DICT_LANGS[P().dictLang] || "bs"});   // synchronous from the click
+  stopSpeaking();
+  p.catch(onStartError);
+}
+function onStartError(e){
+  const c = e && e.code;
+  if (c === "unavailable"){
+    if (P().dictLang < DICT_LANGS.length - 1){
+      const from = LANG_NAME[DICT_LANGS[P().dictLang]];
+      P().dictLang++; persistProfile();
+      toast(`${from} bietet die Spracherkennung nicht an. Ich nehme jetzt ${LANG_NAME[DICT_LANGS[P().dictLang]]}, das klingt fast gleich. Tippe nochmal aufs Mikrofon.`);
+      updateHint();
+    } else { dict = null; toast("Die Spracherkennung bietet hier keine passende Sprache an. Nutze das Diktat deiner Tastatur."); rerender(); }
+  } else if (c === "not_granted"){ dict = null; toast("Mikrofon ist für diese Seite aus. Einschalten kannst du es im Berechtigungsmenü des Artifacts."); rerender(); }
+  else if (c === "dismissed") toast("Mikrofon-Frage geschlossen. Tippe nochmal, wenn du sprechen willst.");
+  else if (c === "rate_limited") toast("Gerade zu viele Aufnahmen. Gleich nochmal versuchen.");
+  else if (c !== "stopped") toast("Das Mikrofon hat nicht reagiert. Versuch es nochmal.");
+}
+function wireDictation(d){
+  d.onPartial(({text}) => { lastAct = Date.now(); if (micTarget && micTarget.live){ micTarget.live.textContent = text; micTarget.live.hidden = !text; } });
+  d.onFinal(({text}) => {
+    if (!micTarget) return;
+    micBuffer = micBuffer ? micBuffer + text : text.replace(/^\s+/, "");
+    micTarget.input.value = micBuffer; micTarget.fromMic = true;
+    micTarget.input.dispatchEvent(new Event("input", {bubbles:true}));
+  });
+  d.onState(({state, reason}) => {
+    micState = state;
+    document.querySelectorAll(".mic").forEach(b => { b.dataset.state = state; b.setAttribute("aria-label", state === "idle" ? "Sprechen" : "Aufnahme beenden"); });
+    updateHint();
+    if (state === "idle"){
+      const t = micTarget;
+      if (t && t.live) t.live.hidden = true;
+      if (t && (reason === "stopped" || reason === "viewer_stopped") && t.fromMic && t.input.value.trim() && document.contains(t.input)){
+        if (ST().autoSend && t.onDone) t.onDone(); else t.input.focus();
+      }
+      else if (reason === "upstream_error") toast("Spracherkennung unterbrochen. Was erkannt wurde, steht im Textfeld.");
+    }
+  });
+}
+function updateHint(){
+  const el = document.querySelector("[data-hint]"); if (!el) return;
+  el.textContent = !dict ? (ST().keyboardSpoken ? "Tipp: Sprich über das Mikrofon deiner Tastatur (Sprache Kroatisch oder Bosnisch)." : "Schreiben oder über die Tastatur diktieren.") :
+    micState === "listening" ? "Ich höre zu. Antippen, wenn du fertig bist." :
+    micState === "starting" ? "Mikrofon startet …" :
+    micState === "finishing" ? "Einen Moment …" :
+    `Mikrofon antippen und sprechen · Erkennung: ${LANG_NAME[DICT_LANGS[P().dictLang]]}`;
+}
+function diacriticKeys(input){
+  const wrap = h("div", {class:"keys"});
+  for (const k of ["č","ć","dž","đ","š","ž"]){
+    const b = h("button", {type:"button", text:k});
+    b.addEventListener("pointerdown", (e) => e.preventDefault());
+    b.onclick = () => {
+      const s = input.selectionStart ?? input.value.length, en = input.selectionEnd ?? s;
+      input.value = input.value.slice(0, s) + k + input.value.slice(en);
+      input.setSelectionRange(s + k.length, s + k.length); input.focus();
+      input.dispatchEvent(new Event("input", {bubbles:true}));
+    };
+    wrap.append(b);
+  }
+  return wrap;
+}
+const spokenVia = (target) => (target.fromMic || (!dict && ST().keyboardSpoken)) ? "mic" : "typed";
+
+/* ---------- Claude ---------- */
+function sampleErrText(code){
+  return ({
+    not_granted:"Der Tutor braucht deine Erlaubnis, Claude zu nutzen. Lade die Seite neu, dann wirst du erneut gefragt.",
+    sampling_disabled:"Claude ist für dieses Konto hier nicht verfügbar.",
+    rate_limited:"Gerade zu viele Anfragen oder dein Nutzungslimit ist erreicht. Warte kurz und versuch es dann nochmal.",
+    session_expired:"Du bist abgemeldet. Melde dich bei Claude neu an und lade die Seite neu.",
+    invalid_json:"Die Antwort kam unvollständig an.",
+    refused:"Darauf hat Claude nicht geantwortet. Formuliere es anders."
+  })[code] || "Keine Antwort von Claude. Prüfe die Verbindung und versuch es nochmal.";
+}
+const tier = () => ST().quality === "gruendlich" ? "default" : "quick";
+function aboutLearner(level){
+  const n = clip(P().name, 40);
+  return [
+    "Der Lerner ist ein Mann mit Deutsch als Muttersprache. Wenn er über sich spricht und in allen Vorschlägen für seine Sätze immer maskuline Formen (bio sam, radio sam, sretan sam, umoran sam).",
+    n ? `Sein Name ist ${n}. Sprich ihn gelegentlich mit diesem Namen an und verwende genau diesen Namen, wo ein Satz seinen Namen braucht (z. B. "Zovem se ${n}").`
+      : "Du kennst seinen Namen nicht. Erfinde keinen Namen für ihn und sprich ihn nicht mit einem Namen an. Braucht ein Vorschlag seinen Namen, schreibe \"Zovem se …\" mit drei Punkten.",
+    "Schreibe Bosnisch immer in lateinischer Schrift, ijekavisch, mit bosnischen Standardformen (kafa, hljeb, historija, sedmica) und korrekten Zeichen č ć dž đ š ž.",
+    "Niveau: " + LEVELS[level && LEVELS[level] ? level : P().level]
+  ].join("\n");
+}
+
+/* ================= router ================= */
+let view = "home", arg = null, sheetEl = null;
+const TABS = [["home","Start",I.home],["talk","Sprechen",I.talk],["train","Üben",I.train],["book","Heft",I.book]];
+const PARENT = {chat:"talk", shadow:"train", cards:"train", sounds:"train", settings:"home", quiz:"train", numbers:"train", words:"train", aboutme:"talk"};
+function go(v, a){
+  if (dict && dict.active()) dict.stop().catch(() => {});
+  stopSpeaking(); flushTime(); closeSheet();
+  view = v; arg = a === undefined ? null : a; micTarget = null;
+  render();
+  $("main").scrollTop = 0;
+}
+function rerender(){ if (sheetEl) return; if (view === "chat") renderChatList(); else if (!["shadow","cards","quiz","numbers"].includes(view)) render(); }
+function applyBodyClasses(){ document.body.classList.toggle("hide-laut", !ST().laut); document.body.classList.toggle("hide-de", !ST().de); }
+
+function render(){
+  if (!P().onboarded) view = "onboard";
+  else if (view === "onboard") view = "home";
+  const hdr = $("hdr"), main = $("main"), bottom = $("bottom");
+  hdr.textContent = ""; main.textContent = ""; bottom.textContent = ""; main.className = "main";
+  const fn = VIEWS[view] || VIEWS.home;
+  fn(hdr, main, bottom);
+  if (["home","talk","train","book"].includes(view)){
+    const nav = h("nav", {class:"tabs", "aria-label":"Bereiche"});
+    for (const [id, label, icon] of TABS) nav.append(h("button", {type:"button", html: icon + `<span>${label}</span>`, "aria-current": id === view ? "page" : null, onclick: () => go(id)}));
+    bottom.append(nav);
+  }
+  updateHint();
+}
+function header(hdr, title, sub, opts){
+  opts = opts || {};
+  if (opts.back) hdr.append(iconBtn(I.back, "Zurück", opts.onBack || (() => go(opts.backTo || PARENT[view] || "home")), "ibtn"));
+  hdr.append(h("div", {class:"ttl"}, opts.brand ? h("h1", {html:'Pričaj <span>bosanski</span>'}) : h("h1", {text:title}), sub ? h("div", {class:"sub", text:sub}) : null));
+  if (opts.right) hdr.append(opts.right);
+  if (opts.gear) hdr.append(iconBtn(I.gear, "Einstellungen", () => go("settings"), "ibtn"));
+}
+
+/* ================= sheet ================= */
+function openSheet(nodes){
+  closeSheet();
+  const sh = h("div", {class:"sheet", role:"dialog", "aria-modal":"true"}, h("div", {class:"grab"}), nodes);
+  sheetEl = h("div", {class:"shade", onclick: (e) => { if (e.target === sheetEl) closeSheet(); }}, sh);
+  document.body.append(sheetEl);
+  return sh;
+}
+function closeSheet(){ if (sheetEl){ sheetEl.remove(); sheetEl = null; document.querySelectorAll(".word.sel").forEach(w => w.classList.remove("sel")); } }
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && sheetEl){ e.preventDefault(); closeSheet(); } });
+
+/* ================= vocabulary ================= */
+function findVocab(bs){ const k = normWords(bs).join(" "); return Object.values(S.vocab).find(v => normWords(v.bs).join(" ") === k); }
+function addVocab(item, quiet){
+  if (!item || !item.bs) return false;
+  if (findVocab(item.bs)){ if (!quiet) toast("Steht schon im Heft."); return false; }
+  const id = newId(), now = Date.now();
+  S.vocab[id] = {id, bs: clip(item.bs, 200), de: clip(item.de, 200), laut: clip(item.laut, 200), box:1, due: now, added: now, upd: now, src: item.src || ""};
+  persistVocab(id);
+  if (!quiet) toast("Ins Heft gelegt.");
+  return true;
+}
+function saveBtn(item){
+  const has = () => !!findVocab(item.bs);
+  const b = h("button", {class:"pill", type:"button"});
+  const paint = () => { b.innerHTML = (has() ? I.starOn : I.star) + `<span>${has() ? "Im Heft" : "Merken"}</span>`; b.classList.toggle("on", has()); };
+  b.onclick = () => { if (!has()) addVocab(item); paint(); };
+  paint(); return b;
+}
+
+/* word lookup sheet */
+async function lookupWord(word, sentence, el){
+  if (el) el.classList.add("sel");
+  const body = h("div", {class:"stack"}, h("h2", {class:"bs", text: word}), h("p", {class:"muted", text:"Schaue nach …"}));
+  openSheet(body);
+  if (!sample){ body.lastChild.textContent = "Nachschlagen geht nur, wenn die Seite in Claude geöffnet ist."; return; }
+  try{
+    const r = await sample.json(
+      `Erkläre das bosnische Wort "${clip(word, 60)}" im Satz "${clip(sentence, 300)}" für einen deutschsprachigen Anfänger. ${LAUT_RULES}\nAntworte nur mit JSON: {"wort": "das Wort", "grundform": "Grundform bzw. Infinitiv", "art": "Wortart auf Deutsch", "de": "Bedeutung in diesem Satz", "laut": "Lautschrift des Wortes", "hinweis": "ein kurzer Satz zur Form (Fall, Person, Zeit) oder leer"}`,
+      {modelTier:"quick", cache:{gcTime: DAY}});
+    if (!sheetEl || !body.isConnected) return;
+    body.textContent = "";
+    body.append(
+      h("div", {class:"spread"}, h("h2", {class:"bs", text: r.wort || word}), h("span", {class:"cap", text: r.art || ""})),
+      r.laut ? h("div", {class:"laut", text: r.laut}) : null,
+      h("p", {style:"font-size:1.1rem", text: r.de || ""}),
+      r.grundform && r.grundform !== r.wort ? h("p", {class:"muted small", text:"Grundform: " + r.grundform}) : null,
+      r.hinweis ? h("p", {class:"muted small", text: r.hinweis}) : null,
+      h("div", {class:"actions"}, speakBtn("Anhören", r.wort || word, false), speakBtn("Langsam", r.wort || word, true),
+        saveBtn({bs: r.grundform || r.wort || word, de: r.de, laut: r.laut, src:"Wort"}))
+    );
+  }catch(e){ if (body.isConnected){ body.lastChild.textContent = sampleErrText(e && e.code); } }
+}
+function wordified(text){
+  const wrap = h("div", {class:"bs"});
+  for (const part of String(text).split(/(\s+)/)){
+    if (!part) continue;
+    if (/^\s+$/.test(part)){ wrap.append(part); continue; }
+    const m = part.match(/^([^\p{L}]*)([\p{L}'’-]+)([^\p{L}]*)$/u);
+    if (!m){ wrap.append(part); continue; }
+    if (m[1]) wrap.append(m[1]);
+    const w = h("span", {class:"word", tabindex:"0", role:"button", text: m[2], "aria-label": m[2] + " nachschlagen"});
+    const open = () => lookupWord(m[2], text, w);
+    w.addEventListener("click", open);
+    w.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); open(); } });
+    wrap.append(w);
+    if (m[3]) wrap.append(m[3]);
+  }
+  return wrap;
+}
+
+/* ================= views ================= */
+const VIEWS = {};
+
+/* ---------- onboarding ---------- */
+VIEWS.onboard = (hdr, main) => {
+  header(hdr, "", null, {brand:true});
+  const name = h("input", {class:"textin", id:"onbName", placeholder:"Dein Vorname", maxlength:"40", value: P().name, autocomplete:"given-name"});
+  let level = P().level, goal = P().goal;
+  const lvl = segControl([["pocetnik","Einsteiger"],["osnove","Grundlagen"],["dalje","Weiter"]], () => level, (v) => level = v);
+  const gl = segControl([[5,"5"],[10,"10"],[15,"15"],[20,"20"],[30,"30"]], () => goal, (v) => goal = v);
+  main.append(h("section", {class:"onb"},
+    h("div", {class:"stack"}, h("h2", {text:"Dobro došao!"}), h("p", {class:"lead", text:"Bevor wir anfangen: drei kurze Angaben, damit der Tutor zu dir passt. Alles lässt sich später in den Einstellungen ändern."})),
+    h("label", {class:"stack", for:"onbName"}, h("span", {class:"cap", text:"Wie heißt du?"}), name, h("small", {class:"muted", text:"Der Tutor spricht dich damit an. Leer lassen geht auch."})),
+    h("div", {class:"stack"}, h("span", {class:"cap", text:"Wo stehst du?"}), lvl),
+    h("div", {class:"stack"}, h("span", {class:"cap", text:"Tagesziel in Minuten"}), gl),
+    h("button", {class:"btn block", type:"button", text:"Los geht's", onclick: () => {
+      Object.assign(S.profile, {name: clip(name.value, 40), level, goal, onboarded:true});
+      persistProfile(); view = "home"; render();
+    }})
+  ));
+};
+function segControl(options, get, set){
+  const seg = h("div", {class:"seg", role:"group"});
+  const paint = () => { for (const b of seg.children) b.setAttribute("aria-pressed", String(b.dataset.v === String(get()))); };
+  for (const [v, label] of options){
+    seg.append(h("button", {type:"button", "data-v": String(v), text: label, onclick: () => { set(v); paint(); }}));
+  }
+  paint(); return seg;
+}
+
+/* ---------- home ---------- */
+VIEWS.home = (hdr, main) => {
+  header(hdr, "", null, {brand:true, gear:true});
+  const now = new Date(), k = dayKey(now), d = S.days[k] || {sec:0, spoken:0};
+  const mins = Math.floor(d.sec / 60), goal = P().goal, frac = Math.min(1, d.sec / (goal * 60)), st = streak();
+  const C = 2 * Math.PI * 38;
+  const ring = h("div", {html:`<svg class="ring${frac >= 1 ? " done" : ""}" viewBox="0 0 92 92" role="img" aria-label="${mins} von ${goal} Minuten heute">
+    <circle class="track" cx="46" cy="46" r="38" fill="none" stroke-width="9"/>
+    <circle class="val" cx="46" cy="46" r="38" fill="none" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - frac)}" transform="rotate(-90 46 46)"/>
+    <text x="46" y="50" text-anchor="middle" font-size="22">${mins}</text><text class="unit" x="46" y="66" text-anchor="middle" font-size="10">von ${goal} Min</text></svg>`});
+  const vocabN = Object.keys(S.vocab).length, due = dueItems().length;
+
+  main.append(h("section", {class:"hello"},
+    h("h2", {text: P().name ? `Zdravo, ${P().name}!` : "Zdravo!"}),
+    h("p", {text: `${WEEKDAYS[now.getDay()]}, ${now.getDate()}. ${MONTHS[now.getMonth()]}`})));
+
+  const week = h("div", {class:"week"});
+  const secs = []; for (let i = 6; i >= 0; i--){ const dd = new Date(now.getTime() - i * DAY); secs.push([dd, (S.days[dayKey(dd)] || {}).sec || 0]); }
+  const max = Math.max(goal * 60, ...secs.map(x => x[1]));
+  secs.forEach(([dd, s], i) => week.append(h("div", {class:"col", title: `${Math.round(s / 60)} Min`},
+    h("div", {class:"bar" + (s >= goal * 60 ? " hit" : "") + (i === 6 ? " now" : ""), style:`height:${Math.max(4, s / max * 64)}px`}),
+    h("span", {text: DAY_ABBR[dd.getDay()]}))));
+  main.append(h("section", {class:"card stack"},
+    h("div", {class:"today"}, ring, h("div", {class:"stats"},
+      h("b", {text: frac >= 1 ? "Tagesziel geschafft" : `Noch ${Math.max(1, goal - mins)} Min bis zum Ziel`}),
+      h("span", {class:"muted small", text: `${st} ${st === 1 ? "Tag" : "Tage"} in Folge · ${d.spoken || 0} Sätze gesprochen`}),
+      h("span", {class:"muted small", text: `${vocabN} Einträge im Heft`}))),
+    week));
+
+  const last = Object.values(S.convs).sort((a, b) => (b.upd || 0) - (a.upd || 0))[0];
+  if (last && last.msgs.length){
+    const lt = [...last.msgs].reverse().find(m => m.who === "tutor");
+    main.append(h("button", {class:"card resume", type:"button", style:"text-align:left", onclick: () => go("chat", last.id)},
+      h("span", {class:"cap", text:"Weitermachen · " + convTitle(last)}),
+      lt ? h("span", {class:"bsline", text: lt.data.bs}) : null,
+      h("span", {class:"muted small", text: fmtDate(last.upd)})));
+  }
+  const act = (title, text, badge, fn) => h("button", {class:"action", type:"button", onclick: fn}, h("b", {text:title}), h("small", {text}), badge ? h("span", {class:"badge", text: badge}) : null);
+  main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Heute üben"}), h("div", {class:"grid2"},
+    act("Gespräch", "Mit dem Tutor sprechen, ein Thema wählen", null, () => go("talk")),
+    act("Quiz", "Ein Wort, vier Antworten, die richtige antippen", null, () => go("quiz")),
+    act("Zahlen", "Hören, wählen, sagen, Preise in KM", null, () => go("numbers")),
+    act("Grundwortschatz", "Fragewörter, Grundverben, Alltagswörter", null, () => go("words")),
+    act("Wiederholen", vocabN ? `${vocabN} Einträge im Heft` : "Füllt sich, wenn du Wörter merkst", due ? `${due} fällig` : null, () => go("cards")),
+    act("Nachsprechen", "Hören, nachsprechen, Abgleich Wort für Wort", null, () => go("shadow")))));
+  if (caps && !dict) main.append(h("p", {class:"note", text: "In dieser Ansicht gibt es kein App-Mikrofon. Sprich stattdessen über das Mikrofon deiner Handy-Tastatur: Füge dort Kroatisch oder Bosnisch als Tastatursprache hinzu und tippe in einem Textfeld aufs Mikrofon. Am Computer in Chrome oder in der Claude-Desktop-App gibt es das eingebaute Mikrofon."}));
+  if (caps && !sample) main.append(h("p", {class:"note", text:"Der Tutor ist in dieser Ansicht nicht erreichbar. Öffne die Seite in Claude, dann funktionieren Gespräche und Nachschlagen."}));
+};
+
+/* ---------- talk (choose conversation) ---------- */
+function scenarioOf(c){ return SCENARIOS.find(s => s.id === c.scen) || null; }
+function convTitle(c){ const s = scenarioOf(c); return s ? `${s.bs} · ${s.de}` : clip(c.custom || "Eigenes Thema", 40); }
+VIEWS.talk = (hdr, main) => {
+  header(hdr, "Sprechen", "Wähle ein Thema, der Tutor beginnt", {gear:true});
+  main.append(h("button", {class:"card resume", type:"button", style:"text-align:left", onclick: () => go("aboutme")},
+    h("span", {class:"cap", text:"Neu"}), h("span", {class:"bsline", text:"Sätze über mich"}),
+    h("span", {class:"muted small", text:"Erzähl auf Deutsch von dir, der Tutor macht daraus Sätze zum Lernen. Per Code auch für die iPhone-App."})));
+  const custom = h("input", {placeholder:"z. B. beim Friseur", id:"customTopic", maxlength:"160", "aria-label":"Eigenes Thema"});
+  const startCustom = () => { const t = custom.value.trim(); if (!t){ custom.focus(); return; } startConversation(null, t); };
+  custom.addEventListener("keydown", (e) => { if (e.key === "Enter") startCustom(); });
+  main.append(
+    h("section", {class:"stack"}, h("span", {class:"cap", text:"Niveau"}),
+      segControl([["pocetnik","Einsteiger"],["osnove","Grundlagen"],["dalje","Weiter"]], () => P().level, (v) => { P().level = v; persistProfile(); })),
+    h("section", {class:"stack"}, h("span", {class:"cap", text:"Eigenes Thema"}),
+      h("div", {class:"field"}, custom, h("button", {class:"btn", type:"button", text:"Starten", onclick: startCustom}))),
+    h("section", {class:"stack"}, h("span", {class:"cap", text:"Themen"}),
+      h("div", {class:"grid2 grid4"}, SCENARIOS.map(s => h("button", {class:"scen", type:"button", onclick: () => startConversation(s.id)},
+        h("b", {text:s.bs}), h("span", {text:s.de}), h("small", {text:s.hint})))))
+  );
+  const convs = Object.values(S.convs).sort((a, b) => (b.upd || 0) - (a.upd || 0)).slice(0, 4);
+  if (convs.length) main.append(h("section", {class:"stack"}, h("div", {class:"spread"}, h("span", {class:"cap", text:"Letzte Gespräche"}), h("button", {class:"tbtn", type:"button", text:"Alle", onclick: () => go("book", "convs")})),
+    h("div", {class:"list"}, convs.map(convRow))));
+};
+function convRow(c){
+  const lt = [...c.msgs].reverse().find(m => m.who === "tutor");
+  return h("button", {class:"li", type:"button", style:"text-align:left", onclick: () => go("chat", c.id)},
+    h("div", {class:"grow"}, h("b", {text: convTitle(c)}), h("small", {text: (lt ? lt.data.bs : "Noch keine Antwort") }), h("small", {text: `${fmtDate(c.upd)} · ${LEVEL_NAME[c.level] || ""}${c.ev ? " · ausgewertet" : ""}`})));
+}
+
+/* ---------- chat ---------- */
+let chatCtl = null, chatBusy = false;
+function startConversation(scen, custom){
+  const id = newId(), now = Date.now();
+  S.convs[id] = {id, scen: scen || null, custom: custom ? clip(custom, 160) : "", level: P().level, msgs: [], turns: [], ev: null, created: now, upd: now};
+  const all = Object.values(S.convs).sort((a, b) => (b.upd || 0) - (a.upd || 0));
+  for (const old of all.slice(30)){ delete S.convs[old.id]; persistConv(old.id); }
+  go("chat", id);
+}
+function chatRules(c){
+  const s = scenarioOf(c);
+  return [
+    "Du bist ein geduldiger Bosnisch-Tutor. Ihr übt mündliches Sprechen; der Lerner lernt vor allem über Hören und Nachsprechen.",
+    aboutLearner(c.level),
+    s ? "Thema und deine Rolle: " + s.role : `Thema, das er selbst gewählt hat: "${clip(c.custom, 160)}". Übernimm eine passende Rolle und führe ein realistisches Alltagsgespräch dazu.`,
+    "Führe das Gespräch in der Rolle und ende fast jede Runde mit einer kurzen Frage, damit er antworten muss. Halte \"bs\" kurz: höchstens zwei kurze Sätze.",
+    "Seine Nachrichten sind markiert: [gesprochen] kommt aus einer Spracherkennung (kann ohne Häkchen oder in Kyrillisch ankommen), [getippt] hat er selbst geschrieben, [hilfe] heißt, er versteht dich nicht oder weiß nicht weiter.",
+    "Bei [gesprochen]: Wenn ein Wort erkennbar gemeint war, aber falsch erkannt wurde, ist das ein Hinweis auf die Aussprache. Nenne dann den Laut, den er üben soll (z. B. č gegen ć, h, rollendes r). Fehlende Häkchen nur ansprechen, wenn sie die Bedeutung ändern.",
+    "Bei [hilfe]: Sag dein Anliegen einfacher, erkläre in \"de\" kurz auf Deutsch, worum es geht und was er antworten könnte, und gib besonders einfache Vorschläge. bewertung ist dann null.",
+    "Korrigiere pro Runde höchstens einen Hauptfehler, kurz und auf Deutsch. Ist sein Satz korrekt und natürlich, ist korrektur null. Erfinde keine Fehler.",
+    "Schreibt oder fragt er auf Deutsch (z. B. \"Wie sagt man …?\"), beantworte das in \"de\", gib den bosnischen Satz in \"bs\" und lade ihn ein, ihn nachzusprechen.",
+    LAUT_RULES + " Die Lautschrift gilt für den Satz in \"bs\".",
+    "\"vorschlaege\": 2 bis 3 kurze, natürliche Antworten, die er jetzt sagen könnte, passend zum Niveau.",
+    "\"bewertung\" beurteilt seine letzte Nachricht: \"richtig\", \"fast\" (verständlich, kleiner Fehler), \"falsch\" (nicht verständlich oder falsch), \"deutsch\" (er hat Deutsch geschrieben) oder null (noch keine Nachricht von ihm, oder [hilfe]).",
+    "Wenn noch kein Gespräch läuft, beginne mit einer Begrüßung in deiner Rolle und einer ersten einfachen Frage.",
+    "Antworte NUR mit einem JSON-Objekt in genau dieser Form:",
+    '{"bewertung": "richtig" | "fast" | "falsch" | "deutsch" | null, "korrektur": null | {"falsch": "sein Ausdruck", "richtig": "korrekte Form", "warum": "kurze Erklärung auf Deutsch"}, "bs": "was du auf Bosnisch sagst", "laut": "Lautschrift", "de": "deutsche Übersetzung", "vorschlaege": [{"bs": "...", "de": "..."}]}'
+  ].join("\n");
+}
+async function askTutor(id){
+  const c = S.convs[id]; if (!c) return;
+  if (!sample){ if (caps) pushMsg(c, {who:"err", text:"Der Tutor ist in dieser Ansicht nicht erreichbar. Öffne die Seite in Claude.", retry:false}); return; }
+  if (chatCtl) chatCtl.abort();
+  const my = new AbortController(); chatCtl = my; chatBusy = true;
+  if (view === "chat" && arg === id){ renderChatList(); updateSendBtn(); }
+  try{
+    const input = [{role:"user", content: chatRules(c)}, ...c.turns.slice(-24)];
+    const data = await sample.json(input, {cache:false, signal: my.signal, modelTier: tier()});
+    if (my !== chatCtl) return;
+    if (!data || typeof data.bs !== "string" || !data.bs.trim()) throw {code:"invalid_json"};
+    c.turns.push({role:"assistant", content: JSON.stringify(data)});
+    for (let i = c.msgs.length - 1; i >= 0; i--){ const m = c.msgs[i]; if (m.who === "me"){ if (data.bewertung) m.grade = data.bewertung; break; } if (m.who === "tutor") break; }
+    chatBusy = false;
+    pushMsg(c, {who:"tutor", data});
+    if (ST().speak && canSpeak() && view === "chat" && arg === id && !(dict && dict.active())){
+      const bubbles = document.querySelectorAll(".msg.tutor"); const last = bubbles[bubbles.length - 1];
+      speak(data.bs, false, last ? last.querySelector(".pill") : null);
+    }
+  }catch(e){
+    if (my !== chatCtl) return;
+    chatBusy = false;
+    const code = e && e.code;
+    if (code === "cancelled"){ if (view === "chat") renderChatList(); return; }
+    pushMsg(c, {who:"err", text: sampleErrText(code), retry: !["not_granted","sampling_disabled","session_expired","refused"].includes(code)});
+  }finally{
+    if (my === chatCtl){ chatCtl = null; chatBusy = false; if (view === "chat"){ const t = $("typing"); if (t) t.remove(); updateSendBtn(); } }
+  }
+}
+function pushMsg(c, m){ c.msgs.push(m); c.upd = Date.now(); persistConv(c.id); if (view === "chat" && arg === c.id) renderChatList(); }
+function sendChat(text, via){
+  const c = S.convs[arg]; text = (text || "").trim();
+  if (!c || !text || chatBusy) return;
+  const last = c.msgs[c.msgs.length - 1]; if (last && last.who === "err") c.msgs.pop();
+  if (via === "mic") countSpoken();
+  c.msgs.push({who:"me", text, via});
+  c.turns.push({role:"user", content: `[${via === "mic" ? "gesprochen" : "getippt"}] ${text}`});
+  c.upd = Date.now(); persistConv(c.id); renderChatList();
+  askTutor(c.id);
+}
+function sendHelp(){
+  const c = S.convs[arg]; if (!c || chatBusy) return;
+  c.msgs.push({who:"me", text:"Hilfe, ich verstehe nicht", via:"help"});
+  c.turns.push({role:"user", content:"[hilfe]"});
+  c.upd = Date.now(); persistConv(c.id); renderChatList(); askTutor(c.id);
+}
+let chatTarget = null;
+function updateSendBtn(){ const b = $("sendBtn"); if (b && chatTarget) b.disabled = chatBusy || !chatTarget.input.value.trim(); }
+VIEWS.chat = (hdr, main, bottom) => {
+  const c = S.convs[arg];
+  if (!c){ view = "talk"; return VIEWS.talk(hdr, main, bottom); }
+  header(hdr, scenarioOf(c) ? scenarioOf(c).bs : clip(c.custom, 30), `${scenarioOf(c) ? scenarioOf(c).de + " · " : ""}${LEVEL_NAME[c.level] || ""}`,
+    {back:true, right: h("button", {class:"tbtn", type:"button", text:"Auswerten", onclick: () => evaluateConv(c)})});
+  main.classList.add("chatmode");
+  main.append(h("section", {class:"chat", id:"chat"}));
+  const input = h("input", {id:"chatText", placeholder: dict ? "Schreiben oder Mikrofon antippen" : "Schreiben oder diktieren", "aria-label":"Deine Antwort", autocomplete:"off"});
+  const live = h("div", {class:"live", hidden:true});
+  chatTarget = {input, live, fromMic:false, onDone: () => submit()};
+  const submit = () => { const via = spokenVia(chatTarget); chatTarget.fromMic = false; const t = input.value; input.value = ""; updateSendBtn(); sendChat(t, via); };
+  input.addEventListener("input", (e) => { if (e.isTrusted) chatTarget.fromMic = chatTarget.fromMic && !!input.value; updateSendBtn(); });
+  const form = h("form", {class:"field", autocomplete:"off"}, input, h("button", {class:"send", id:"sendBtn", type:"submit", "aria-label":"Senden", html: I.send, disabled:true}));
+  form.addEventListener("submit", (e) => { e.preventDefault(); submit(); });
+  bottom.append(h("div", {class:"composer"},
+    h("div", {class:"helpers"}, h("button", {class:"pill", type:"button", text:"Hilfe, ich verstehe nicht", onclick: sendHelp})),
+    live, diacriticKeys(input),
+    h("div", {class:"bar"}, form, micBtn(chatTarget)),
+    h("div", {class:"hint", "data-hint":""})));
+  renderChatList();
+  const lastTurn = c.turns[c.turns.length - 1], lastMsg = c.msgs[c.msgs.length - 1];
+  if (!chatBusy && (!lastTurn || lastTurn.role === "user") && !(lastMsg && lastMsg.who === "err")) askTutor(c.id);
+};
+function renderChatList(){
+  const list = $("chat"); const c = S.convs[arg]; if (!list || !c) return;
+  list.textContent = "";
+  const lastTutor = c.msgs.map(m => m.who).lastIndexOf("tutor");
+  c.msgs.forEach((m, i) => list.append(...renderMsg(c, m, i, i === lastTutor)));
+  if (chatBusy){ const t = h("div", {class:"typing", id:"typing"}, h("i"), h("i"), h("i")); list.append(t); }
+  if (!c.msgs.length && !chatBusy) list.append(h("p", {class:"empty", text:"Der Tutor beginnt gleich."}));
+  requestAnimationFrame(() => { const mn = $("main"); mn.scrollTop = mn.scrollHeight; });
+}
+function renderMsg(c, m, idx, isLastTutor){
+  if (m.who === "me"){
+    const b = h("div", {class:"msg me"}, h("div", {text:m.text}), m.via === "mic" ? h("div", {class:"via", text:"gesprochen"}) : null);
+    const label = {richtig:"Passt", fast:"Fast richtig", falsch:"Nochmal üben", deutsch:"Auf Deutsch"}[m.grade];
+    return label ? [b, h("div", {class:"grade " + m.grade, text: label})] : [b];
+  }
+  if (m.who === "err"){
+    const b = h("div", {class:"msg err"}, h("div", {text:m.text}));
+    if (m.retry && idx === c.msgs.length - 1) b.append(h("button", {type:"button", text:"Nochmal versuchen", onclick: () => { c.msgs.pop(); persistConv(c.id); askTutor(c.id); }}));
+    return [b];
+  }
+  const d = m.data, b = h("div", {class:"msg tutor"});
+  if (d.korrektur && d.korrektur.richtig){
+    b.append(h("div", {class:"fix"}, h("span", {class:"cap", text:"Besser so"}),
+      h("div", null, d.korrektur.falsch ? [h("s", {text: d.korrektur.falsch}), " → "] : null, h("b", {text: d.korrektur.richtig})),
+      d.korrektur.warum ? h("div", {text: d.korrektur.warum}) : null,
+      h("div", {class:"actions"}, speakBtn("Anhören", d.korrektur.richtig, true), saveBtn({bs: d.korrektur.richtig, de: d.korrektur.warum || "", laut:"", src:"Korrektur"}))));
+  }
+  b.append(wordified(d.bs));
+  if (d.laut) b.append(h("div", {class:"laut", text: d.laut}));
+  if (d.de) b.append(h("div", {class:"de", text: d.de}));
+  b.append(h("div", {class:"actions"}, speakBtn("Anhören", d.bs, false), speakBtn("Langsam", d.bs, true), saveBtn({bs: d.bs, de: d.de, laut: d.laut, src:"Gespräch"})));
+  if (isLastTutor && Array.isArray(d.vorschlaege) && d.vorschlaege.length){
+    const s = h("div", {class:"sugg"}, h("span", {class:"cap", text: canSpeak() ? "So könntest du antworten · antippen zum Anhören" : "So könntest du antworten · antippen zum Übernehmen"}));
+    for (const v of d.vorschlaege.slice(0, 3)){
+      if (!v || !v.bs) continue;
+      const chip = h("button", {class:"chip", type:"button"}, h("b", {text: v.bs}), v.de ? h("small", {text: v.de}) : null);
+      chip.onclick = () => { if (canSpeak()) speak(v.bs, false, null); else if (chatTarget){ chatTarget.input.value = v.bs; updateSendBtn(); } };
+      s.append(chip);
+    }
+    b.append(s);
+  }
+  return [b];
+}
+async function evaluateConv(c){
+  const mine = c.msgs.filter(m => m.who === "me" && m.via !== "help");
+  const body = h("div", {class:"stack"}, h("h2", {text:"Auswertung"}));
+  openSheet(body);
+  if (c.ev){ fillEval(body, c, c.ev); return; }
+  if (!mine.length){ body.append(h("p", {class:"muted", text:"Sag erst etwas zum Tutor, dann gibt es eine Auswertung."})); return; }
+  if (!sample){ body.append(h("p", {class:"muted", text:"Die Auswertung geht nur, wenn die Seite in Claude geöffnet ist."})); return; }
+  const status = h("p", {class:"muted", text:"Claude wertet das Gespräch aus …"}); body.append(status);
+  const lines = c.msgs.filter(m => m.who === "me" || m.who === "tutor").slice(-40).map(m => m.who === "me" ? `Lerner${m.via === "mic" ? " (gesprochen)" : ""}: ${m.via === "help" ? "[bittet um Hilfe]" : m.text}` : `Tutor: ${m.data.bs}`).join("\n");
+  try{
+    const r = await sample.json(
+      `Werte dieses Übungsgespräch auf Bosnisch aus. ${aboutLearner(c.level)}\n${LAUT_RULES}\n\nGespräch:\n${lines}\n\n` +
+      'Antworte nur mit JSON: {"fazit": "2 bis 3 sachliche Sätze auf Deutsch: was klappte und was er als Nächstes üben sollte", "fehler": [{"falsch": "...", "richtig": "...", "warum": "kurz auf Deutsch"}], "woerter": [{"bs": "...", "de": "...", "laut": "..."}]}. Höchstens 4 Fehler (nur echte, keine erfundenen; leer, wenn keine) und höchstens 6 nützliche Wörter oder Wendungen aus dem Gespräch.',
+      {cache:false, modelTier:"default"});
+    if (!r || typeof r.fazit !== "string") throw {code:"invalid_json"};
+    c.ev = {fazit: r.fazit, fehler: Array.isArray(r.fehler) ? r.fehler.slice(0, 4) : [], woerter: Array.isArray(r.woerter) ? r.woerter.slice(0, 6) : [], at: Date.now()};
+    c.upd = Date.now(); persistConv(c.id);
+    if (body.isConnected){ status.remove(); fillEval(body, c, c.ev); }
+  }catch(e){ if (body.isConnected) status.textContent = sampleErrText(e && e.code); }
+}
+function fillEval(body, c, ev){
+  body.append(h("p", {text: ev.fazit}));
+  if (ev.fehler.length){
+    body.append(h("span", {class:"cap", text:"Zum Üben"}));
+    for (const f of ev.fehler) if (f && f.richtig) body.append(h("div", {class:"fix"},
+      h("div", null, f.falsch ? [h("s", {text:f.falsch}), " → "] : null, h("b", {text:f.richtig})), f.warum ? h("div", {text:f.warum}) : null,
+      h("div", {class:"actions"}, speakBtn("Anhören", f.richtig, true), saveBtn({bs:f.richtig, de:f.warum || "", laut:"", src:"Auswertung"}))));
+  }
+  if (ev.woerter.length){
+    body.append(h("span", {class:"cap", text:"Wörter aus dem Gespräch"}));
+    const list = h("div", {class:"list"});
+    for (const w of ev.woerter) if (w && w.bs) list.append(h("div", {class:"li"},
+      h("div", {class:"grow"}, h("b", {text:w.bs}), h("small", {text:w.de || ""}), w.laut ? h("small", {class:"laut", text:w.laut}) : null),
+      speakBtn("Anhören", w.bs, false), saveBtn({...w, src:"Auswertung"})));
+    body.append(list);
+    body.append(h("button", {class:"btn sec", type:"button", text:"Alle ins Heft", onclick: (e) => {
+      let n = 0; for (const w of ev.woerter) if (w && w.bs && addVocab({...w, src:"Auswertung"}, true)) n++;
+      for (const f of ev.fehler) if (f && f.richtig && addVocab({bs:f.richtig, de:f.warum || "", laut:"", src:"Auswertung"}, true)) n++;
+      toast(n ? `${n} Einträge ins Heft gelegt.` : "Alles steht schon im Heft."); e.target.disabled = true;
+    }}));
+  }
+  body.append(h("div", {class:"row"},
+    h("button", {class:"btn", type:"button", text:"Neues Gespräch, gleiches Thema", onclick: () => { closeSheet(); startConversation(c.scen, c.scen ? null : c.custom); }}),
+    h("button", {class:"btn ghost", type:"button", text:"Schließen", onclick: closeSheet})));
+}
+
+/* ---------- train hub ---------- */
+VIEWS.train = (hdr, main) => {
+  header(hdr, "Üben", "Kurze Einheiten neben den Gesprächen", {gear:true});
+  const due = dueItems().length, total = Object.keys(S.vocab).length;
+  const mode = (title, text, badge, fn) => h("button", {class:"action", type:"button", onclick: fn}, h("b", {text:title}), h("small", {text}), badge ? h("span", {class:"badge", text: badge}) : null);
+  main.append(h("span", {class:"cap", text:"Grundlagen"}), h("div", {class:"stack"},
+    mode("Grundwortschatz", `${WORDS.length} Themen: Fragewörter, Grundverben mit allen Formen, Begrüßen, Zeit, Essen, Orte, Eigenschaften.`, null, () => go("words")),
+    mode("Zahlen", "Von 0 bis 9999: hören und wählen, hören und tippen, selbst sagen, Preise in KM.", null, () => go("numbers")),
+    mode("Laute", "Die Laute, die es im Deutschen nicht gibt, mit Beispielwörtern zum Anhören.", null, () => go("sounds"))),
+    h("span", {class:"cap", text:"Trainieren"}), h("div", {class:"stack"},
+    mode("Quiz", "Ein Wort, vier Antworten. Aus dem Grundwortschatz, deinem Heft oder Zahlen.", null, () => go("quiz")),
+    mode("Wiederholen", total ? `Karteikarten aus deinem Heft mit Wiederholungsplan. ${total} Einträge.` : "Karteikarten aus deinem Heft. Merke dir zuerst Sätze im Gespräch oder schlage Wörter nach.", due ? `${due} fällig` : null, () => go("cards")),
+    mode("Nachsprechen", "Claude stellt sechs Sätze zu einem Thema zusammen. Du hörst, sprichst nach und siehst Wort für Wort, was angekommen ist.", null, () => go("shadow"))));
+};
+
+/* answer box shared by repeat and cards */
+function answerBox(onCheck, opts){
+  opts = opts || {};
+  const input = h("input", {class:"textin", placeholder: opts.placeholder || (dict ? "Sprechen oder schreiben" : "Schreiben oder diktieren"), "aria-label":"Deine Antwort", autocomplete:"off", autocapitalize:"off", inputmode: opts.numeric ? "numeric" : null});
+  const live = h("div", {class:"live", hidden:true});
+  const target = {input, live, fromMic:false, onDone: () => check()};
+  const check = () => { const t = input.value.trim(); if (!t) { input.focus(); return; } const via = spokenVia(target); target.fromMic = false; onCheck(t, via); };
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter"){ e.preventDefault(); check(); } });
+  const box = h("div", {class:"answer"}, live, opts.numeric ? null : diacriticKeys(input),
+    h("div", {class:"bar"}, h("div", {class:"field", style:"flex:1"}, input, h("button", {class:"send", type:"button", "aria-label":"Prüfen", html: I.send, onclick: check})), opts.numeric ? null : micBtn(target)),
+    opts.numeric ? null : h("div", {class:"hint", "data-hint":""}));
+  return {box, input};
+}
+function diffView(res){
+  return h("div", {class:"stack", style:"justify-items:center"},
+    h("div", {class:"score " + (res.score >= 85 ? "good" : res.score >= 55 ? "mid" : "low"), text: res.score + " %"}),
+    h("div", {class:"diff"}, res.words.map(w => h("span", {class: w.s, text: w.w}))),
+    h("p", {class:"muted small", text: res.words.some(w => w.s === "near") ? "Gewellt: richtig erkannt, aber ohne passende Häkchen. Das kann an der Erkennung liegen oder an č/ć, š, ž." : res.words.some(w => w.s === "miss") ? "Durchgestrichen: kam nicht an. Hör dir den Satz nochmal langsam an." : "Alles angekommen."}));
+}
+
+/* ---------- shadowing ---------- */
+let SH = null;
+VIEWS.shadow = (hdr, main) => {
+  header(hdr, "Nachsprechen", SH && SH.phase === "run" ? SH.topicName : "Hören und nachsprechen", {back:true});
+  if (!SH || SH.phase === "setup") return shadowSetup(main);
+  if (SH.phase === "loading"){ main.append(h("div", {class:"card practice"}, h("p", {class:"muted", text:"Claude stellt die Sätze zusammen …"}), h("button", {class:"btn ghost", type:"button", text:"Abbrechen", onclick: () => { if (SH.ctl) SH.ctl.abort(); SH = null; render(); }}))); return; }
+  if (SH.phase === "done") return shadowDone(main);
+  const it = SH.items[SH.i];
+  main.append(h("div", {class:"prog"}, SH.items.map((x, i) => h("i", {class: i < SH.i ? "done" : i === SH.i ? "cur" : ""}))));
+  const card = h("section", {class:"card practice"});
+  const showText = !ST().hideText || SH.revealed;
+  card.append(h("span", {class:"cap", text:`Satz ${SH.i + 1} von ${SH.items.length}`}));
+  if (showText){
+    card.append(wordified(it.bs));
+    if (it.laut) card.append(h("div", {class:"laut", text: it.laut}));
+    if (it.de) card.append(h("div", {class:"de", text: it.de}));
+  } else {
+    card.append(h("div", {class:"veil"}, h("p", {text:"Erst hören, dann nachsprechen."}), h("button", {class:"tbtn", type:"button", style:"margin-top:8px", text:"Text zeigen", onclick: () => { SH.revealed = true; render(); }})));
+  }
+  card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true), saveBtn({...it, src:"Nachsprechen"})));
+  if (SH.result){
+    card.append(diffView(SH.result));
+    card.append(h("div", {class:"row", style:"justify-content:center"},
+      h("button", {class:"btn ghost", type:"button", text:"Nochmal", onclick: () => { SH.result = null; render(); }}),
+      h("button", {class:"btn", type:"button", text: SH.i < SH.items.length - 1 ? "Weiter" : "Fertig", onclick: shadowNext})));
+  } else {
+    const ab = answerBox((t, via) => {
+      if (via === "mic") countSpoken();
+      SH.result = compare(it.bs, t); SH.scores[SH.i] = SH.result.score; SH.revealed = true; render();
+    });
+    card.append(ab.box, h("button", {class:"tbtn", type:"button", text:"Laut gesagt, ohne Abgleich weiter", onclick: () => { SH.scores[SH.i] = null; countSpoken(); shadowNext(); }}));
+  }
+  main.append(card);
+  if (!SH.spokeIdx || SH.spokeIdx !== SH.i + 1){ SH.spokeIdx = SH.i + 1; if (canSpeak() && SH.autoplay) setTimeout(() => speak(it.bs, false, card.querySelector(".pill")), 150); }
+};
+function shadowNext(){ SH.result = null; SH.revealed = false; if (SH.i < SH.items.length - 1) SH.i++; else SH.phase = "done"; render(); }
+function shadowSetup(main){
+  let topic = (SH && SH.topic) || "mix";
+  const opts = [["mix","Gemischt"], ...SCENARIOS.filter(s => s.id !== "slobodno").map(s => [s.id, s.de])];
+  const seg = h("div", {class:"row"});
+  const paint = () => seg.querySelectorAll("button").forEach(b => { b.classList.toggle("on", b.dataset.v === topic); b.setAttribute("aria-pressed", String(b.dataset.v === topic)); });
+  for (const [v, l] of opts) seg.append(h("button", {class:"pill", type:"button", "data-v": v, text: l, onclick: () => { topic = v; paint(); }}));
+  paint();
+  const hide = h("input", {type:"checkbox", class:"switch", id:"optHide", checked: ST().hideText});
+  hide.onchange = () => { ST().hideText = hide.checked; persistProfile(); };
+  main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Thema"}), seg),
+    h("div", {class:"card set"}, h("div", {class:"setrow"}, h("label", {for:"optHide"}, "Text erst nach dem Hören zeigen", h("small", {text:"Trainiert das Ohr: erst hören, sprechen, dann lesen"})), hide)),
+    h("button", {class:"btn block", type:"button", text:"6 Sätze starten", disabled: !sample, onclick: () => startShadow(topic)}),
+    !sample ? h("p", {class:"note", text:"Nachsprechen braucht Claude für die Sätze. Öffne die Seite in Claude."}) : null);
+}
+async function startShadow(topic){
+  const s = SCENARIOS.find(x => x.id === topic);
+  SH = {phase:"loading", topic, topicName: s ? s.de : "Gemischt", items:[], i:0, scores:[], ctl: new AbortController(), autoplay:true};
+  render();
+  try{
+    const r = await sample.json(
+      `Stelle 6 kurze bosnische Sätze zum Nachsprechen zusammen. ${aboutLearner()}\nThema: ${s ? s.de + " (" + s.hint + ")" : "gemischter Alltag"}. Mische Sätze, die er selbst sagen würde (Ich-Form, maskulin), mit typischen Fragen. Steigere leicht die Länge. ${LAUT_RULES}\n` +
+      'Antworte nur mit JSON: {"saetze": [{"bs": "...", "de": "...", "laut": "..."}]}',
+      {cache:false, signal: SH.ctl.signal, modelTier: tier()});
+    const items = (r && Array.isArray(r.saetze) ? r.saetze : []).filter(x => x && x.bs).slice(0, 6);
+    if (!items.length) throw {code:"invalid_json"};
+    if (!SH || SH.phase !== "loading") return;
+    Object.assign(SH, {phase:"run", items, scores: new Array(items.length).fill(undefined)});
+    if (view === "shadow") render();
+  }catch(e){
+    if (e && e.code === "cancelled") return;
+    SH = {phase:"setup", topic}; if (view === "shadow") render();
+    toast(sampleErrText(e && e.code));
+  }
+}
+function shadowDone(main){
+  const vals = SH.scores.filter(x => typeof x === "number");
+  const avg = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : null;
+  main.append(h("section", {class:"card practice"},
+    h("span", {class:"cap", text:"Runde geschafft"}),
+    avg != null ? h("div", {class:"score " + (avg >= 85 ? "good" : avg >= 55 ? "mid" : "low"), text: avg + " %"}) : h("h2", {text:"Gut gemacht"}),
+    h("p", {class:"muted", text: avg != null ? "Durchschnitt der abgeglichenen Sätze" : "Alle Sätze laut gesprochen"})));
+  main.append(h("div", {class:"list"}, SH.items.map((it, i) => h("div", {class:"li"},
+    h("div", {class:"grow"}, h("b", {text: it.bs}), h("small", {text: it.de || ""})),
+    h("span", {class:"cap", text: typeof SH.scores[i] === "number" ? SH.scores[i] + " %" : "–"}),
+    saveBtn({...it, src:"Nachsprechen"})))));
+  main.append(h("div", {class:"row"},
+    h("button", {class:"btn", type:"button", text:"Neue Runde", onclick: () => startShadow(SH.topic)}),
+    h("button", {class:"btn ghost", type:"button", text:"Anderes Thema", onclick: () => { SH = {phase:"setup", topic: SH.topic}; render(); }})));
+}
+
+/* ---------- flashcards ---------- */
+let CD = null;
+VIEWS.cards = (hdr, main) => {
+  header(hdr, "Wiederholen", CD && CD.phase === "run" ? `${CD.done} geschafft · ${CD.queue.length} offen` : "Karteikarten aus deinem Heft", {back:true});
+  if (!CD || CD.phase === "setup") return cardsSetup(main);
+  if (CD.phase === "done"){
+    main.append(h("section", {class:"card practice"}, h("span", {class:"cap", text:"Fertig für jetzt"}), h("h2", {text:`${CD.done} Karten wiederholt`}),
+      h("p", {class:"muted", text:`${CD.good} gewusst · ${CD.hard} schwer · ${CD.again} nochmal`}),
+      h("div", {class:"row", style:"justify-content:center"}, h("button", {class:"btn", type:"button", text:"Noch eine Runde", onclick: () => { CD = null; render(); }}), h("button", {class:"btn ghost", type:"button", text:"Zum Start", onclick: () => go("home")}))));
+    return;
+  }
+  const it = S.vocab[CD.queue[0]];
+  if (!it){ CD.queue.shift(); if (!CD.queue.length) CD.phase = "done"; return render(); }
+  const card = h("section", {class:"card practice"});
+  const listen = CD.dir === "listen";
+  card.append(h("span", {class:"cap", text: listen ? "Hör zu: Was heißt das?" : "Wie sagst du das auf Bosnisch?"}));
+  if (listen){
+    card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true)));
+    if (!canSpeak()) card.append(h("p", {class:"note", text:"Vorlesen gibt es hier nicht, darum siehst du den Text."}), h("div", {class:"bs", text: it.bs}));
+  } else card.append(h("div", {class:"bs", text: it.de || "(ohne Übersetzung)"}));
+  if (CD.revealed){
+    card.append(listen ? h("div", {class:"bs", text: it.bs}) : wordified(it.bs));
+    if (it.laut) card.append(h("div", {class:"laut", text: it.laut}));
+    if (listen && it.de) card.append(h("p", {style:"font-size:1.1rem", text: it.de}));
+    if (!listen) card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true)));
+    if (CD.result) card.append(diffView(CD.result));
+    const nextDays = (b) => { const d = BOX_DAYS[Math.min(6, b)]; return d <= 1 ? "morgen" : `in ${d} Tagen`; };
+    card.append(h("div", {class:"rate"},
+      h("button", {class:"r1", type:"button", onclick: () => rateCard(it, "again")}, "Nochmal", h("small", {text:"gleich wieder"})),
+      h("button", {class:"r2", type:"button", onclick: () => rateCard(it, "hard")}, "Schwer", h("small", {text:"morgen"})),
+      h("button", {class:"r3", type:"button", onclick: () => rateCard(it, "good")}, "Gewusst", h("small", {text: nextDays((it.box || 1) + 1)}))));
+  } else {
+    if (!listen){
+      const ab = answerBox((t, via) => { if (via === "mic") countSpoken(); CD.result = compare(it.bs, t); CD.revealed = true; render(); if (canSpeak()) speak(it.bs, false, null); });
+      card.append(ab.box);
+    }
+    card.append(h("button", {class: listen ? "btn" : "tbtn", type:"button", text:"Aufdecken", onclick: () => { CD.revealed = true; render(); if (!listen && canSpeak()) speak(it.bs, false, null); }}));
+  }
+  main.append(card);
+  if (listen && !CD.revealed && canSpeak() && CD.spoke !== it.id){ CD.spoke = it.id; setTimeout(() => speak(it.bs, false, card.querySelector(".pill")), 150); }
+};
+function cardsSetup(main){
+  const all = Object.values(S.vocab), due = dueItems();
+  if (!all.length){
+    main.append(h("div", {class:"card empty stack"}, h("h3", {text:"Dein Heft ist noch leer"}),
+      h("p", {text:"Tippe im Gespräch auf „Merken“, lass dir ein Gespräch auswerten oder schlage im Heft Wörter nach. Alles Gemerkte landet hier als Karteikarte."}),
+      h("div", {class:"row", style:"justify-content:center"}, h("button", {class:"btn", type:"button", text:"Zum Gespräch", onclick: () => go("talk")}), h("button", {class:"btn ghost", type:"button", text:"Zum Heft", onclick: () => go("book")}))));
+    return;
+  }
+  let dir = (CD && CD.dir) || "de";
+  main.append(h("section", {class:"card stack"},
+    h("div", {class:"spread"}, h("b", {text: due.length ? `${due.length} Karten fällig` : "Heute nichts fällig"}), h("span", {class:"muted small", text:`${all.length} im Heft`})),
+    h("p", {class:"muted small", text:"Gewusste Karten kommen in immer größeren Abständen wieder: morgen, in 3, 7, 14 und 30 Tagen."})),
+    h("section", {class:"stack"}, h("span", {class:"cap", text:"Richtung"}),
+      segControl([["de","Deutsch → Bosnisch"],["listen","Hören → Deutsch"]], () => dir, (v) => dir = v)),
+    h("button", {class:"btn block", type:"button", text: due.length ? `${Math.min(20, due.length)} fällige Karten üben` : "10 zufällige Karten üben", onclick: () => {
+      const pool = due.length ? due.sort((a, b) => (a.due || 0) - (b.due || 0)).slice(0, 20) : all.sort(() => Math.random() - .5).slice(0, 10);
+      CD = {phase:"run", dir, queue: pool.map(x => x.id), done:0, good:0, hard:0, again:0, revealed:false, result:null, requeued:{}};
+      render();
+    }}));
+}
+function rateCard(it, r){
+  const now = Date.now();
+  if (r === "again"){ it.box = 1; it.due = now; CD.again++; if (!CD.requeued[it.id]){ CD.requeued[it.id] = 1; CD.queue.push(it.id); } }
+  else if (r === "hard"){ it.box = Math.max(1, it.box || 1); it.due = startOfDay(now) + DAY; CD.hard++; }
+  else { it.box = Math.min(6, (it.box || 1) + 1); it.due = startOfDay(now) + BOX_DAYS[it.box] * DAY; CD.good++; }
+  it.upd = now; persistVocab(it.id);
+  CD.queue.shift(); CD.done++; CD.revealed = false; CD.result = null; CD.spoke = null;
+  if (!CD.queue.length) CD.phase = "done";
+  render();
+}
+
+/* ---------- sounds ---------- */
+VIEWS.sounds = (hdr, main) => {
+  header(hdr, "Laute", "Antippen zum Anhören, dann nachsprechen", {back:true});
+  if (!canSpeak()) main.append(h("p", {class:"note", text:"Vorlesen gibt es in dieser Ansicht nicht. Die Lautbeschreibungen helfen trotzdem."}));
+  main.append(h("div", {class:"list"}, SOUNDS.map(s => h("div", {class:"card sound"},
+    h("div", {class:"glyph", text: s.g}),
+    h("div", null, h("p", {text: s.how}),
+      h("div", {class:"ex"}, s.ex.map(([w, de]) => {
+        const b = h("button", {class:"chip", type:"button"}, h("b", {text:w}), h("small", {text:de}));
+        b.onclick = () => speak(w, true, null);
+        return b;
+      })))))));
+};
+
+/* ---------- book (Heft) ---------- */
+let bookTab = "words", lookupRes = null, confirmDel = null, bookQ = "";
+VIEWS.book = (hdr, main) => {
+  if (arg === "convs"){ bookTab = "convs"; arg = null; }
+  header(hdr, "Heft", "Gemerktes, Nachschlagen, Gespräche", {gear:true});
+  main.append(segControl([["words","Wörter & Sätze"],["convs","Gespräche"]], () => bookTab, (v) => { bookTab = v; render(); }));
+  if (bookTab === "convs"){
+    const convs = Object.values(S.convs).sort((a, b) => (b.upd || 0) - (a.upd || 0));
+    if (!convs.length){ main.append(h("p", {class:"empty", text:"Noch keine Gespräche. Starte eins unter Sprechen."})); return; }
+    main.append(h("div", {class:"list"}, convs.map(c => {
+      const row = convRow(c);
+      const wrap = h("div", {class:"row", style:"flex-wrap:nowrap"}, row);
+      row.style.flex = "1"; row.style.minWidth = "0";
+      wrap.append(delBtn("c" + c.id, () => { delete S.convs[c.id]; persistConv(c.id); }));
+      return wrap;
+    })));
+    return;
+  }
+  main.append(h("button", {class:"btn sec", type:"button", text:`Heft für die iPhone-App kopieren (${Object.keys(S.vocab).length})`, disabled: !Object.keys(S.vocab).length,
+    onclick: () => copyExport(Object.values(S.vocab).map(v => ({bs: v.bs, de: v.de, laut: v.laut}))) }));
+  /* lookup + filter */
+  const q = h("input", {id:"bookQ", placeholder:"Deutsch oder Bosnisch eingeben", "aria-label":"Nachschlagen oder im Heft suchen", autocomplete:"off", value: bookQ});
+  const resBox = h("div");
+  const listBox = h("div", {class:"list"});
+  const doLookup = async () => {
+    const term = q.value.trim(); if (!term) return;
+    if (!sample){ toast("Nachschlagen geht nur, wenn die Seite in Claude geöffnet ist."); return; }
+    resBox.textContent = ""; resBox.append(h("p", {class:"muted", text:"Schaue nach …"}));
+    try{
+      const r = await sample.json(
+        `Er möchte wissen: "${clip(term, 200)}". ${aboutLearner()}\nIst es Deutsch, gib den natürlichsten bosnischen Ausdruck dafür. Ist es Bosnisch, übersetze es ins Deutsche. ${LAUT_RULES}\n` +
+        'Antworte nur mit JSON: {"bs": "bosnisch", "de": "deutsch", "laut": "Lautschrift zu bs", "hinweis": "ein kurzer Satz zur Verwendung oder leer", "beispiel": {"bs": "kurzer Beispielsatz", "de": "Übersetzung"}}',
+        {modelTier:"quick", cache:{gcTime: DAY}});
+      if (!r || !r.bs) throw {code:"invalid_json"};
+      lookupRes = {q: term, r}; paintLookup();
+    }catch(e){ resBox.textContent = ""; resBox.append(h("p", {class:"note", text: sampleErrText(e && e.code)})); }
+  };
+  const paintLookup = () => {
+    resBox.textContent = ""; if (!lookupRes) return; const r = lookupRes.r;
+    resBox.append(h("div", {class:"card stack"},
+      wordified(r.bs), r.laut ? h("div", {class:"laut", text:r.laut}) : null, h("p", {text: r.de || ""}),
+      r.hinweis ? h("p", {class:"muted small", text:r.hinweis}) : null,
+      h("div", {class:"actions"}, speakBtn("Anhören", r.bs, false), speakBtn("Langsam", r.bs, true), saveBtn({bs:r.bs, de:r.de, laut:r.laut, src:"Nachgeschlagen"})),
+      r.beispiel && r.beispiel.bs ? h("div", {class:"stack", style:"border-top:1px dashed var(--line);padding-top:10px"},
+        h("span", {class:"cap", text:"Beispiel"}), h("b", {text:r.beispiel.bs}), h("span", {class:"muted small", text:r.beispiel.de || ""}),
+        h("div", {class:"actions"}, speakBtn("Anhören", r.beispiel.bs, false), saveBtn({bs:r.beispiel.bs, de:r.beispiel.de, laut:"", src:"Nachgeschlagen"}))) : null));
+  };
+  const paintList = () => {
+    listBox.textContent = "";
+    const term = normWords(q.value).map(loose).join(" ");
+    let items = Object.values(S.vocab).sort((a, b) => (b.added || 0) - (a.added || 0));
+    if (term) items = items.filter(v => loose(normWords(v.bs + " " + v.de).join(" ")).includes(term));
+    if (!items.length){ listBox.append(h("p", {class:"empty", text: Object.keys(S.vocab).length ? "Nichts im Heft passt dazu. Tippe auf die Lupe, um es nachzuschlagen." : "Noch nichts gemerkt. Schlage oben etwas nach oder tippe im Gespräch auf „Merken“."})); return; }
+    for (const v of items) listBox.append(h("div", {class:"li"},
+      h("div", {class:"grow"}, h("b", {text: v.bs}), v.de ? h("small", {text: v.de}) : null, v.laut ? h("small", {class:"laut", text: v.laut}) : null,
+        h("span", {class:"boxdots", title:`Stufe ${v.box || 1} von 6`}, [1,2,3,4,5,6].map(i => h("i", {class: i <= (v.box || 1) ? "on" : ""})))),
+      canSpeak() ? iconBtn(I.speak, "Anhören", (e) => speak(v.bs, false, e.currentTarget), "ibtn") : null,
+      delBtn("v" + v.id, () => { delete S.vocab[v.id]; persistVocab(v.id); })));
+  };
+  q.addEventListener("input", () => { bookQ = q.value; paintList(); });
+  q.addEventListener("keydown", (e) => { if (e.key === "Enter"){ e.preventDefault(); doLookup(); } });
+  main.append(h("section", {class:"stack"},
+    h("div", {class:"field"}, q, h("button", {class:"send", type:"button", "aria-label":"Nachschlagen", html: I.search, onclick: doLookup})),
+    h("small", {class:"muted", text:"Tippen filtert dein Heft. Die Lupe schlägt nach und zeigt Aussprache und Beispiel."})),
+    resBox, h("span", {class:"cap", text:`Im Heft (${Object.keys(S.vocab).length})`}), listBox);
+  paintLookup(); paintList();
+};
+function delBtn(key, onDelete){
+  if (confirmDel === key) return h("button", {class:"btn danger", type:"button", style:"padding:7px 12px", text:"Löschen", onclick: () => { confirmDel = null; onDelete(); render(); }});
+  return iconBtn(I.trash, "Löschen", () => { confirmDel = key; render(); setTimeout(() => { if (confirmDel === key){ confirmDel = null; if (view === "book") render(); } }, 4000); }, "ibtn");
+}
+
+/* ---------- settings ---------- */
+function renderSyncInto(el){
+  el.className = "sync " + syncState; el.textContent = "";
+  el.append(h("i"), h("span", {text: ({cloud:"In deinem Konto gespeichert, auf allen Geräten gleich", loading:"Verbinde mit deinem Konto …", offline:"Konto gerade nicht erreichbar, auf diesem Gerät gespeichert", error:"Nur auf diesem Gerät gespeichert", local:"Auf diesem Gerät gespeichert"})[syncState] || ""}));
+}
+VIEWS.settings = (hdr, main) => {
+  header(hdr, "Einstellungen", null, {back:true});
+  const s = ST();
+  const sw = (id, label, help, key, after) => {
+    const inp = h("input", {type:"checkbox", class:"switch", id, checked: !!s[key]});
+    inp.onchange = () => { s[key] = inp.checked; persistProfile(); applyBodyClasses(); if (after) after(); };
+    return h("div", {class:"setrow"}, h("label", {for:id}, label, help ? h("small", {text:help}) : null), inp);
+  };
+  const name = h("input", {class:"textin", id:"setName", placeholder:"Dein Vorname", maxlength:"40", value: P().name});
+  name.addEventListener("change", () => { P().name = clip(name.value, 40); persistProfile(); toast(P().name ? `Der Tutor nennt dich jetzt ${P().name}.` : "Der Tutor spricht dich ohne Namen an."); });
+  const rate = h("input", {type:"range", id:"setRate", min:"0.7", max:"1.2", step:"0.05", value: s.rate});
+  const rv = h("span", {class:"val", text: Number(s.rate).toFixed(2) + "×"});
+  rate.oninput = () => { s.rate = Number(rate.value); rv.textContent = s.rate.toFixed(2) + "×"; };
+  rate.onchange = () => persistProfile();
+  const langSel = h("select", {class:"textin", id:"setLang"}, DICT_LANGS.map((l, i) => h("option", {value: String(i), text: LANG_NAME[l], selected: i === P().dictLang})));
+  langSel.onchange = () => { P().dictLang = Number(langSel.value); persistProfile(); };
+  const sync = h("div", {"data-sync":""}); renderSyncInto(sync);
+  let resetArmed = false;
+  const resetBtn = h("button", {class:"btn ghost", type:"button", text:"Alle Daten löschen"});
+  resetBtn.onclick = () => {
+    if (!resetArmed){ resetArmed = true; resetBtn.className = "btn danger"; resetBtn.textContent = "Wirklich alles löschen?"; return; }
+    for (const id in S.vocab){ delete S.vocab[id]; persistVocab(id); }
+    for (const id in S.convs){ delete S.convs[id]; persistConv(id); }
+    for (const k in S.days){ if (db) writer.put(dayRef(k), null); }
+    S.days = {}; S.profile = freshProfile(); persistProfile();
+    toast("Alles gelöscht."); go("onboard");
+  };
+  main.append(
+    h("section", {class:"card set"}, h("h3", {text:"Du"}),
+      h("label", {class:"stack", for:"setName"}, h("span", {class:"cap", text:"Name"}), name, h("small", {class:"muted", text:"So spricht dich der Tutor an. Leer: ohne Namen."})),
+      h("div", {class:"stack"}, h("span", {class:"cap", text:"Niveau"}), segControl([["pocetnik","Einsteiger"],["osnove","Grundlagen"],["dalje","Weiter"]], () => P().level, (v) => { P().level = v; persistProfile(); })),
+      h("div", {class:"stack"}, h("span", {class:"cap", text:"Tagesziel in Minuten"}), segControl([[5,"5"],[10,"10"],[15,"15"],[20,"20"],[30,"30"]], () => P().goal, (v) => { P().goal = v; persistProfile(); }))),
+    h("section", {class:"card set"}, h("h3", {text:"Anzeige"}),
+      sw("setLaut", "Lautschrift zeigen", "Deutsche Aussprache-Hilfe, betonte Silbe groß", "laut"),
+      sw("setDe", "Übersetzung zeigen", null, "de")),
+    h("section", {class:"card set"}, h("h3", {text:"Sprechen & Hören"}),
+      sw("setSpeak", "Tutor automatisch vorlesen", null, "speak"),
+      h("div", {class:"setrow"}, h("label", {for:"setRate"}, "Sprechtempo"), rate, rv),
+      sw("setSend", "Nach dem Sprechen sofort senden", "Aus: erkannten Text erst prüfen", "autoSend"),
+      sw("setKbd", "Tastatur-Diktat als gesprochen werten", "Gilt, wenn das App-Mikrofon fehlt und du über die Handy-Tastatur sprichst", "keyboardSpoken", updateHint),
+      h("div", {class:"setrow"}, h("label", {for:"setLang"}, "Sprache der Spracherkennung", h("small", {text:"Falls Bosnisch nicht angeboten wird: Kroatisch"})), langSel),
+      h("div", {class:"setrow"}, h("span", {class:"lbl"}, "Antworten", h("small", {text:"Schnell für flüssiges Sprechen, Gründlich für genauere Korrekturen"})),
+        segControl([["schnell","Schnell"],["gruendlich","Gründlich"]], () => s.quality, (v) => { s.quality = v; persistProfile(); }))),
+    h("section", {class:"card set"}, h("h3", {text:"Daten"}), sync, resetBtn),
+    h("p", {class:"muted small", text: `Status: ${sample ? "Tutor verbunden" : "Tutor nicht verbunden"} · ${dict ? "App-Mikrofon verfügbar" : "kein App-Mikrofon (Tastatur-Diktat nutzen)"} · ${tts ? "Claude-Stimme" : sysVoice ? "Systemstimme" : "kein Vorlesen"}`})
+  );
+};
+
+/* ---------- shared bits for the new modes ---------- */
+const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function pillChoice(options, get, set){
+  const row = h("div", {class:"row", role:"group"});
+  const paint = () => row.querySelectorAll("button").forEach(b => { const on = b.dataset.v === String(get()); b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
+  for (const [v, l] of options) row.append(h("button", {class:"pill", type:"button", "data-v": String(v), text: l, onclick: () => { set(v); paint(); }}));
+  paint(); return row;
+}
+function starBtn(item){
+  const b = h("button", {class:"ibtn", type:"button"});
+  const paint = () => { const on = !!findVocab(item.bs); b.innerHTML = on ? I.starOn : I.star; b.setAttribute("aria-label", on ? "Im Heft" : "Merken"); b.style.color = on ? "var(--gold)" : ""; };
+  b.onclick = () => { if (!findVocab(item.bs)) addVocab(item); paint(); };
+  paint(); return b;
+}
+const vocabOf = (it, src) => ({bs: it.bs, de: it.de, laut: it.laut || bsToLaut(it.bs), src: src || "Grundwortschatz"});
+const speakIcon = (text) => canSpeak() ? iconBtn(I.speak, "Anhören", (e) => speak(text, false, e.currentTarget), "ibtn") : null;
+
+/* ---------- basic vocabulary ---------- */
+let openVerb = null;
+VIEWS.words = (hdr, main) => {
+  const cat = WORDS.find(c => c.id === arg);
+  if (!cat){
+    header(hdr, "Grundwortschatz", "Antippen, anhören, merken, abfragen", {back:true});
+    main.append(h("div", {class:"grid2 catgrid"}, WORDS.map(c => h("button", {class:"scen", type:"button", onclick: () => go("words", c.id)},
+      h("b", {text: c.de}), h("span", {text: c.bs}), h("small", {text: `${c.items.length} ${c.verbs ? "Verben mit allen Formen" : "Einträge"}`})))));
+    return;
+  }
+  header(hdr, cat.de, cat.bs, {back:true, backTo:"words"});
+  const items = wordItems(cat);
+  main.append(h("div", {class:"row"},
+    h("button", {class:"btn", type:"button", text:"Quiz dazu", onclick: () => go("quiz", {src: cat.id})}),
+    h("button", {class:"btn sec", type:"button", text:"Alle ins Heft", onclick: () => {
+      let n = 0; for (const it of items) if (addVocab(vocabOf(it), true)) n++;
+      toast(n ? `${n} Einträge ins Heft gelegt. Unter „Wiederholen“ kommen sie als Karteikarten.` : "Alles steht schon im Heft."); render();
+    }})));
+  const notes = [cat.note, cat.verbs ? "„Alle Formen“ zeigt die Gegenwart: ich, du, er/sie, wir, ihr, sie." : "Beispielsatz antippen zum Anhören.", "Die Lautschrift mit ≈ ist eine grobe Hilfe ohne Betonung."].filter(Boolean);
+  main.append(h("p", {class:"muted small", text: notes.join(" ")}));
+  main.append(h("div", {class:"list"}, items.map(it => wordRow(it))));
+};
+function wordRow(it){
+  const open = it.conj && openVerb === it.bs;
+  const body = h("div", {class:"grow wrow"}, h("b", {text: it.bs}), h("small", {class:"laut", text:"≈ " + bsToLaut(it.bs)}), h("small", {text: it.de}));
+  if (it.ex){
+    const ex = h("div", {class:"ex", role:"button", tabindex:"0"}, h("b", {text: it.ex}), " · " + it.exde);
+    ex.onclick = () => speak(it.ex, false, null);
+    ex.onkeydown = (e) => { if (e.key === "Enter"){ e.preventDefault(); speak(it.ex, false, null); } };
+    body.append(ex);
+  }
+  if (it.conj){
+    if (open) body.append(h("div", {class:"conj"}, it.conj.flatMap((f, i) => [h("span", {text: PRON[i]}), h("b", {text: f})])));
+    body.append(h("button", {class:"tbtn", type:"button", style:"justify-self:start;margin-top:4px", text: open ? "Formen ausblenden" : "Alle Formen", onclick: () => { openVerb = open ? null : it.bs; render(); }}));
+  }
+  const say = open ? it.conj.map((f, i) => PRON[i].split(",")[0] + " " + f).join(", ") : it.bs;
+  return h("div", {class:"li"}, body, speakIcon(say), starBtn(vocabOf(it)));
+}
+
+/* ---------- quiz ---------- */
+let QZ = null;
+function quizSources(){
+  const heftN = Object.values(S.vocab).filter(v => v.bs && v.de).length;
+  return [["alle","Alles gemischt"], ...WORDS.map(c => [c.id, c.de]), ["zahlen","Zahlen bis 100"], ["heft", `Mein Heft (${heftN})`]];
+}
+function quizPool(src){
+  if (src === "heft") return Object.values(S.vocab).filter(v => v.bs && v.de).map(v => ({bs: v.bs, de: v.de, laut: v.laut}));
+  if (src === "zahlen"){ const out = []; for (let n = 0; n <= 100; n++) out.push({bs: num2bs(n), de: String(n)}); return out; }
+  if (src === "alle") return WORDS.flatMap(wordItems);
+  const c = WORDS.find(x => x.id === src); return c ? wordItems(c) : [];
+}
+function numDistractors(n, lo, hi){
+  const c = new Set(), add = (x) => { if (x !== n && x >= lo && x <= hi) c.add(x); };
+  if (n >= 11 && n <= 19) add((n - 10) * 10);
+  if (n % 10 === 0 && n >= 20 && n <= 90) add(10 + n / 10);
+  if (n >= 10 && n < 100) add((n % 10) * 10 + Math.floor(n / 10));
+  [1, -1, 10, -10, 100, -100, 2, -2].forEach(d => add(n + d));
+  const out = shuffle([...c]).slice(0, 3);
+  let guard = 0;
+  while (out.length < 3 && guard++ < 300){ const x = lo + Math.floor(Math.random() * (hi - lo + 1)); if (x !== n && !out.includes(x)) out.push(x); }
+  return out;
+}
+function buildQuestions(pool, dir, src){
+  const field = dir === "de-bs" ? "bs" : "de";
+  const backup = WORDS.flatMap(wordItems);
+  return shuffle(pool).slice(0, 10).map(item => {
+    let opts;
+    if (src === "zahlen" && /^\d+$/.test(item.de)){
+      const n = Number(item.de);
+      opts = [n, ...numDistractors(n, 0, 100)].map(x => field === "de" ? String(x) : num2bs(x));
+    } else {
+      const uniq = [];
+      for (const o of shuffle(pool).concat(shuffle(backup))){
+        if (o[field] && o[field] !== item[field] && !uniq.includes(o[field])) uniq.push(o[field]);
+        if (uniq.length === 3) break;
+      }
+      opts = [item[field], ...uniq];
+    }
+    return {item, answer: item[field], opts: shuffle(opts)};
+  });
+}
+function startQuiz(src, dir, pool){
+  pool = pool || quizPool(src);
+  if (!pool.length){ toast(src === "heft" ? "In deinem Heft steht noch nichts mit Übersetzung." : "Keine Wörter gefunden."); return; }
+  if (dir === "audio" && !canSpeak()) toast("Vorlesen gibt es hier nicht, darum siehst du das Wort.");
+  QZ = {phase:"run", src, dir, qs: buildQuestions(pool, dir, src), i:0, score:0, combo:0, best:0, picked:null, wrong:[], spoke:null};
+  render();
+}
+function pickQuiz(o){
+  const q = QZ.qs[QZ.i], idx = QZ.i, my = QZ;
+  QZ.picked = o;
+  if (o === q.answer){
+    QZ.score++; QZ.combo++; QZ.best = Math.max(QZ.best, QZ.combo);
+    render(); if (canSpeak()) speak(q.item.bs, false, null);
+    setTimeout(() => { if (QZ === my && QZ.i === idx && QZ.phase === "run" && view === "quiz") nextQuiz(); }, 1200);
+  } else {
+    QZ.combo = 0; QZ.wrong.push(q.item);
+    render(); if (canSpeak()) speak(q.item.bs, false, null);
+  }
+}
+function nextQuiz(){ QZ.picked = null; if (QZ.i < QZ.qs.length - 1) QZ.i++; else QZ.phase = "done"; render(); }
+VIEWS.quiz = (hdr, main) => {
+  if (arg && arg.src){ QZ = {phase:"setup", src: arg.src, dir: (QZ && QZ.dir) || "bs-de"}; arg = null; }
+  if (!QZ) QZ = {phase:"setup", src:"alle", dir:"bs-de"};
+  header(hdr, "Quiz", QZ.phase === "run" ? `Frage ${QZ.i + 1} von ${QZ.qs.length}` : "Ein Wort, vier Antworten",
+    {back:true, onBack: QZ.phase === "setup" ? null : () => { stopSpeaking(); QZ.phase = "setup"; render(); }});
+  if (QZ.phase === "setup"){
+    main.append(
+      h("section", {class:"stack"}, h("span", {class:"cap", text:"Wörter aus"}), pillChoice(quizSources(), () => QZ.src, (v) => QZ.src = v)),
+      h("section", {class:"stack"}, h("span", {class:"cap", text:"Richtung"}), pillChoice([["bs-de","Bosnisch → Deutsch"],["de-bs","Deutsch → Bosnisch"],["audio","Hören → Deutsch"]], () => QZ.dir, (v) => QZ.dir = v)),
+      h("button", {class:"btn block", type:"button", text:"10 Fragen starten", onclick: () => startQuiz(QZ.src, QZ.dir)}));
+    return;
+  }
+  if (QZ.phase === "done"){
+    const n = QZ.qs.length, pct = Math.round(QZ.score / n * 100);
+    main.append(h("section", {class:"card practice"}, h("span", {class:"cap", text:"Ergebnis"}),
+      h("div", {class:"score " + (pct >= 80 ? "good" : pct >= 50 ? "mid" : "low"), text: `${QZ.score} / ${n}`}),
+      h("p", {class:"muted", text: QZ.best >= 3 ? `Längste Serie: ${QZ.best} richtig in Folge` : QZ.wrong.length ? "Die verpassten Wörter stehen unten." : "Alles richtig."})));
+    if (QZ.wrong.length) main.append(h("span", {class:"cap", text:"Nochmal anschauen"}), h("div", {class:"list"}, QZ.wrong.map(it =>
+      h("div", {class:"li"}, h("div", {class:"grow"}, h("b", {text: it.bs}), h("small", {text: it.de})), speakIcon(it.bs), starBtn(vocabOf(it, "Quiz"))))));
+    main.append(h("div", {class:"row"},
+      QZ.wrong.length ? h("button", {class:"btn", type:"button", text:"Fehler nochmal", onclick: () => startQuiz(QZ.src, QZ.dir, QZ.wrong.slice())}) : null,
+      h("button", {class: QZ.wrong.length ? "btn ghost" : "btn", type:"button", text:"Neue Runde", onclick: () => startQuiz(QZ.src, QZ.dir)}),
+      h("button", {class:"btn ghost", type:"button", text:"Andere Auswahl", onclick: () => { QZ.phase = "setup"; render(); }})));
+    return;
+  }
+  const q = QZ.qs[QZ.i], dir = QZ.dir, answered = QZ.picked != null;
+  const card = h("section", {class:"card practice"});
+  card.append(h("div", {class:"quizhead"}, h("span", {text: `${QZ.score} richtig`}), QZ.combo >= 2 ? h("span", {class:"combo", text: `${QZ.combo} in Folge`}) : h("span")),
+    h("div", {class:"prog", style:"width:100%"}, QZ.qs.map((x, i) => h("i", {class: i < QZ.i ? "done" : i === QZ.i ? "cur" : ""}))));
+  if (dir === "audio"){
+    card.append(h("span", {class:"cap", text:"Hör zu: Was heißt das?"}));
+    if (canSpeak()) card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", q.item.bs, false), speakBtn("Langsam", q.item.bs, true)));
+    if (!canSpeak() || answered) card.append(h("div", {class:"bs", text: q.item.bs}));
+  } else {
+    card.append(h("span", {class:"cap", text: dir === "bs-de" ? "Was heißt das?" : "Wie heißt das auf Bosnisch?"}),
+      h("div", {class:"bs", style:"font-size:1.9rem", text: dir === "bs-de" ? q.item.bs : q.item.de}));
+    if (dir === "bs-de") card.append(h("div", {class:"laut", text: "≈ " + bsToLaut(q.item.bs)}));
+  }
+  const opts = h("div", {class:"opts"});
+  for (const o of q.opts){
+    const b = h("button", {class:"opt", type:"button", text: o});
+    if (answered){ b.disabled = true; b.classList.add(o === q.answer ? "right" : o === QZ.picked ? "wrong" : "dim"); }
+    else b.onclick = () => pickQuiz(o);
+    opts.append(b);
+  }
+  card.append(opts);
+  if (answered && QZ.picked !== q.answer) card.append(
+    h("p", {class:"muted", text: `${q.item.bs} = ${q.item.de}`}),
+    h("div", {class:"row", style:"justify-content:center"}, speakIcon(q.item.bs), starBtn(vocabOf(q.item, "Quiz")),
+      h("button", {class:"btn", type:"button", text: QZ.i < QZ.qs.length - 1 ? "Weiter" : "Ergebnis", onclick: nextQuiz})));
+  main.append(card);
+  if (dir === "audio" && !answered && canSpeak() && QZ.spoke !== QZ.i){ QZ.spoke = QZ.i; setTimeout(() => speak(q.item.bs, false, card.querySelector(".pill")), 150); }
+};
+
+/* ---------- numbers ---------- */
+let NM = null;
+const NUM_MODES = [["pick","Hören & wählen"],["type","Hören & tippen"],["say","Zahl sagen"],["price","Preise sagen"]];
+function numRef(){
+  const rng = (a, b, s) => { const o = []; for (let x = a; x <= b; x += s) o.push(x); return o; };
+  const sec = (title, nums, fn) => h("div", {class:"stack"}, h("span", {class:"cap", text: title}), h("div", {class:"numgrid"}, nums.map(n => {
+    const w = fn ? fn(n) : num2bs(n);
+    const b = h("button", {type:"button"}, h("b", {text: fn ? `${n} KM` : String(n)}), h("small", {text: w}));
+    b.onclick = () => speak(w, true, null); return b;
+  })));
+  return h("details", {class:"card"}, h("summary", {text:"Zahlentafel zum Anhören"}), h("div", {class:"stack"},
+    sec("0 bis 20", rng(0, 20, 1)), sec("Zehner", rng(30, 90, 10)), sec("Zusammengesetzt", [21, 34, 47, 58, 99]),
+    sec("Hunderter", rng(100, 900, 100)), sec("Tausender", [1000, 2000, 5000, 1250]),
+    sec("Preise: jedna marka · dvije marke · pet maraka", [1, 2, 3, 5, 11, 21, 22, 25], priceBs)));
+}
+function sayScore(n, said, target){
+  const digits = said.match(/\d+/g);
+  const letters = said.replace(/\b(km|kn)\b/gi, "").match(/\p{L}{3,}/gu);
+  if (digits && !letters && Number(digits.join("")) === n) return {words: normWords(target).map(w => ({w, s:"ok"})), score:100, viaDigits:true};
+  const cleaned = said.replace(/(^|\s)i(?=\s|$)/gi, " ");
+  let best = compare(target, cleaned);
+  if (target.startsWith("hiljadu")){ const alt = compare("jedna hiljada" + target.slice(7), cleaned); if (alt.score > best.score) best = alt; }
+  return best;
+}
+function startNumbers(){
+  const r = NM.mode === "price" ? ["", "", 1, 100] : (NUM_RANGES.find(x => x[0] === NM.range) || NUM_RANGES[2]);
+  const lo = r[2], hi = r[3], qs = [];
+  let guard = 0;
+  while (qs.length < 10 && guard++ < 1000){
+    const x = lo + Math.floor(Math.random() * (hi - lo + 1));
+    if (!qs.includes(x) || (hi - lo < 10 && qs[qs.length - 1] !== x)) qs.push(x);
+  }
+  NM = {...NM, phase:"run", qs, i:0, res:[], opts: qs.map(n => shuffle([n, ...numDistractors(n, lo, hi)])), picked:null, result:null, typed:"", spoke:null};
+  render();
+}
+function numNext(){ NM.picked = null; NM.result = null; NM.typed = ""; if (NM.i < NM.qs.length - 1) NM.i++; else NM.phase = "done"; render(); }
+VIEWS.numbers = (hdr, main) => {
+  if (!NM) NM = {phase:"setup", mode:"pick", range:"0-100"};
+  const modeName = NUM_MODES.find(m => m[0] === NM.mode)[1];
+  header(hdr, "Zahlen", NM.phase === "run" ? `${NM.i + 1} von ${NM.qs.length} · ${modeName}` : "Brojevi",
+    {back:true, onBack: NM.phase === "setup" ? null : () => { stopSpeaking(); NM.phase = "setup"; render(); }});
+  if (NM.phase === "setup"){
+    main.append(numRef(),
+      h("section", {class:"stack"}, h("span", {class:"cap", text:"Übung"}), pillChoice(NUM_MODES, () => NM.mode, (v) => { NM.mode = v; render(); })),
+      NM.mode !== "price"
+        ? h("section", {class:"stack"}, h("span", {class:"cap", text:"Zahlenbereich"}), pillChoice(NUM_RANGES.map(x => [x[0], x[1]]), () => NM.range, (v) => NM.range = v))
+        : h("p", {class:"muted small", text:"Preise von 1 bis 100 KM, mit der passenden Endung: marka, marke oder maraka."}),
+      (NM.mode === "pick" || NM.mode === "type") && !canSpeak() ? h("p", {class:"note", text:"Vorlesen gibt es in dieser Ansicht nicht. Du siehst die Zahl als Wort und wählst oder tippst die Ziffern."}) : null,
+      h("button", {class:"btn block", type:"button", text:"10 Zahlen starten", onclick: startNumbers}));
+    return;
+  }
+  if (NM.phase === "done"){
+    const ok = (i) => (NM.res[i] || 0) >= 85, right = NM.qs.filter((x, i) => ok(i)).length;
+    main.append(h("section", {class:"card practice"}, h("span", {class:"cap", text:"Ergebnis"}),
+      h("div", {class:"score " + (right >= 8 ? "good" : right >= 5 ? "mid" : "low"), text: `${right} / ${NM.qs.length}`})));
+    main.append(h("div", {class:"list"}, NM.qs.map((n, i) => {
+      const w = NM.mode === "price" ? priceBs(n) : num2bs(n);
+      return h("div", {class:"li"}, h("div", {class:"grow"}, h("b", {text: NM.mode === "price" ? `${n} KM` : String(n)}), h("small", {text: w})),
+        h("span", {class:"cap", style: `color:var(${ok(i) ? "--ok" : "--bad"})`, text: ok(i) ? "richtig" : "üben"}), speakIcon(w));
+    })));
+    main.append(h("div", {class:"row"}, h("button", {class:"btn", type:"button", text:"Neue Runde", onclick: startNumbers}),
+      h("button", {class:"btn ghost", type:"button", text:"Andere Übung", onclick: () => { NM.phase = "setup"; render(); }})));
+    return;
+  }
+  const n = NM.qs[NM.i], mode = NM.mode, word = mode === "price" ? priceBs(n) : num2bs(n);
+  const answered = NM.res[NM.i] !== undefined, listen = mode === "pick" || mode === "type";
+  const card = h("section", {class:"card practice"});
+  card.append(h("div", {class:"prog", style:"width:100%"}, NM.qs.map((x, i) => h("i", {class: i < NM.i ? "done" : i === NM.i ? "cur" : ""}))));
+  if (listen){
+    card.append(h("span", {class:"cap", text: !canSpeak() ? "Welche Zahl ist das?" : mode === "pick" ? "Welche Zahl hörst du?" : "Schreib die Zahl, die du hörst"}));
+    if (canSpeak()) card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", word, false), speakBtn("Langsam", word, true)));
+    if (!canSpeak() || answered) card.append(h("div", {class:"bs", text: word}));
+  } else {
+    card.append(h("span", {class:"cap", text: mode === "price" ? "Koliko košta? Sag den Preis" : "Sag die Zahl auf Bosnisch"}),
+      h("div", {class:"bignum", text: mode === "price" ? `${n} KM` : String(n)}));
+  }
+  if (mode === "pick"){
+    const opts = h("div", {class:"opts"});
+    for (const o of NM.opts[NM.i]){
+      const b = h("button", {class:"opt", type:"button", style:"font-variant-numeric:tabular-nums;font-size:1.5rem", text: String(o)});
+      if (answered){ b.disabled = true; b.classList.add(o === n ? "right" : o === NM.picked ? "wrong" : "dim"); }
+      else b.onclick = () => {
+        NM.picked = o; NM.res[NM.i] = o === n ? 100 : 0; render();
+        if (o === n){ const i = NM.i, my = NM; setTimeout(() => { if (NM === my && NM.phase === "run" && NM.i === i && view === "numbers") numNext(); }, 1200); }
+      };
+      opts.append(b);
+    }
+    card.append(opts);
+    if (answered && NM.res[NM.i] === 0) card.append(h("div", {class:"row", style:"justify-content:center"}, speakBtn("Nochmal hören", word, true), h("button", {class:"btn", type:"button", text: NM.i < NM.qs.length - 1 ? "Weiter" : "Ergebnis", onclick: numNext})));
+  } else if (!answered){
+    const ab = answerBox((t, via) => {
+      if (mode === "type"){ const got = Number((t.match(/\d+/g) || []).join("")); NM.res[NM.i] = got === n ? 100 : 0; NM.typed = t; }
+      else { if (via === "mic") countSpoken(); NM.result = sayScore(n, t, word); NM.res[NM.i] = NM.result.score; }
+      render();
+      if (canSpeak() && mode !== "type") speak(word, false, null);
+    }, mode === "type" ? {numeric:true, placeholder:"Zahl eingeben"} : {});
+    card.append(ab.box);
+    if (mode !== "type") card.append(h("button", {class:"tbtn", type:"button", text:"Lösung zeigen", onclick: () => { NM.res[NM.i] = 0; NM.result = null; render(); if (canSpeak()) speak(word, false, null); }}));
+  } else {
+    if (mode === "type"){
+      const good = NM.res[NM.i] === 100;
+      card.append(h("div", {class:"score " + (good ? "good" : "low"), text: good ? "Richtig" : `Nicht ${clip(NM.typed, 12)}`}), h("div", {class:"bignum", text: String(n)}));
+    } else {
+      if (NM.result) card.append(diffView(NM.result));
+      card.append(h("div", {class:"bs", text: word}), h("div", {class:"laut", text: "≈ " + bsToLaut(word)}));
+      if (NM.result && NM.result.viaDigits) card.append(h("p", {class:"muted small", text:"Die Erkennung hat Ziffern geschrieben. Die Zahl stimmt, die Aussprache der Endungen ließ sich so nicht prüfen."}));
+      if (mode === "price") card.append(h("p", {class:"muted small", text:"Endung: auf 1 → jedna marka, auf 2–4 → marke (dvije, tri, četiri), sonst maraka. 11 bis 14 immer maraka."}));
+    }
+    card.append(h("div", {class:"row", style:"justify-content:center"}, speakBtn("Anhören", word, false), speakBtn("Langsam", word, true),
+      mode !== "type" ? h("button", {class:"btn ghost", type:"button", text:"Nochmal", onclick: () => { delete NM.res[NM.i]; NM.result = null; render(); }}) : null,
+      h("button", {class:"btn", type:"button", text: NM.i < NM.qs.length - 1 ? "Weiter" : "Ergebnis", onclick: numNext})));
+  }
+  main.append(card);
+  if (listen && !answered && canSpeak() && NM.spoke !== NM.i){ NM.spoke = NM.i; setTimeout(() => speak(word, false, card.querySelector(".pill")), 150); }
+};
+
+
+/* ---------- export to the iPhone app ---------- */
+function encodeExport(items){
+  const bytes = new TextEncoder().encode(JSON.stringify({v:1, items}));
+  let bin = ""; bytes.forEach(b => bin += String.fromCharCode(b));
+  return "PRICAJ:" + btoa(bin);
+}
+function copyExport(items){
+  const code = encodeExport(items);
+  const ta = h("textarea", {class:"textin", rows:"4", readonly:"readonly", style:"font-size:.8rem;width:100%"}); ta.value = code;
+  const body = h("div", {class:"stack"}, h("h2", {text:"Code für die iPhone-App"}),
+    h("p", {class:"muted small", text:`${items.length} Einträge. In der iPhone-App: Heft → „Sätze aus der Claude-Version übernehmen“ → einfügen → Übernehmen.`}), ta,
+    h("div", {class:"row"}, h("button", {class:"btn", type:"button", text:"Kopieren", onclick: () => {
+      const fallback = () => { ta.focus(); ta.select(); toast("Text ist markiert: lange drücken und Kopieren wählen."); };
+      try{ navigator.clipboard.writeText(code).then(() => toast("Code kopiert."), fallback); }catch(e){ fallback(); }
+    }}), h("button", {class:"btn ghost", type:"button", text:"Schließen", onclick: closeSheet})));
+  openSheet(body);
+  try{ navigator.clipboard.writeText(code).then(() => toast("Code kopiert."), () => {}); }catch(e){}
+}
+
+/* ---------- personal sentences ---------- */
+let ABOUT = {text:"", items:null, busy:false};
+VIEWS.aboutme = (hdr, main) => {
+  header(hdr, "Sätze über mich", "Persönliche Sätze lernen sich leichter", {back:true});
+  const ta = h("textarea", {class:"textin", id:"aboutText", rows:"6", maxlength:"1500", style:"resize:vertical",
+    placeholder:"Erzähl auf Deutsch, was du über dich sagen können willst: Beruf, Wohnort, Familie, Hobbys, was dich freut. Stichpunkte reichen."});
+  ta.value = ABOUT.text;
+  ta.addEventListener("input", () => ABOUT.text = ta.value);
+  const go_ = async () => {
+    const text = ta.value.trim(); if (!text){ ta.focus(); return; }
+    if (!sample){ toast("Das geht nur, wenn die Seite in Claude geöffnet ist."); return; }
+    ABOUT.busy = true; render();
+    try{
+      const r = await sample.json(
+        `Erstelle Sätze, mit denen er auf Bosnisch über sich selbst sprechen kann. ${aboutLearner()}\nDas hat er über sich erzählt (auf Deutsch): "${clip(text, 1500)}"\n` +
+        `Schreibe 10 bis 14 kurze, natürliche Sätze in der Ich-Form (maskuline Formen), die genau diese Angaben ausdrücken. Erfinde nichts dazu. Vom Einfachen zum Schwereren. ${LAUT_RULES}\n` +
+        'Antworte nur mit JSON: {"saetze": [{"bs": "...", "de": "...", "laut": "..."}]}', {cache:false, modelTier:"default"});
+      const items = (r && Array.isArray(r.saetze) ? r.saetze : []).filter(x => x && x.bs).slice(0, 14);
+      if (!items.length) throw {code:"invalid_json"};
+      ABOUT.items = items;
+    }catch(e){ toast(sampleErrText(e && e.code)); }
+    ABOUT.busy = false; if (view === "aboutme") render();
+  };
+  main.append(h("section", {class:"stack"}, h("label", {class:"cap", for:"aboutText", text:"Über dich"}), ta,
+    h("button", {class:"btn", type:"button", text: ABOUT.busy ? "Claude schreibt …" : ABOUT.items ? "Neu erstellen" : "Sätze erstellen", disabled: ABOUT.busy, onclick: go_}),
+    h("p", {class:"muted small", text:"Was du hier schreibst, bleibt in diesem Artifact bei dir. Die iPhone-App bekommt nur die fertigen Sätze, und auch nur, wenn du den Code dort einfügst."})));
+  if (ABOUT.items){
+    main.append(h("div", {class:"list"}, ABOUT.items.map(x => h("div", {class:"li"},
+      h("div", {class:"grow"}, h("b", {text: x.bs}), h("small", {text: x.de || ""}), x.laut ? h("small", {class:"laut", text: x.laut}) : null),
+      canSpeak() ? iconBtn(I.speak, "Anhören", (e) => speak(x.bs, false, e.currentTarget), "ibtn") : null))));
+    main.append(h("div", {class:"row"},
+      h("button", {class:"btn", type:"button", text:"Für die iPhone-App kopieren", onclick: () => copyExport(ABOUT.items.map(x => ({bs: x.bs, de: x.de, laut: x.laut, p: 1})))}),
+      h("button", {class:"btn ghost", type:"button", text:"Alle hier ins Heft", onclick: () => { let n = 0; for (const x of ABOUT.items) if (addVocab({...x, src:"Über mich"}, true)) n++; toast(n ? `${n} Sätze ins Heft gelegt.` : "Alles steht schon im Heft."); }})));
+  }
+};
+
+/* ================= boot ================= */
+applyBodyClasses();
+pickSystemVoice();
+if (window.speechSynthesis) try{ speechSynthesis.addEventListener("voiceschanged", () => { const had = canSpeak(); pickSystemVoice(); if (had !== canSpeak()) rerender(); }); }catch(e){}
+render();
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden"){ flushTime(); store.set("pricaj2.state", S); }
+  else if (db && Date.now() - (window.__lastLoad || 0) > 60000){ window.__lastLoad = Date.now(); loadCloud(); }
+});
+
+(async () => {
+  if (!window.claude || typeof window.claude.use !== "function"){ caps = true; if (!sheetEl) render(); return; }
+  const [s, d, t, dbase, u] = await Promise.all(["sample","dictation","tts","db","user"].map(n => claude.use(n).catch(() => null)));
+  sample = s; dict = d; tts = t; caps = true;
+  if (tts){
+    try{
+      const langs = tts.languages ? await tts.languages().catch(() => undefined) : undefined;
+      ttsLang = Array.isArray(langs) ? ["bs","hr","sr"].find(l => langs.includes(l)) : "bs";
+    }catch(e){ ttsLang = undefined; }
+  }
+  if (dict) wireDictation(dict);
+  if (dbase && u){
+    const uid = await u.id().catch(() => null);
+    if (uid){ db = dbase; rootRef = db.doc(`data/users/${uid}/app`); window.__lastLoad = Date.now(); loadCloud(); }
+  }
+  if (!sheetEl) render();
+})();
+})();
+</script>
