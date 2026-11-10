@@ -44,7 +44,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px
 .app{height:100%;max-width:720px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr);min-height:0}
 button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 input,select,textarea{font:inherit;color:var(--fg)}
-button:focus-visible,input:focus-visible,select:focus-visible,.word:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.15}
 p{margin:0}
 .cap{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
@@ -610,7 +610,7 @@ const speakIcon = (text) => canSpeak() ? iconBtn(I.speak, "Anhören", (e) => spe
 
 /* ================= speech input ================= */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-let rec = null, recOn = false, micBroken = false, micTarget = null;
+let rec = null, recOn = false, micBroken = false;
 const micAvailable = () => !!SR && ST().mic && !micBroken;
 function setMicUi(state){ document.querySelectorAll(".mic").forEach(b => { b.dataset.state = state; b.setAttribute("aria-label", state === "listening" ? "Aufnahme beenden" : "Sprechen"); }); updateHint(); }
 function micBtn(target){
@@ -622,7 +622,7 @@ function micBtn(target){
 function micClick(target){
   if (recOn && rec){ try{ rec.stop(); }catch(e){} return; }
   stopSpeaking();
-  micTarget = target; target.fromMic = false;
+  target.fromMic = false;
   const base = target.input.value ? target.input.value.trim() + " " : "";
   try{
     rec = new SR();
@@ -715,7 +715,7 @@ function go(v, a){
   if (recOn && rec) try{ rec.abort(); }catch(e){}
   if (typeof hmStop === "function") hmStop();
   stopSpeaking();
-  view = v; arg = a === undefined ? null : a; micTarget = null;
+  view = v; arg = a === undefined ? null : a;
   render(); $("main").scrollTop = 0;
 }
 function applyBodyClasses(){ document.body.classList.toggle("hide-laut", !ST().laut); document.body.classList.toggle("hide-de", !ST().de); }
@@ -1123,6 +1123,7 @@ VIEWS.shadow = (hdr, main) => {
 
 /* ---------- flashcards ---------- */
 let CD = null;
+function startCards(pool, dir){ CD = {phase:"run", dir, queue: pool.map(x => x.id), done:0, good:0, hard:0, again:0, revealed:false, result:null, requeued:{}, spoke:null}; render(); }
 VIEWS.cards = (hdr, main) => {
   header(hdr, "Wiederholen", CD && CD.phase === "run" ? `${CD.done} geschafft · ${CD.queue.length} offen` : "Karteikarten aus deinem Heft", {back:true, onBack: CD && CD.phase !== "setup" ? () => { stopSpeaking(); CD = null; render(); } : null});
   const all = Object.values(S.vocab), due = dueItems(), weak = weakItems();
@@ -1138,10 +1139,9 @@ VIEWS.cards = (hdr, main) => {
       h("p", {class:"muted small", text:"Gewusste Karten kommen in wachsenden Abständen wieder: morgen, in 3, 7, 14 und 30 Tagen."})),
       h("section", {class:"stack"}, h("span", {class:"cap", text:"Richtung"}), pillChoice([["de","Deutsch → Bosnisch"],["listen","Hören → Deutsch"]], () => dir, (v) => dir = v)),
       h("button", {class:"btn block", type:"button", text: due.length ? `${Math.min(20, due.length)} fällige Karten üben` : "10 zufällige Karten üben", onclick: () => {
-        const pool = due.length ? due.sort((a, b) => (a.due || 0) - (b.due || 0)).slice(0, 20) : shuffle(all).slice(0, 10);
-        CD = {phase:"run", dir, queue: pool.map(x => x.id), done:0, good:0, hard:0, again:0, revealed:false, result:null, requeued:{}, spoke:null}; render(); }}),
+        startCards(due.length ? due.sort((a, b) => (a.due || 0) - (b.due || 0)).slice(0, 20) : shuffle(all).slice(0, 10), dir); }}),
       weak.length ? h("button", {class:"btn ghost block", type:"button", text:`${Math.min(20, weak.length)} schwache Karten üben`, onclick: () => {
-        CD = {phase:"run", dir, queue: weak.slice(0, 20).map(x => x.id), done:0, good:0, hard:0, again:0, revealed:false, result:null, requeued:{}, spoke:null}; render(); }}) : null,
+        startCards(weak.slice(0, 20), dir); }}) : null,
       weak.length ? h("p", {class:"muted small", text:"Schwach sind Karten, die du mindestens zweimal verfehlt hast und die noch nicht sitzen."}) : null);
     return;
   }
@@ -1162,11 +1162,10 @@ VIEWS.cards = (hdr, main) => {
     if (listen && it.de) card.append(h("p", {style:"font-size:1.1rem", text: it.de}));
     if (!listen) card.append(h("div", {class:"actions", style:"justify-content:center"}, speakBtn("Anhören", it.bs, false), speakBtn("Langsam", it.bs, true)));
     if (CD.result) card.append(diffView(CD.result));
-    const nd = (b) => { const d = BOX_DAYS[Math.min(6, b)]; return d <= 1 ? "morgen" : `in ${d} Tagen`; };
     card.append(h("div", {class:"rate"},
       h("button", {class:"r1", type:"button", onclick: () => rateCard(it, "again")}, "Nochmal", h("small", {text:"gleich wieder"})),
       h("button", {class:"r2", type:"button", onclick: () => rateCard(it, "hard")}, "Schwer", h("small", {text:"morgen"})),
-      h("button", {class:"r3", type:"button", onclick: () => rateCard(it, "good")}, "Gewusst", h("small", {text: nd((it.box || 1) + 1)}))));
+      h("button", {class:"r3", type:"button", onclick: () => rateCard(it, "good")}, "Gewusst", h("small", {text: nextLabel((it.box || 1) + 1)}))));
   } else {
     if (!listen) card.append(answerBox((t) => { countSpoken(); CD.result = compare(it.bs, t); CD.revealed = true; render(); speak(it.bs, false, null); }).box);
     card.append(h("button", {class: listen ? "btn" : "tbtn", type:"button", text:"Aufdecken", onclick: () => { CD.revealed = true; render(); if (!listen) speak(it.bs, false, null); }}));
@@ -1175,11 +1174,9 @@ VIEWS.cards = (hdr, main) => {
   if (listen && !CD.revealed && CD.spoke !== it.id){ CD.spoke = it.id; setTimeout(() => speak(it.bs, false, card.querySelector(".pill")), 150); }
 };
 function rateCard(it, r){
-  const now = Date.now();
-  if (r === "again"){ it.box = 1; it.due = now; it.miss = (it.miss || 0) + 1; CD.again++; if (!CD.requeued[it.id]){ CD.requeued[it.id] = 1; CD.queue.push(it.id); } }
-  else if (r === "hard"){ it.box = Math.max(1, it.box || 1); it.due = startOfDay(now) + DAY; CD.hard++; }
-  else { it.box = Math.min(6, (it.box || 1) + 1); it.due = startOfDay(now) + BOX_DAYS[it.box] * DAY; CD.good++; }
-  save(); CD.queue.shift(); CD.done++; CD.revealed = false; CD.result = null; CD.spoke = null;
+  rateItem(it, r); CD[r]++;
+  if (r === "again" && !CD.requeued[it.id]){ CD.requeued[it.id] = 1; CD.queue.push(it.id); }
+  CD.queue.shift(); CD.done++; CD.revealed = false; CD.result = null; CD.spoke = null;
   if (!CD.queue.length) CD.phase = "done";
   render();
 }
@@ -1239,7 +1236,7 @@ VIEWS.settings = (hdr, main) => {
   const voiceSel = h("select", {class:"textin", id:"setVoice"}, ours.length ? ours.map(v => h("option", {value: v.voiceURI, text: `${v.name} (${v.lang})`, selected: voice && v.voiceURI === voice.voiceURI})) : h("option", {value:"", text:"Keine passende Stimme gefunden"}));
   voiceSel.disabled = !ours.length;
   voiceSel.onchange = () => { s.voice = voiceSel.value; save(); loadVoices(); speak("Dobar dan, kako si?", false, null); };
-  const recSel = h("select", {class:"textin", id:"setRec"}, REC_LANGS.map(([code, label], i) => h("option", {value: String(i), text: label, selected: i === s.recLang})));
+  const recSel = h("select", {class:"textin", id:"setRec"}, REC_LANGS.map(([, label], i) => h("option", {value: String(i), text: label, selected: i === s.recLang})));
   recSel.onchange = () => { s.recLang = Number(recSel.value); save(); };
   let armed = false;
   const reset = h("button", {class:"btn ghost", type:"button", text:"Alle Daten löschen"});
@@ -1330,7 +1327,7 @@ function hmCreate(items, offsets){
   const offs = offsets || [0, 2, 5, 9], ev = [];
   items.forEach((it, j) => offs.forEach((o, r) => ev.push({it, r, pos: j * 3 + o + r * 0.01})));
   ev.sort((a, b) => a.pos - b.pos);
-  HM = {events: ev, pos: 0, paused: false, running: false, finished: false, stage: "", token: null, cur: null, paint: null, onDone: null};
+  HM = {events: ev, pos: 0, paused: false, running: false, finished: false, stage: "", token: null, cur: null, paint: null};
   return HM;
 }
 function hmPaint(){ if (HM && HM.paint) HM.paint(); }
@@ -1432,14 +1429,14 @@ function startLesson(L, mode){
     steps.push({t:"listen", items: items.slice(0, 8).concat(rev.slice(0, 2).map(id => ({bs: S.vocab[id].bs, de: S.vocab[id].de, laut: S.vocab[id].laut})))});
   }
   steps.push({t:"check", qs: buildCheck(items)});
-  SE = {lesson: L, mode, steps, si: 0, ii: 0, queue: null, requeued: {}, revealed: false, result: null, picked: null, score: 0, spoke: null, items};
+  SE = {lesson: L, steps, si: 0, ii: 0, queue: null, requeued: {}, revealed: false, result: null, picked: null, score: 0, spoke: null};
   go("session");
 }
 function startReviewSession(){
   const due = dueItems().sort((a, b) => (a.due || 0) - (b.due || 0));
   if (!due.length){ toast("Alle Etappen geschafft und nichts fällig. Morgen geht es mit Wiederholungen weiter."); return; }
   const rev = due.slice(0, 15).map(v => v.id);
-  SE = {lesson: null, mode: "review", steps: [{t:"review", ids: rev}, {t:"listen", items: rev.slice(0, 8).map(id => ({bs: S.vocab[id].bs, de: S.vocab[id].de, laut: S.vocab[id].laut}))}], si: 0, ii: 0, queue: null, requeued: {}, revealed: false, result: null, picked: null, score: 0, spoke: null, items: []};
+  SE = {lesson: null, steps: [{t:"review", ids: rev}, {t:"listen", items: rev.slice(0, 8).map(id => ({bs: S.vocab[id].bs, de: S.vocab[id].de, laut: S.vocab[id].laut}))}], si: 0, ii: 0, queue: null, requeued: {}, revealed: false, result: null, picked: null, score: 0, spoke: null};
   go("session");
 }
 function seNextStep(){
