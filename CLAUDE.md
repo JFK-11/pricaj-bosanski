@@ -18,6 +18,9 @@ Offline-Lern-App (PWA) für Bosnisch, genutzt als Home-Bildschirm-App auf einem 
   - `PRICAJ:` + `{"v":1,"items":[{"bs","de","laut","p"}]}` – Satzliste (`p:1` = persönlicher Satz)
   - `PRICAJ-SICHERUNG:` + `{"v":1,"kind":"backup","at",...,"data":{profile,vocab,days,path}}` – komplette Sicherung der iPhone-App. Einspielen führt zusammen, löscht nie.
 
+## Commits
+- Autor immer `JFK-11 <355063843+JFK-11@users.noreply.github.com>`. Netlify (Gratis-Tarif, privates Repository) baut nur Commits, die GitHub dem Konto JFK-11 zuordnet; andere Autoren blockiert es mit „Unrecognized Git contributor“.
+
 ## Inhalte
 - Bosnisch in lateinischer Schrift, ijekavisch, bosnische Standardformen (kafa, hljeb, sedmica, hiljada).
 - Der Lerner ist ein Mann: Ich-Sätze in maskulinen Formen (bio sam, sretan sam).
