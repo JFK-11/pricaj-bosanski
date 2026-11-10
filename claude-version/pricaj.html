@@ -765,7 +765,7 @@ const tier = () => ST().quality === "gruendlich" ? "default" : "quick";
 function aboutLearner(level){
   const n = clip(P().name, 40);
   return [
-    "Der Lerner ist ein Mann mit Deutsch als Muttersprache. Wenn er über sich spricht und in allen Vorschlägen für seine Sätze immer maskuline Formen (bio sam, radio sam, sretan sam, umoran sam).",
+    "Der Lerner ist ein Mann mit Deutsch als Muttersprache. Verwende in seinen Sätzen über sich selbst und in allen Vorschlägen für seine Sätze immer maskuline Formen (bio sam, radio sam, sretan sam, umoran sam).",
     n ? `Sein Name ist ${n}. Sprich ihn gelegentlich mit diesem Namen an und verwende genau diesen Namen, wo ein Satz seinen Namen braucht (z. B. "Zovem se ${n}").`
       : "Du kennst seinen Namen nicht. Erfinde keinen Namen für ihn und sprich ihn nicht mit einem Namen an. Braucht ein Vorschlag seinen Namen, schreibe \"Zovem se …\" mit drei Punkten.",
     "Schreibe Bosnisch immer in lateinischer Schrift, ijekavisch, mit bosnischen Standardformen (kafa, hljeb, historija, sedmica) und korrekten Zeichen č ć dž đ š ž.",
