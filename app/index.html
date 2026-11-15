@@ -59,7 +59,7 @@ p{margin:0}
 .ibtn svg{width:18px;height:18px}
 .tbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:.9rem;flex:none}
 .main{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;padding-block:16px 20px;display:grid;grid-auto-rows:max-content;gap:18px;align-content:start}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);padding-top:6px;padding-bottom:max(6px, env(safe-area-inset-bottom, 0px))}
+.tabs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border-top:1px solid var(--line);padding-top:6px;padding-bottom:max(6px, env(safe-area-inset-bottom, 0px))}
 .tabs button{border:0;background:transparent;display:grid;justify-items:center;gap:2px;padding:4px 0;font-size:.74rem;color:var(--muted);font-weight:600}
 .tabs svg{width:23px;height:23px}
 .tabs button[aria-current="page"]{color:var(--tone, var(--accent))}
@@ -117,7 +117,7 @@ select.textin{width:auto;max-width:100%}
 .action small,.scen small{color:var(--muted);font-size:.84rem;line-height:1.3}
 /* Bereichsfarben: jede Übung hat ihre Farbe (--tone), als Symbolfeld und im Dunkeln als zarter Schimmer */
 .t-path{--tone:var(--t-path)}.t-words{--tone:var(--t-words)}.t-frames{--tone:var(--t-frames)}.t-numbers{--tone:var(--t-numbers)}
-.t-sounds{--tone:var(--t-sounds)}.t-listen{--tone:var(--t-listen)}.t-quiz{--tone:var(--t-quiz)}.t-cards{--tone:var(--t-cards)}
+.t-sounds{--tone:var(--t-sounds)}.t-listen{--tone:var(--t-listen)}.t-quiz{--tone:var(--t-quiz)}.t-cards{--tone:var(--t-cards)}.t-grammar{--tone:var(--t-frames)}
 .action[class*="t-"],.scen[class*="t-"]{background:linear-gradient(150deg, color-mix(in srgb, var(--tone) var(--tint), var(--surface)) 0%, var(--surface) 70%)}
 .action{grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
 .action .txt{display:grid;gap:3px;min-width:0}
@@ -213,6 +213,42 @@ input[type=range]{accent-color:var(--accent);width:140px}
 .numgrid small{color:var(--muted);font-size:.78rem;overflow-wrap:anywhere}
 details.card > summary{cursor:pointer;font-weight:600}
 details.card[open] > summary{margin-bottom:10px}
+/* Grammatik */
+.gram{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.gram p{line-height:1.55}
+.gram i{font-style:normal;font-weight:600;color:var(--tone, var(--accent))}
+.gh{margin-top:8px}
+.gh h3{font-size:1.12rem}
+.gh small{color:var(--muted);font-size:.86rem}
+.note b{color:var(--fg)}
+.note.warn{border-left-color:var(--bad)}
+.abc{font-family:var(--display);font-weight:600;text-align:center;letter-spacing:.14em;line-height:2}
+.gtw{overflow-x:auto;background:var(--surface);border:1px solid var(--card-line);border-radius:12px;box-shadow:var(--card-shadow)}
+.gt{width:100%;border-collapse:collapse;font-size:.9rem}
+.gt th{text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:bottom}
+.gt td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}
+.gt tr:last-child td{border-bottom:0}
+.gt td:first-child:not(.bsc){overflow-wrap:normal}
+.gt .bsc b{font-weight:600}
+.gt .bsc small{display:block;color:var(--muted);font-size:.82rem}
+.gt .bsc .lab{font-size:.74rem}
+.gt .say{cursor:pointer}
+.li .grow small.ghint{font-size:.78rem}
+.dlg{display:grid;gap:10px}
+.dlg .ln{display:flex;gap:10px;align-items:center}
+.dlg .who{font-family:var(--display);font-weight:700;color:var(--tone, var(--accent));width:1.2em;flex:none;align-self:flex-start}
+.dlg .grow{flex:1;min-width:0}
+.dlg .grow b{display:block;font-weight:600;overflow-wrap:anywhere}
+.dlg .grow small{display:block;color:var(--muted);font-size:.84rem}
+.gq{display:grid;gap:8px}
+.gq ol{margin:0;padding-left:1.4em;list-style:lower-alpha;display:grid;gap:3px}
+.gq details{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:6px}
+.gq summary{cursor:pointer;font-weight:600;color:var(--tone, var(--accent))}
+.gq details ol{font-weight:600;margin-top:6px}
+.gcard{display:grid;gap:4px;align-content:start}
+.gcard b{font-family:var(--display)}
+.gcard small{color:var(--muted);font-size:.82rem}
+.ico.gno{font-family:var(--display);font-weight:700;font-size:.95rem;font-variant-numeric:tabular-nums}
 .conj{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:.95rem;margin-top:8px}
 .conj span{color:var(--muted)}
 .wrow{display:grid;gap:3px}
@@ -265,24 +301,26 @@ const WORDS = [
     ["vidjeti","sehen",["vidim","vidiš","vidi","vidimo","vidite","vide"]],["čuti","hören",["čujem","čuješ","čuje","čujemo","čujete","čuju"]],
     ["dolaziti","kommen",["dolazim","dolaziš","dolazi","dolazimo","dolazite","dolaze"]],["trebati","brauchen",["trebam","trebaš","treba","trebamo","trebate","trebaju"]],
     ["učiti","lernen",["učim","učiš","uči","učimo","učite","uče"]],["kupiti","kaufen",["kupim","kupiš","kupi","kupimo","kupite","kupe"]],
-    ["čekati","warten",["čekam","čekaš","čeka","čekamo","čekate","čekaju"]],["spavati","schlafen",["spavam","spavaš","spava","spavamo","spavate","spavaju"]]]},
+    ["čekati","warten",["čekam","čekaš","čeka","čekamo","čekate","čekaju"]],["spavati","schlafen",["spavam","spavaš","spava","spavamo","spavate","spavaju"]],
+    ["doći","kommen, ankommen",["dođem","dođeš","dođe","dođemo","dođete","dođu"]],["morati","müssen",["moram","moraš","mora","moramo","morate","moraju"]],
+    ["željeti","wünschen, mögen",["želim","želiš","želi","želimo","želite","žele"]]]},
   {id:"pozdravi", bs:"Pozdravi", de:"Begrüßen & Höflichkeit", items:[
     ["zdravo","hallo"],["dobro jutro","guten Morgen"],["dobar dan","guten Tag"],["dobro veče","guten Abend"],["laku noć","gute Nacht"],
-    ["doviđenja","auf Wiedersehen"],["ćao","tschüss, hallo"],["vidimo se","bis bald"],["hvala","danke"],["hvala lijepa","vielen Dank"],
-    ["molim","bitte"],["izvinite","entschuldigen Sie"],["da","ja"],["ne","nein"],["može","geht klar"],["drago mi je","freut mich"]]},
+    ["doviđenja","auf Wiedersehen"],["ćao","tschüss, hallo"],["vidimo se","bis bald"],["hvala","danke"],["hvala lijepa","vielen Dank"],["hvala puno","danke sehr"],
+    ["molim","bitte"],["izvini","entschuldige"],["izvinite","entschuldigen Sie"],["da","ja"],["ne","nein"],["može","geht klar"],["u redu","in Ordnung"],["drago mi je","freut mich"]]},
   {id:"ljudi", bs:"Ljudi", de:"Personen & Familie", items:[
-    ["ja","ich"],["ti","du"],["on","er"],["ona","sie (eine Person)"],["mi","wir"],["vi","ihr, Sie"],["oni","sie (mehrere)"],
-    ["mama","Mama"],["tata","Papa"],["brat","Bruder"],["sestra","Schwester"],["prijatelj","Freund"],["prijateljica","Freundin"],
-    ["porodica","Familie"],["dijete","Kind"],["čovjek","Mensch, Mann"]]},
+    ["ja","ich"],["ti","du"],["on","er"],["ona","sie (eine Person)"],["ono","es"],["mi","wir"],["vi","ihr, Sie"],["oni","sie (mehrere)"],["one","sie (mehrere Frauen)"],
+    ["mama","Mama"],["tata","Papa"],["majka","Mutter"],["otac","Vater"],["brat","Bruder"],["sestra","Schwester"],["prijatelj","Freund"],["prijateljica","Freundin"],
+    ["porodica","Familie"],["dijete","Kind"],["čovjek","Mensch, Mann"],["ime","Name"]]},
   {id:"vrijeme", bs:"Vrijeme", de:"Zeit & Wochentage", items:[
     ["danas","heute"],["sutra","morgen"],["jučer","gestern"],["sada","jetzt"],["kasnije","später"],["uvijek","immer"],["nikad","nie"],
     ["jutro","Morgen (Tageszeit)"],["veče","Abend"],["sedmica","Woche"],["ponedjeljak","Montag"],["utorak","Dienstag"],["srijeda","Mittwoch"],
     ["četvrtak","Donnerstag"],["petak","Freitag"],["subota","Samstag"],["nedjelja","Sonntag"]]},
   {id:"hrana", bs:"Hrana i piće", de:"Essen & Trinken", items:[
     ["voda","Wasser"],["kafa","Kaffee"],["čaj","Tee"],["sok","Saft"],["pivo","Bier"],["mlijeko","Milch"],["hljeb","Brot"],["sir","Käse"],
-    ["meso","Fleisch"],["riba","Fisch"],["voće","Obst"],["povrće","Gemüse"],["jabuka","Apfel"],["šećer","Zucker"],["so","Salz"],["račun","Rechnung"]]},
+    ["meso","Fleisch"],["riba","Fisch"],["voće","Obst"],["povrće","Gemüse"],["jabuka","Apfel"],["šećer","Zucker"],["so","Salz"],["ručak","Mittagessen"],["račun","Rechnung"]]},
   {id:"mjesta", bs:"Mjesta", de:"Orte & Richtungen", items:[
-    ["kuća","Haus"],["stan","Wohnung"],["grad","Stadt"],["ulica","Straße"],["posao","Arbeit"],["prodavnica","Laden"],["pijaca","Markt"],
+    ["kuća","Haus"],["stan","Wohnung"],["soba","Zimmer"],["grad","Stadt"],["selo","Dorf"],["ulica","Straße"],["posao","Arbeit"],["prodavnica","Laden"],["pijaca","Markt"],
     ["stanica","Haltestelle, Bahnhof"],["apoteka","Apotheke"],["bolnica","Krankenhaus"],["škola","Schule"],["restoran","Restaurant"],
     ["lijevo","links"],["desno","rechts"],["pravo","geradeaus"],["blizu","nah"],["daleko","weit"]]},
   {id:"opis", bs:"Opisi", de:"Eigenschaften", note:"Adjektive in der männlichen Grundform.", items:[
@@ -295,10 +333,10 @@ const PRON = ["ja","ti","on, ona","mi","vi","oni"];
 WORDS.push(
   {id:"cesto", bs:"Česte riječi", de:"Häufige kleine Wörter", items:[
     ["i","und"],["ali","aber"],["ili","oder"],["jer","weil"],["ako","wenn, falls"],["kad","wenn, als"],["sa","mit"],["bez","ohne"],
-    ["u","in"],["na","auf"],["za","für"],["od","von"],["do","bis"],["iz","aus"],["kod","bei"],["ovdje","hier"],["tamo","dort"],
+    ["u","in"],["na","auf"],["za","für"],["od","von"],["o","über"],["do","bis"],["iz","aus"],["kod","bei"],["ovdje","hier"],["tamo","dort"],
     ["ovo","das hier"],["to","das"],["moj","mein"],["tvoj","dein"],["naš","unser"],["vaš","euer, Ihr"],["jako","sehr"],["malo","wenig, ein bisschen"],
     ["puno","viel"],["sve","alles"],["nešto","etwas"],["ništa","nichts"],["neko","jemand"],["niko","niemand"],["još","noch"],["već","schon"],
-    ["samo","nur"],["opet","wieder"],["možda","vielleicht"],["naravno","natürlich"],["tačno","genau"]]},
+    ["samo","nur"],["opet","wieder"],["možda","vielleicht"],["naravno","natürlich"],["tačno","genau"],["njegov","sein"],["njen","ihr (einer Frau)"],["njihov","ihr (mehrerer)"]]},
   {id:"glagoli2", bs:"Još glagola", de:"Weitere Verben", verbs:true, note:"Angezeigt mit der Ich-Form.", items:[
     ["gledati","schauen",["gledam"]],["slušati","zuhören",["slušam"]],["čitati","lesen",["čitam"]],["pisati","schreiben",["pišem"]],
     ["kuhati","kochen",["kuham"]],["platiti","bezahlen",["platim"]],["otvoriti","öffnen",["otvorim"]],["zatvoriti","schließen",["zatvorim"]],
@@ -306,17 +344,19 @@ WORDS.push(
     ["kazati","sagen",["kažem"]],["misliti","denken",["mislim"]],["osjećati","fühlen",["osjećam"]],["sjediti","sitzen",["sjedim"]],
     ["stajati","stehen",["stojim"]],["putovati","reisen",["putujem"]],["igrati","spielen",["igram"]],["voziti","fahren",["vozim"]],
     ["nazvati","anrufen",["nazovem"]],["pomoći","helfen",["pomognem"]],["tražiti","suchen",["tražim"]],["naći","finden",["nađem"]],
-    ["zaboraviti","vergessen",["zaboravim"]],["ostati","bleiben",["ostanem"]],["vratiti se","zurückkommen",["vratim se"]],["sresti","treffen",["sretnem"]]]},
+    ["zaboraviti","vergessen",["zaboravim"]],["ostati","bleiben",["ostanem"]],["vratiti se","zurückkommen",["vratim se"]],["sresti","treffen",["sretnem"]],
+    ["razgovarati","sich unterhalten",["razgovaram"]],["kasniti","sich verspäten",["kasnim"]],["ući","hineingehen",["uđem"]],["napisati","fertig schreiben",["napišem"]],
+    ["pročitati","durchlesen",["pročitam"]],["naučiti","erlernen",["naučim"]],["uraditi","erledigen",["uradim"]]]},
   {id:"porodica", bs:"Porodica", de:"Familie erweitert", note:"Nana, daidža und amidža sind typisch bosnische Wörter.", items:[
     ["muž","Ehemann"],["žena","Frau, Ehefrau"],["sin","Sohn"],["kćerka","Tochter"],["djed","Opa"],["nana","Oma"],
     ["tetka","Tante"],["daidža","Onkel (Bruder der Mutter)"],["amidža","Onkel (Bruder des Vaters)"],["rodbina","Verwandtschaft"]]},
   {id:"tijelo", bs:"Tijelo i zdravlje", de:"Körper & Gesundheit", items:[
     ["glava","Kopf"],["ruka","Hand, Arm"],["noga","Fuß, Bein"],["oko","Auge"],["uho","Ohr"],["zub","Zahn"],["stomak","Bauch"],
-    ["leđa","Rücken"],["Boli me glava.","Ich habe Kopfweh."],["Bolestan sam.","Ich bin krank."],["doktor","Arzt"],["lijek","Medikament"]]},
+    ["leđa","Rücken"],["Boli me glava.","Ich habe Kopfweh."],["Bolestan sam.","Ich bin krank."],["doktor","Arzt"],["ljekar","Arzt (Standardwort)"],["lijek","Medikament"]]},
   {id:"stvari", bs:"Stvari", de:"Dinge & Unterwegs", items:[
     ["sto","Tisch"],["stolica","Stuhl"],["krevet","Bett"],["vrata","Tür"],["prozor","Fenster"],["ključ","Schlüssel"],["telefon","Telefon"],
     ["novac","Geld"],["pare","Geld (umgangssprachlich)"],["torba","Tasche"],["knjiga","Buch"],["auto","Auto"],["autobus","Bus"],
-    ["voz","Zug"],["karta","Fahrkarte"],["kofer","Koffer"]]},
+    ["voz","Zug"],["karta","Fahrkarte"],["kofer","Koffer"],["olovka","Stift"],["pismo","Brief"],["poklon","Geschenk"],["film","Film"],["ispit","Prüfung"],["sat","Stunde, Uhr"]]},
   {id:"hrana2", bs:"Još hrane", de:"Mehr Essen", items:[
     ["jaje","Ei"],["krompir","Kartoffel"],["luk","Zwiebel"],["paradajz","Tomate"],["krastavac","Gurke"],["salata","Salat"],["supa","Suppe"],
     ["pita","Pita (gefüllter Teig)"],["burek","Burek (mit Fleisch)"],["ćevapi","Ćevapi"],["sladoled","Eis"],["čokolada","Schokolade"],
@@ -420,7 +460,17 @@ const PHRASES = [
     ["Idite pravo, pa lijevo.","Gehen Sie geradeaus, dann links."],["Koji tramvaj ide na Baščaršiju?","Welche Tram fährt zur Baščaršija?"],["Izgubio sam se.","Ich habe mich verlaufen."]]},
   {id:"osjecaji", de:"Wie es mir geht", items:[
     ["Dobro sam, hvala. A ti?","Mir geht's gut, danke. Und dir?"],["Umoran sam.","Ich bin müde."],["Sretan sam.","Ich bin glücklich."],["Gladan sam.","Ich habe Hunger."],
-    ["Bio sam na poslu.","Ich war bei der Arbeit."],["Sutra radim.","Morgen arbeite ich."],["Nedostaješ mi.","Ich vermisse dich."],["Volim te.","Ich liebe dich."]]}
+    ["Bio sam na poslu.","Ich war bei der Arbeit."],["Sutra radim.","Morgen arbeite ich."],["Nedostaješ mi.","Ich vermisse dich."],["Volim te.","Ich liebe dich."]]},
+  {id:"sat", de:"Uhrzeit & Datum", items:[
+    ["Koliko je sati?","Wie spät ist es?"],["Sada je osam sati.","Es ist acht Uhr."],["Sada je osam i petnaest.","Es ist acht Uhr fünfzehn."],["Vidimo se u devet sati.","Wir sehen uns um neun Uhr."],
+    ["Danas je petnaesti novembar.","Heute ist der fünfzehnte November."],["Rođen sam dvanaestog maja.","Ich bin am zwölften Mai geboren."]]},
+  {id:"obrasci", de:"Feste Satzmuster", items:[
+    ["Imam dvadeset pet godina.","Ich bin 25 Jahre alt."],["Hladno mi je.","Mir ist kalt."],["Sviđa mi se ovaj film.","Dieser Film gefällt mir."],["Treba mi pomoć.","Ich brauche Hilfe."],
+    ["Boli me glava.","Ich habe Kopfschmerzen."],["Moram ići.","Ich muss gehen."],["Mogu li ući?","Darf ich reinkommen?"],["Znam govoriti bosanski.","Ich kann Bosnisch sprechen."]]},
+  {id:"dijalozi", de:"Aus den Dialogen", items:[
+    ["Kako ste?","Wie geht es Ihnen?"],["Dobro sam, hvala. A Vi?","Mir geht es gut, danke. Und Ihnen?"],["I ja sam dobro.","Mir geht es auch gut."],["Koliko košta ova knjiga?","Wie viel kostet dieses Buch?"],
+    ["Košta deset maraka.","Es kostet zehn Mark."],["U redu, hvala.","In Ordnung, danke."],["Izvinite, gdje je autobuska stanica?","Entschuldigen Sie, wo ist die Bushaltestelle?"],
+    ["Idite pravo, pa skrenite lijevo.","Gehen Sie geradeaus, dann biegen Sie links ab."],["Hvala Vam puno!","Vielen Dank!"],["Iz Sarajeva, ali živim u Njemačkoj.","Aus Sarajevo, aber ich lebe in Deutschland."]]}
 ];
 const SOUNDS = [
   {g:"č", how:"hartes tsch wie in Tschüss", ex:[["čaj","Tee"],["čovjek","Mensch"]]},
@@ -439,6 +489,256 @@ const SOUNDS = [
   {g:"v", how:"wie deutsches w", ex:[["voda","Wasser"],["volim","ich liebe"]]},
   {g:"j", how:"wie deutsches j", ex:[["ja","ich"],["jabuka","Apfel"]]}
 ];
+/* ---- grammar reference: 17 chapters after a native speaker's handout (exercises and solutions merged) ----
+   Blocks: p (text), h [bosnisch, deutsch], note/warn [Titel, Text], abc, t {head, rows}, ex [[bs, de, Hinweis?]],
+   dlg [[wer, bs, de]], chips [[bs, de]], nums [[Zahl, Wort]], q {task, parts, sol, why}, cards [[Titel, bs, de]], go [Ansicht, Text].
+   In Texten: *fett*, _bosnisch_. Tabellenzelle als Liste [bs, de?, Vorsatz?] = bosnisch, antippbar zum Anhören. */
+const GRAMMAR = [
+  {id:"g01", bs:"Abeceda i izgovor", de:"Alphabet und Aussprache", blocks:[
+    {p:"Bosnisch wird hier in lateinischer Schrift geschrieben. Das Alphabet hat *30 Buchstaben*; _dž_, _lj_ und _nj_ zählen jeweils als ein Buchstabe."},
+    {abc:"A B C Č Ć D Dž Đ E F G H I J K L Lj M N Nj O P R S Š T U V Z Ž"},
+    {p:"Die Schreibung ist lautnah: Fast jedes Wort wird so gelesen, wie es geschrieben ist. Die Vokale _a, e, i, o, u_ werden klar ausgesprochen."},
+    {h:["Posebna slova","Besondere Buchstaben"]},
+    {t:["Buchstabe","Beispiel","Klingt ungefähr wie"], r:[
+      ["č",["čaj","Tee"],"kräftiges tsch"],["ć",["kuća","Haus"],"weicheres tsch"],["š",["škola","Schule"],"sch"],
+      ["ž",["žena","Frau"],"stimmhaftes sch wie in Journal"],["dž",["džep","Tasche"],"dsch"],["đ",["đak","Schüler"],"weicheres dsch"],
+      ["j",["jabuka","Apfel"],"j wie in ja"],["lj",["ljubav","Liebe"],"weiches l mit j"],["nj",["njega","ihn"],"n und j in einem Laut"],
+      ["c",["cijena","Preis"],"z wie in Zeit"]]},
+    {note:["Merke","_č/ć_ und _dž/đ_ sind verschiedene Laute: _čaj_ (Tee), aber _ćao_ (tschüss). Die deutschen Umschreibungen sind nur Annäherungen. Unter Lernen → Laute kannst du alle Laute anhören."]},
+    {go:["sounds","Zu den Lauten"]},
+    {h:["Ijekavski oblici","Ijekavische Formen"]},
+    {p:"Im bosnischen Standard stehen oft die Gruppen _ije_ und _je_: _mlijeko_ (Milch), _vrijeme_ (Zeit, Wetter), _lijep_ (schön), _čovjek_ (Mensch). Sie gehören fest zum Wort und lassen sich nicht austauschen. Lerne deshalb immer das ganze Wort."}]},
+
+  {id:"g02", bs:"Pozdravi i prve rečenice", de:"Grüße und erste Sätze", blocks:[
+    {p:"Lerne zuerst ein paar Wendungen auswendig. Wichtig ist der Unterschied zwischen _ti_ (du) und _Vi_ (Sie)."},
+    {p:"_ti_ sagst du zu Freunden, Familie und vertrauten Personen. _Vi_ ist die höfliche Anrede für eine Person, _vi_ heißt außerdem „ihr“. _Kako ste?_ kann deshalb „Wie geht es Ihnen?“ oder „Wie geht es euch?“ bedeuten."},
+    {ex:[["Zdravo!","Hallo!"],["Ćao!","Hi! Tschüss!"],["Dobro jutro!","Guten Morgen!"],["Dobar dan!","Guten Tag!"],["Dobro veče!","Guten Abend!"],["Laku noć!","Gute Nacht!"],
+      ["Doviđenja!","Auf Wiedersehen!"],["Hvala!","Danke!"],["Hvala puno!","Vielen Dank!"],["Molim.","Bitte. Gern geschehen."],["Izvini.","Entschuldige."],["Izvinite.","Entschuldigen Sie."],
+      ["Kako si?","Wie geht es dir?"],["Kako ste?","Wie geht es Ihnen?"],["Dobro sam, hvala.","Mir geht es gut, danke."],["Kako se zoveš?","Wie heißt du?"],["Zovem se Amir.","Ich heiße Amir."],
+      ["Drago mi je.","Freut mich."],["Ne razumijem.","Ich verstehe nicht."],["Možete li ponoviti?","Können Sie das wiederholen?"]]},
+    {h:["Kratak dijalog","Kurzer Dialog"]},
+    {dlg:[["A","Dobar dan! Kako ste?","Guten Tag! Wie geht es Ihnen?"],["B","Dobro sam, hvala. A Vi?","Mir geht es gut, danke. Und Ihnen?"],["A","I ja sam dobro.","Mir geht es auch gut."]]}]},
+
+  {id:"g03", bs:"Imenice: rod, broj i član", de:"Substantive: Geschlecht, Zahl, Artikel", blocks:[
+    {p:"Substantive haben *drei Geschlechter*: männlich, weiblich und sächlich. Anders als im Deutschen gibt es *keine Artikel*, also kein der, die, das, ein oder eine."},
+    {p:"Das Geschlecht erkennst du meist an der Endung."},
+    {t:["Geschlecht","Häufige Endung","Beispiele"], r:[
+      ["männlich","Konsonant","_grad_ (Stadt), _student_ (Student)"],["weiblich","-a","_žena_ (Frau), _knjiga_ (Buch)"],["sächlich","-o, -e","_selo_ (Dorf), _more_ (Meer)"]]},
+    {note:["Merke","Die Endung ist nur eine Hilfe: _noć_ (Nacht) ist weiblich, obwohl kein -a am Ende steht. _tata_ (Papa) ist männlich trotz -a."]},
+    {h:["Jednina i množina","Einzahl und Mehrzahl"]},
+    {p:"Häufige Endungen der Mehrzahl sind _-i_ (männlich), _-e_ (weiblich) und _-a_ (sächlich). Einige Formen sind unregelmäßig."},
+    {t:["Einzahl","Mehrzahl","Deutsch"], r:[
+      [["student"],["studenti"],"Student, Studenten"],[["žena"],["žene"],"Frau, Frauen"],[["selo"],["sela"],"Dorf, Dörfer"],[["grad"],["gradovi"],"Stadt, Städte"],[["dijete"],["djeca"],"Kind, Kinder (unregelmäßig)"]]},
+    {p:"Die Form eines Substantivs hängt von *Geschlecht, Zahl und Fall* ab. Die Grundform allein reicht deshalb nicht, mehr dazu im Kapitel über die sieben Fälle."}]},
+
+  {id:"g04", bs:"Lične i upitne zamjenice", de:"Personal- und Fragepronomen", blocks:[
+    {h:["Lične zamjenice","Personalpronomen"]},
+    {t:["Bosnisch","Deutsch","Hinweis"], r:[
+      [["ja"],"ich",""],[["ti"],"du","informell"],[["on"],"er",""],[["ona"],"sie",""],[["ono"],"es",""],[["mi"],"wir",""],
+      [["vi"],"ihr, Sie","Mehrzahl oder höfliche Anrede"],[["oni"],"sie","Männer oder gemischte Gruppe"],[["one"],"sie","nur Frauen"],[["ona"],"sie","sächlich, Mehrzahl"]]},
+    {p:"Das Pronomen fällt oft weg, weil die Verbendung die Person schon zeigt: _Govorim bosanski._ bedeutet dasselbe wie _Ja govorim bosanski._ Mit _ja_ betonst du etwas oder stellst es gegenüber: _Ja govorim, a ti slušaš._ (Ich spreche, und du hörst zu.)"},
+    {h:["Upitne riječi","Fragewörter"]},
+    {p:"_gdje?_ fragt nach dem Ort (wo?), _kuda?_ nach der Richtung (wohin?), _odakle?_ nach der Herkunft (woher?)."},
+    {t:["Bosnisch","Deutsch","Beispiel"], r:[
+      [["ko?"],"wer?",["Ko je to?","Wer ist das?"]],[["šta?"],"was? (auch: _što?_)",["Šta radiš?","Was machst du?"]],[["gdje?"],"wo?",["Gdje živiš?","Wo wohnst du?"]],
+      [["kuda?"],"wohin? (auch: _kamo?_)",["Kuda ideš?","Wohin gehst du?"]],[["odakle?"],"woher?",["Odakle si?","Woher kommst du?"]],[["kada?"],"wann?",["Kada dolaziš?","Wann kommst du?"]],
+      [["kako?"],"wie?",["Kako si?","Wie geht es dir?"]],[["zašto?"],"warum?",["Zašto učiš?","Warum lernst du?"]],[["koliko?"],"wie viel?",["Koliko košta?","Wie viel kostet es?"]],
+      [["čiji?"],"wessen?",["Čija je ovo knjiga?","Wessen Buch ist das?"]]]}]},
+
+  {id:"g05", bs:"Glagoli u prezentu", de:"Verben im Präsens", blocks:[
+    {p:"Verben ändern ihre Form nach Person und Zahl: _radim, radiš, radi, radimo, radite, rade_. Nicht jedes Verb folgt demselben Muster. Lerne die Formen deshalb zusammen mit dem Verb."},
+    {h:["Biti","Sein"]},
+    {p:"Die Kurzformen _sam, si, je, smo, ste, su_ bedeuten „sein“ und dienen auch als Hilfsverb der Vergangenheit: _Ja sam kod kuće._ (Ich bin zu Hause.) _Ja sam radio._ (Ich habe gearbeitet.)"},
+    {t:["Person","bejaht","verneint","Deutsch"], r:[
+      ["ja",["sam"],["nisam"],"ich bin (nicht)"],["ti",["si"],["nisi"],"du bist (nicht)"],["on, ona, ono",["je"],["nije"],"er, sie, es ist (nicht)"],
+      ["mi",["smo"],["nismo"],"wir sind (nicht)"],["vi",["ste"],["niste"],"ihr seid, Sie sind (nicht)"],["oni, one, ona",["su"],["nisu"],"sie sind (nicht)"]]},
+    {warn:["Wichtig","Die Kurzformen stehen normalerweise an *zweiter Stelle* im Satz: _Ja sam kod kuće._ oder _Danas sam kod kuće._"]},
+    {h:["Imati","Haben"]},
+    {t:["Person","imati","Deutsch"], r:[
+      ["ja",["imam"],"ich habe"],["ti",["imaš"],"du hast"],["on, ona, ono",["ima"],"er, sie, es hat"],["mi",["imamo"],"wir haben"],["vi",["imate"],"ihr habt, Sie haben"],["oni, one, ona",["imaju"],"sie haben"]]},
+    {h:["Primjeri glagolskih nastavaka","Drei Muster"]},
+    {t:["Person","raditi (arbeiten)","čitati (lesen)","učiti (lernen)"], r:[
+      ["ja",["radim"],["čitam"],["učim"]],["ti",["radiš"],["čitaš"],["učiš"]],["on, ona, ono",["radi"],["čita"],["uči"]],
+      ["mi",["radimo"],["čitamo"],["učimo"]],["vi",["radite"],["čitate"],["učite"]],["oni, one, ona",["rade"],["čitaju"],["uče"]]]},
+    {p:"Das Präsens steht für das, was jetzt oder regelmäßig geschieht: _Radim danas._ (Ich arbeite heute.) _Svaki dan učim._ (Ich lerne jeden Tag.)"},
+    {ex:[["Govorim malo bosanski.","Ich spreche ein bisschen Bosnisch."],["Ona čita knjigu.","Sie liest ein Buch."],["Mi radimo u bolnici.","Wir arbeiten im Krankenhaus."],["Imam vremena.","Ich habe Zeit."]]}]},
+
+  {id:"g06", bs:"Negacija, pitanja i red riječi", de:"Verneinung, Fragen, Wortstellung", blocks:[
+    {h:["Negacija","Verneinung"]},
+    {p:"_ne_ steht getrennt vor dem Verb: _ne znam_ (ich weiß nicht), _ne radim_ (ich arbeite nicht). Drei wichtige Ausnahmen schreibt man zusammen: _nisam_ (ich bin nicht), _nemam_ (ich habe nicht) und _neću_ (ich will nicht, ich werde nicht)."},
+    {p:"Anders als im Deutschen ist die mehrfache Verneinung normal: _Niko ništa ne zna._ (Niemand weiß etwas.)"},
+    {ex:[["Ne govorim njemački.","Ich spreche kein Deutsch."],["On ne radi danas.","Er arbeitet heute nicht."],["Nemam novca.","Ich habe kein Geld."],["Nisam umoran.","Ich bin nicht müde."]]},
+    {h:["Da/ne pitanja","Ja-Nein-Fragen"]},
+    {p:"Eine Entscheidungsfrage beginnt mit _Da li …?_ oder hat _li_ direkt nach dem Verb. Beide Formen fragen dasselbe."},
+    {ex:[["Da li govoriš bosanski?","Sprichst du Bosnisch?"],["Govoriš li bosanski?","Sprichst du Bosnisch?"],["Da li je ovo tvoje?","Ist das deins?"],["Je li ovo tvoje?","Ist das deins?"]]},
+    {h:["Red riječi","Wortstellung"]},
+    {p:"Die übliche Reihenfolge ist Subjekt, Verb, Objekt. Sie ist aber freier als im Deutschen, und das Subjekt kann wegfallen. Kurze unbetonte Wörter wie _sam_ haben ihren festen Platz an zweiter Stelle: _Danas sam umoran._ ist üblich, _Danas umoran sam._ nicht."},
+    {ex:[["Ja danas učim bosanski.","Ich lerne heute Bosnisch."],["Danas učim bosanski.","Heute lerne ich Bosnisch."],["Ja sam danas kod kuće.","Ich bin heute zu Hause."],["Danas sam kod kuće.","Heute bin ich zu Hause."]]}]},
+
+  {id:"g07", bs:"Sedam padeža", de:"Die sieben Fälle", blocks:[
+    {p:"Bosnisch hat *sieben Fälle*. Sie zeigen, welche Rolle ein Wort im Satz spielt. Im Deutschen erkennt man das oft am Artikel (der Frau, die Frau), im Bosnischen an der Endung (_ženi, ženu_). Vier Fälle kennst du aus dem Deutschen. Vokativ, Instrumental und Lokativ sind neu."},
+    {t:["Fall","Frage","Aufgabe und Beispiel"], r:[
+      ["1. Nominativ","_ko? šta?_ wer? was?",["Žena radi.","Die Frau arbeitet.","Subjekt"]],
+      ["2. Genitiv","_koga? čega?_ wessen?",["Nema vode.","Es gibt kein Wasser.","Zugehörigkeit, Fehlen, nach Präposition"]],
+      ["3. Dativ","_kome? čemu?_ wem?",["Dajem ženi knjigu.","Ich gebe der Frau ein Buch.","Empfänger"]],
+      ["4. Akkusativ","_koga? šta?_ wen? was?",["Vidim ženu.","Ich sehe die Frau.","direktes Objekt"]],
+      ["5. Vokativ","Anrede",["Amire!","Amir!","jemanden ansprechen"]],
+      ["6. Instrumental","_s kim? čime?_ mit wem? womit?",["Pišem olovkom.","Ich schreibe mit einem Stift.","Mittel, Begleitung"]],
+      ["7. Lokativ","_o kome? o čemu? gdje?_",["Pričam o ženi.","Ich spreche über die Frau.","Ort oder Thema, nach Präposition"]]]},
+    {h:["Primjer promjene imenica u jednini","Drei Muster in der Einzahl"]},
+    {p:"So liest du die Tabelle: Such die Grundform (_žena_) und wähl den Fall nach der Aufgabe im Satz, zum Beispiel _Vidim ženu_ (Akkusativ) oder _Pomažem ženi_ (Dativ). Die Tabelle zeigt Muster. Nicht jede Endung gilt für alle Wörter."},
+    {t:["Fall","grad (m.) Stadt","žena (w.) Frau","selo (s.) Dorf"], r:[
+      ["Nominativ",["grad"],["žena"],["selo"]],["Genitiv",["grada"],["žene"],["sela"]],["Dativ",["gradu"],["ženi"],["selu"]],["Akkusativ",["grad"],["ženu"],["selo"]],
+      ["Vokativ",["grade"],["ženo"],["selo"]],["Instrumental",["gradom"],["ženom"],["selom"]],["Lokativ",["gradu"],["ženi"],["selu"]]]},
+    {warn:["Wichtig","Im männlichen Akkusativ zählt, ob etwas lebt: _Vidim prijatelja._ (Ich sehe einen Freund, belebt), aber _Vidim grad._ (Ich sehe die Stadt, unbelebt)."]},
+    {h:["Jedan padež – jedna kratka rečenica","Jeder Fall in einem kurzen Satz"]},
+    {ex:[["Ovo je moj prijatelj.","Das ist mein Freund.","Nominativ"],["To je kuća mog prijatelja.","Das ist das Haus meines Freundes.","Genitiv"],["Pomažem prijatelju.","Ich helfe meinem Freund.","Dativ"],
+      ["Vidim prijatelja.","Ich sehe meinen Freund.","Akkusativ"],["Prijatelju, dođi!","Freund, komm!","Vokativ"],["Idem s prijateljem.","Ich gehe mit einem Freund.","Instrumental"],
+      ["Razgovaram o prijatelju.","Ich spreche über einen Freund.","Lokativ"]]}]},
+
+  {id:"g08", bs:"Prijedlozi i padeži", de:"Präpositionen und Fälle", blocks:[
+    {p:"Die Präposition bestimmt oft den Fall. Besonders wichtig ist der Unterschied zwischen *Bewegung zu einem Ort* (wohin?) und *Aufenthalt an einem Ort* (wo?)."},
+    {p:"_u_ mit Akkusativ nennt das Ziel: _u školu_ (in die Schule). _u_ mit Lokativ nennt den Ort: _u školi_ (in der Schule). Lerne Präposition und Fall deshalb immer zusammen."},
+    {t:["Präposition + Fall","Beispiel"], r:[
+      ["_u_ + Akkusativ",["Idem u školu.","Ich gehe in die Schule. (wohin?)"]],["_u_ + Lokativ",["Ja sam u školi.","Ich bin in der Schule. (wo?)"]],
+      ["_na_ + Akkusativ",["Idem na posao.","Ich gehe zur Arbeit."]],["_na_ + Lokativ",["Ja sam na poslu.","Ich bin bei der Arbeit."]],
+      ["_iz_ + Genitiv",["Dolazim iz škole.","Ich komme aus der Schule."]],["_od_ + Genitiv",["Ovo je poklon od prijatelja.","Das ist ein Geschenk von einem Freund."]],
+      ["_do_ + Genitiv",["Idem do grada.","Ich gehe bis in die Stadt."]],["_kod_ + Genitiv",["Ja sam kod ljekara.","Ich bin beim Arzt."]],
+      ["_bez_ + Genitiv",["Kafa bez šećera.","Kaffee ohne Zucker."]],["_s, sa_ + Instrumental",["Idem s prijateljem.","Ich gehe mit einem Freund."]],
+      ["_o_ + Lokativ",["Pričamo o filmu.","Wir sprechen über den Film."]],["_za_ + Akkusativ",["Ovo je za tebe.","Das ist für dich."]]]},
+    {note:["Merke","Das deutsche „in“ ist je nach Bedeutung _u_ + Akkusativ (wohin?) oder _u_ + Lokativ (wo?)."]}]},
+
+  {id:"g09", bs:"Pridjevi i prisvojne zamjenice", de:"Adjektive und Possessivpronomen", blocks:[
+    {h:["Slaganje s imenicom","Übereinstimmung mit dem Substantiv"]},
+    {p:"Das Adjektiv richtet sich nach *Geschlecht, Zahl und Fall* des Substantivs: _nov grad_, _nova knjiga_, _novo selo_. Ändert sich der Fall, ändert sich auch das Adjektiv: aus _nova knjiga_ wird _Imam novu knjigu._"},
+    {t:["männlich","weiblich","sächlich"], r:[
+      [["lijep grad","schöne Stadt"],["lijepa kuća","schönes Haus"],["lijepo selo","schönes Dorf"]],
+      [["nov automobil","neues Auto"],["nova knjiga","neues Buch"],["novo pismo","neuer Brief"]],
+      [["dobar prijatelj","guter Freund"],["dobra prijateljica","gute Freundin"],["dobro dijete","gutes Kind"]]]},
+    {ex:[["Ovo je lijepa kuća.","Das ist ein schönes Haus."],["Ovo je lijepo selo.","Das ist ein schönes Dorf."],["Imam novu knjigu.","Ich habe ein neues Buch.","Akkusativ"]]},
+    {h:["Poređenje","Steigerung"]},
+    {p:"Der Komparativ vergleicht: _brži_ heißt „schneller“. Der Superlativ bekommt _naj-_ davor: _najbrži_ heißt „am schnellsten“. Manche Formen sind unregelmäßig, zum Beispiel _dobar, bolji, najbolji_."},
+    {t:["Grundform","Komparativ","Superlativ"], r:[
+      [["lijep","schön"],["ljepši","schöner"],["najljepši","am schönsten"]],[["brz","schnell"],["brži","schneller"],["najbrži","am schnellsten"]],
+      [["dobar","gut"],["bolji","besser"],["najbolji","am besten"]],[["velik","groß"],["veći","größer"],["najveći","am größten"]]]},
+    {h:["Prisvojne zamjenice","Possessivpronomen"]},
+    {p:"Auch „mein“ hat drei Formen: _moj brat_, _moja sestra_, _moje dijete_. In der Mehrzahl und in anderen Fällen ändern sich die Formen weiter."},
+    {t:["männlich, weiblich, sächlich","Deutsch"], r:[
+      [["moj, moja, moje"],"mein"],[["tvoj, tvoja, tvoje"],"dein"],[["njegov, njegova, njegovo"],"sein"],[["njen, njena, njeno"],"ihr (einer Frau)"],
+      [["naš, naša, naše"],"unser"],[["vaš, vaša, vaše"],"euer, Ihr"],[["njihov, njihova, njihovo"],"ihr (mehrerer)"]]}]},
+
+  {id:"g10", bs:"Prošlo, buduće i pogodbeno vrijeme", de:"Vergangenheit, Zukunft, Konditional", blocks:[
+    {h:["Perfekt – prošlo vrijeme","Vergangenheit"]},
+    {p:"Die Vergangenheit baust du in drei Schritten: Person bestimmen, die Kurzform von _biti_ wählen (_sam, si, je, smo, ste, su_) und das Partizip anhängen. Das Partizip richtet sich nach *Geschlecht und Zahl des Subjekts*: _radio, radila, radili, radile_."},
+    {t:["Bosnisch","Deutsch","Wer?"], r:[
+      [["Ja sam radio."],"Ich habe gearbeitet.","ein Mann spricht"],[["Ja sam radila."],"Ich habe gearbeitet.","eine Frau spricht"],[["On je radio."],"Er hat gearbeitet.",""],[["Ona je radila."],"Sie hat gearbeitet.",""],
+      [["Mi smo radili."],"Wir haben gearbeitet.","Männer oder gemischte Gruppe"],[["One su radile."],"Sie haben gearbeitet.","nur Frauen"]]},
+    {note:["Für dich","Als Mann sagst du immer _radio sam_, _bio sam_, _učio sam_."]},
+    {p:"Verneint wird beim Hilfsverb: _Nisam radio._ (Ich habe nicht gearbeitet.)"},
+    {h:["Futur I – budućnost","Zukunft"]},
+    {p:"Die Zukunft bildest du mit _ću, ćeš, će, ćemo, ćete, će_ und dem Infinitiv: _Ja ću raditi._ Ohne Pronomen rückt die Kurzform hinter das Verb: _Radit ću._ Verneint heißt es _Neću raditi._"},
+    {t:["Person","Bosnisch","Deutsch"], r:[
+      ["ja",["Ja ću učiti."],"Ich werde lernen."],["ti",["Ti ćeš učiti."],"Du wirst lernen."],["on, ona",["On će učiti."],"Er wird lernen."],
+      ["mi",["Mi ćemo učiti."],"Wir werden lernen."],["vi",["Vi ćete učiti."],"Ihr werdet lernen. Sie werden lernen."],["oni, one",["Oni će učiti."],"Sie werden lernen."]]},
+    {ex:[["Sutra ću raditi.","Morgen werde ich arbeiten."],["Neću kasniti.","Ich werde mich nicht verspäten."]]},
+    {h:["Kondicional – bih, bi …","Konditional: würde …"]},
+    {p:"Für Wünsche, Mögliches und höfliche Bitten nimmst du _bih, bi, bi, bismo, biste, bi_ und das Partizip: _Ja bih radio._ (Ich würde arbeiten.) Auch hier richtet sich das Partizip nach dem Subjekt, eine Frau sagt _Ja bih radila._"},
+    {t:["Person","Form"], r:[["ja",["bih"]],["ti",["bi"]],["on, ona",["bi"]],["mi",["bismo"]],["vi",["biste"]],["oni, one",["bi"]]]},
+    {ex:[["Ja bih učio bosanski.","Ich würde Bosnisch lernen."],["Bismo li mogli razgovarati?","Könnten wir sprechen?"]]},
+    {note:["Merke","Für den Anfang reichen drei Muster: _Učim._ (ich lerne), _Učio sam._ (ich habe gelernt) und _Učit ću._ oder _Ja ću učiti._ (ich werde lernen)."]}]},
+
+  {id:"g11", bs:"Glagolski vid i zapovjedni način", de:"Verbalaspekt und Imperativ", blocks:[
+    {h:["Nesvršeni i svršeni glagoli","Unvollendete und vollendete Verben"]},
+    {p:"Viele Verben gibt es als Paar. Das *unvollendete* Verb beschreibt Verlauf, Dauer oder Wiederholung: _pisati_ (schreiben). Das *vollendete* Verb sieht die Handlung als Ganzes oder betont das Ergebnis: _napisati_ (fertig schreiben). Im Deutschen drückt man das mit Zusatzwörtern oder über den Zusammenhang aus."},
+    {t:["unvollendet","vollendet","Bedeutung"], r:[
+      [["pisati"],["napisati"],"schreiben, fertig schreiben"],[["čitati"],["pročitati"],"lesen, durchlesen"],[["učiti"],["naučiti"],"lernen, erlernen"],[["raditi"],["uraditi"],"arbeiten oder tun, erledigen"]]},
+    {ex:[["Čitam knjigu.","Ich lese gerade ein Buch."],["Pročitao sam knjigu.","Ich habe das Buch durchgelesen."],["Učim nove riječi.","Ich lerne neue Wörter."],["Naučio sam pet riječi.","Ich habe fünf Wörter gelernt."]]},
+    {warn:["Wichtig","Vollendete Verben stehen im Präsens normalerweise nicht für etwas, das gerade abläuft. Ihr Präsens hat meist Zukunfts- oder Nebensatzbedeutung."]},
+    {h:["Imperativ – naredbe i molbe","Aufforderungen und Bitten"]},
+    {p:"Zu einer vertrauten Person nimmst du die _ti_-Form (_Piši!_), zu mehreren Personen oder in der höflichen Anrede die _vi_-Form (_Pišite!_). Mit _molim te_ oder _molim Vas_ wird daraus eine höfliche Bitte."},
+    {t:["Infinitiv","ti","vi, Vi","Deutsch"], r:[
+      ["raditi",["radi!"],["radite!"],"arbeite! arbeitet! arbeiten Sie!"],["pisati",["piši!"],["pišite!"],"schreib! schreibt! schreiben Sie!"],
+      ["ići",["idi!"],["idite!"],"geh! geht! gehen Sie!"],["slušati",["slušaj!"],["slušajte!"],"hör zu! hört zu! hören Sie zu!"]]},
+    {ex:[["Molim te, ponovi.","Bitte wiederhole es."],["Molim Vas, ponovite.","Bitte wiederholen Sie es."]]}]},
+
+  {id:"g12", bs:"Brojevi, vrijeme i datumi", de:"Zahlen, Uhrzeit, Datum", blocks:[
+    {h:["Osnovni brojevi","Grundzahlen"]},
+    {p:"Nach einer Zahl ändert sich die Form des Substantivs: _jedan sat_ (eine Stunde), _dva sata_ (zwei Stunden), _pet sati_ (fünf Stunden). _jedan_ hat drei Formen (_jedan, jedna, jedno_), für „zwei“ gibt es _dva_ und _dvije_."},
+    {nums:[[0,"nula"],[1,"jedan"],[2,"dva"],[3,"tri"],[4,"četiri"],[5,"pet"],[6,"šest"],[7,"sedam"],[8,"osam"],[9,"devet"],[10,"deset"],[11,"jedanaest"],[12,"dvanaest"],[13,"trinaest"],[20,"dvadeset"],[30,"trideset"],[50,"pedeset"],[100,"sto"]]},
+    {go:["numbers","Alle Zahlen und Übungen"]},
+    {h:["Dani i mjeseci","Wochentage und Monate"]},
+    {p:"Wochentage und Monate schreibt man klein, außer am Satzanfang."},
+    {chips:[["ponedjeljak","Montag"],["utorak","Dienstag"],["srijeda","Mittwoch"],["četvrtak","Donnerstag"],["petak","Freitag"],["subota","Samstag"],["nedjelja","Sonntag"]]},
+    {chips:[["januar","Januar"],["februar","Februar"],["mart","März"],["april","April"],["maj","Mai"],["juni","Juni"],["juli","Juli"],["august","August"],["septembar","September"],["oktobar","Oktober"],["novembar","November"],["decembar","Dezember"]]},
+    {h:["Sat i datum","Uhrzeit und Datum"]},
+    {p:"Im Datum steht der Tag als Ordnungszahl mit Punkt: _15. 11. 2026._ Gesprochen sagt man zum Beispiel _petnaesti novembar_ (der fünfzehnte November). _Koliko je sati?_ heißt „Wie spät ist es?“."},
+    {ex:[["Koliko je sati?","Wie spät ist es?"],["Sada je osam sati.","Es ist acht Uhr."],["Sada je osam i petnaest.","Es ist acht Uhr fünfzehn."],["Vidimo se u devet sati.","Wir sehen uns um neun Uhr."],
+      ["Danas je petnaesti novembar.","Heute ist der fünfzehnte November."],["Rođen sam 12. maja.","Ich bin am 12. Mai geboren."]]}]},
+
+  {id:"g13", bs:"Važne rečenične konstrukcije", de:"Wichtige Satzmuster", blocks:[
+    {p:"Manche Wendungen lassen sich nicht Wort für Wort übersetzen. Lerne sie als ganze Sätze. Oft steht _mi_ (mir), wo das Deutsche „ich“ sagt."},
+    {ex:[["Imam 25 godina.","Ich bin 25 Jahre alt.","Bosnisch sagt „ich habe“: _imam_"],["Hladno mi je.","Mir ist kalt.","Dativ _mi_ statt „ich“"],["Sviđa mi se ovaj film.","Dieser Film gefällt mir.","Subjekt ist der Film"],
+      ["Treba mi pomoć.","Ich brauche Hilfe.","wörtlich: Hilfe ist mir nötig"],["Boli me glava.","Ich habe Kopfschmerzen.","wörtlich: Der Kopf tut mir weh"],["Moram ići.","Ich muss gehen.","_morati_ + Infinitiv"],
+      ["Mogu li ući?","Darf ich reinkommen?","_moći_ + Infinitiv"],["Želim vodu.","Ich möchte Wasser.","_željeti_ + Akkusativ"],["Volim muziku.","Ich mag Musik.","_voljeti_ + Akkusativ"],
+      ["Znam govoriti bosanski.","Ich kann Bosnisch sprechen.","_znati_ + Infinitiv"]]},
+    {h:["Veznici i povezivanje","Konjunktionen"]},
+    {p:"_i, ali, jer, ako, da_ und _ili_ verbinden Satzteile. Anders als im Deutschen wandert das Verb im Nebensatz nicht ans Ende."},
+    {t:["Bosnisch","Deutsch","Beispiel"], r:[
+      [["i"],"und",["Čitam i pišem.","Ich lese und schreibe."]],[["ali"],"aber",["Učim, ali sam umoran.","Ich lerne, aber ich bin müde."]],[["jer"],"weil",["Učim jer imam ispit.","Ich lerne, weil ich eine Prüfung habe."]],
+      [["ako"],"wenn, falls",["Ako imam vremena, doći ću.","Wenn ich Zeit habe, komme ich."]],[["da"],"dass, damit",["Znam da si tu.","Ich weiß, dass du hier bist."]],[["ili"],"oder",["Čaj ili kafa?","Tee oder Kaffee?"]]]}]},
+
+  {id:"g14", bs:"Dijalozi iz svakodnevnog života", de:"Alltagsdialoge", blocks:[
+    {p:"Bei Unbekannten passen die höflichen Formen _Izvinite_, _Vi_ und _Molim Vas_. Unter Freunden sagt man _Ćao_, _ti_ und _molim te_. Lies die Dialoge laut und setz danach eigene Namen, Orte und Zahlen ein."},
+    {h:["U prodavnici","Im Geschäft"]},
+    {dlg:[["A","Dobar dan. Koliko košta ova knjiga?","Guten Tag. Wie viel kostet dieses Buch?"],["B","Košta deset maraka.","Es kostet zehn Mark (KM)."],["A","U redu, hvala.","In Ordnung, danke."]]},
+    {h:["Upoznavanje","Kennenlernen"]},
+    {dlg:[["A","Kako se zoveš?","Wie heißt du?"],["B","Zovem se Lejla. A ti?","Ich heiße Lejla. Und du?"],["A","Ja sam Emir. Odakle si?","Ich bin Emir. Woher kommst du?"],["B","Iz Sarajeva, ali živim u Njemačkoj.","Aus Sarajevo, aber ich lebe in Deutschland."]]},
+    {h:["Na putu","Unterwegs"]},
+    {dlg:[["A","Izvinite, gdje je autobuska stanica?","Entschuldigen Sie, wo ist die Bushaltestelle?"],["B","Idite pravo, pa skrenite lijevo.","Gehen Sie geradeaus, dann biegen Sie links ab."],["A","Hvala Vam puno!","Vielen Dank!"]]}]},
+
+  {id:"g15", bs:"Mali rječnik: 60 korisnih riječi", de:"Kleiner Wortschatz: 60 nützliche Wörter", blocks:[
+    {p:"Merk dir nicht nur die Übersetzung, sondern auch einen Beispielsatz: _knjiga_ (Buch) und dazu _Čitam knjigu._ (Ich lese ein Buch.) Bei Substantiven ist das Geschlecht wichtig, bei Verben mindestens die Ich-Form."},
+    {h:["Ljudi i porodica","Menschen und Familie"]},
+    {chips:[["čovjek","Mensch, Mann"],["žena","Frau"],["dijete","Kind"],["majka","Mutter"],["otac","Vater"],["brat","Bruder"],["sestra","Schwester"],["prijatelj","Freund"],["porodica","Familie"],["ime","Name"]]},
+    {h:["Kuća i grad","Zuhause und Stadt"]},
+    {chips:[["kuća","Haus"],["stan","Wohnung"],["soba","Zimmer"],["vrata","Tür"],["prozor","Fenster"],["ulica","Straße"],["grad","Stadt"],["škola","Schule"],["posao","Arbeit"],["bolnica","Krankenhaus"]]},
+    {h:["Hrana i piće","Essen und Trinken"]},
+    {chips:[["voda","Wasser"],["hljeb","Brot"],["mlijeko","Milch"],["kafa","Kaffee"],["čaj","Tee"],["jabuka","Apfel"],["meso","Fleisch"],["riba","Fisch"],["ručak","Mittagessen"],["šećer","Zucker"]]},
+    {h:["Vrijeme i opis","Zeit und Eigenschaften"]},
+    {chips:[["danas","heute"],["sutra","morgen"],["jučer","gestern"],["sada","jetzt"],["uvijek","immer"],["nikad","nie"],["dobar","gut"],["loš","schlecht"],["velik","groß"],["mali","klein"]]},
+    {h:["Glagoli","Verben"]},
+    {chips:[["biti","sein"],["imati","haben"],["ići","gehen"],["doći","kommen"],["raditi","arbeiten, tun"],["učiti","lernen"],["govoriti","sprechen"],["čitati","lesen"],["pisati","schreiben"],["jesti","essen"]]},
+    {h:["Ostale korisne riječi","Weitere Wörter"]},
+    {chips:[["da","ja"],["ne","nein"],["možda","vielleicht"],["molim","bitte"],["hvala","danke"],["ovdje","hier"],["tamo","dort"],["desno","rechts"],["lijevo","links"],["pomoć","Hilfe"]]},
+    {p:"Alle diese Wörter stehen auch im Grundwortschatz. Dort legst du sie mit dem Stern ins Heft und fragst sie im Quiz ab."},
+    {go:["words","Zum Grundwortschatz"]}]},
+
+  {id:"g16", bs:"Vježbe i rješenja", de:"Übungen mit Lösungen", blocks:[
+    {p:"Lös die Aufgaben zuerst, ohne die Lösung aufzuklappen. Schreib am besten den ganzen Satz auf. Bei Fällen frag dich: Ist das Wort Subjekt, Objekt, Ort oder Ziel? Beim Perfekt zählt das Geschlecht des Subjekts. Eine andere Wortstellung ist nicht automatisch falsch, wenn der Satz richtig ist und dasselbe bedeutet."},
+    {q:{task:"Übersetze ins Deutsche.", parts:["Dobro veče.","Hvala puno.","Gdje živiš?"], sol:["Guten Abend.","Vielen Dank.","Wo wohnst du?"], why:"_Gdje?_ heißt „wo?“."}},
+    {q:{task:"Übersetze ins Bosnische. Die Pronomen dürfen wegfallen.", parts:["Ich lerne Bosnisch.","Wir haben Zeit.","Sie (eine Frau) arbeitet heute."], sol:["Učim bosanski.","Imamo vremena.","Ona danas radi."], why:"Die Formen _učim_, _imamo_ und _radi_ zeigen die Person schon an."}},
+    {q:{task:"Ergänze die passende Form von _biti_ (sein).", parts:["Ja ___ student.","Ona ___ kod kuće.","Mi ___ prijatelji."], sol:["Ja sam student.","Ona je kod kuće.","Mi smo prijatelji."], why:"Zu _ja_ gehört _sam_, zu _ona_ gehört _je_, zu _mi_ gehört _smo_."}},
+    {q:{task:"Ergänze die passende Form von _imati_ (haben).", parts:["Ti ___ knjigu.","On ___ auto.","Vi ___ vremena."], sol:["Ti imaš knjigu.","On ima auto.","Vi imate vremena."], why:"_imaš_ heißt „du hast“, _ima_ „er hat“, _imate_ „ihr habt“ oder „Sie haben“."}},
+    {q:{task:"Verneine die Sätze.", parts:["Ja radim.","Ona je umorna.","Imam novac."], sol:["Ja ne radim.","Ona nije umorna.","Nemam novac. (Im Alltag oft: Nemam novca.)"], why:"Bei _raditi_ steht _ne_ getrennt vor dem Verb. _biti_ und _imati_ haben die Sonderformen _nije_ und _nemam_."}},
+    {q:{task:"Setz das Wort in Klammern in den richtigen Fall: wohin, wo oder wen?", parts:["Idem u (škola).","Ja sam u (škola).","Vidim (prijatelj)."], sol:["Idem u školu. (Akkusativ)","Ja sam u školi. (Lokativ)","Vidim prijatelja. (Akkusativ, belebt)"], why:"_u školu_ nennt die Richtung, _u školi_ den Ort. Ein männliches belebtes Wort endet im Akkusativ oft auf _-a_."}},
+    {q:{task:"Ergänze die richtige Form von _nov_ (neu).", parts:["___ knjiga","___ selo","___ grad"], sol:["nova knjiga","novo selo","nov grad"], why:"Das Adjektiv passt sich dem Geschlecht an: _nova_ (weiblich), _novo_ (sächlich), _nov_ (männlich)."}},
+    {q:{task:"Bilde die Vergangenheit von _raditi_ (arbeiten).", parts:["ja (ein Mann)","ja (eine Frau)","mi (gemischte Gruppe)"], sol:["Ja sam radio.","Ja sam radila.","Mi smo radili."], why:"Das Perfekt besteht aus einer Form von _biti_ und dem Partizip, das sich nach Geschlecht und Zahl des Subjekts richtet."}},
+    {q:{task:"Setz die Sätze in die Zukunft.", parts:["Ja učim.","Ti radiš.","Mi čitamo."], sol:["Ja ću učiti.","Ti ćeš raditi.","Mi ćemo čitati."], why:"Das Futur I bildest du mit _ću, ćeš, ćemo_ und dem Infinitiv."}},
+    {q:{task:"Ergänze die richtige Form von _sat_ (Stunde).", parts:["jedan ___","dva ___","pet ___"], sol:["jedan sat","dva sata","pet sati"], why:"Nach _jedan_ steht _sat_, nach _dva_ steht _sata_, nach _pet_ steht _sati_."}},
+    {q:{task:"Mach aus dem Satz eine Ja-Nein-Frage mit _Da li_.", parts:["Ti govoriš bosanski."], sol:["Da li ti govoriš bosanski? Oder: Da li govoriš bosanski?"], why:"_Da li_ steht vor dem Aussagesatz. _ti_ kann bleiben oder wegfallen."}},
+    {q:{task:"Übersetze ins Bosnische. Verwende die festen Satzmuster.", parts:["Mir ist kalt.","Ich brauche Hilfe.","Wir gehen zur Arbeit."], sol:["Hladno mi je.","Treba mi pomoć.","Idemo na posao."], why:"Diese Wendungen lernst du am besten als Ganzes. _Hladno mi je_ enthält den Dativ _mi_ (mir)."}},
+    {h:["Kako dalje učiti?","Wie geht es weiter?"]},
+    {p:"Nimm dir jeden Tag *fünf neue Wörter* vor, schreib *drei einfache Sätze* und sprich sie laut. Wiederhole danach ein Verb im Präsens und ein Beispiel zu einem Fall."}]},
+
+  {id:"g17", bs:"Brzi podsjetnik", de:"Spickzettel: Grammatik auf einen Blick", blocks:[
+    {cards:[["3 Geschlechter","muški · ženski · srednji","männlich · weiblich · sächlich"],["7 Fälle","N · G · D · A · V · I · L","Nominativ, Genitiv, Dativ, Akkusativ, Vokativ, Instrumental, Lokativ"],
+      ["Präsens","radim · radiš · radi","ich arbeite · du arbeitest · er arbeitet"],["Vergangenheit","radio sam","ich habe gearbeitet (eine Frau sagt: radila sam)"],
+      ["Zukunft","ja ću učiti","ich werde lernen"],["Verneinung","ne znam · nisam · nemam","ich weiß nicht · ich bin nicht · ich habe nicht"]]},
+    {p:"Das Wichtigste für den Start: *Aussprache, Präsens, die sieben Fälle und Alltagsausdrücke*. Du musst nicht sofort jede Endung auswendig können."},
+    {p:"Eine gute Reihenfolge: zuerst Aussprache und Begrüßungen, dann Präsens und Verneinung. Danach kommen die Fälle, immer zusammen mit Präpositionen und kurzen Sätzen. Vergangenheit, Zukunft und Aspekt nimmst du Schritt für Schritt dazu."}]}
+];
+/* Beispielsätze für Hören & Sagen; ohne Ziffern und ohne den Beispielnamen, die sich schlecht sprechen lassen */
+const gramSentences = () => GRAMMAR.flatMap(c => c.blocks.flatMap(b => b.ex || [])).filter(x => !/\d|Amir/.test(x[0])).map(x => ({bs: x[0], de: x[1]}));
 const wordItems = (cat) => cat.items.map(x => cat.verbs ? {bs:x[0], de:x[1], conj:x[2]} : {bs:x[0], de:x[1], ex:x[2] || "", exde:x[3] || ""});
 const LMAP = {"č":"tsch","ć":"tj","đ":"dj","š":"sch","ž":"zh","c":"z","z":"s","s":"ss","h":"ch","v":"w"};
 function bsToLaut(s){ const t = String(s).toLowerCase(), V = /[aeiou]/; let o = ""; for (let i = 0; i < t.length; i++){ if (t[i] === "d" && t[i + 1] === "ž"){ o += "dsch"; i++; continue; } if (t[i] === "s"){ o += V.test(t[i - 1] || "") && V.test(t[i + 1] || "") ? "ss" : "s"; continue; } o += LMAP[t[i]] ?? t[i]; } return o; }
@@ -493,6 +793,7 @@ const I = {
   listen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="7" rx="1.5"/><rect x="17" y="14" width="4" height="7" rx="1.5"/></svg>',
   quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7"/><path d="M12 17h.01"/></svg>',
   cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="13" height="16" rx="2"/><path d="M4 7v12a2 2 0 0 0 2 2h10"/></svg>',
+  grammar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/></svg>',
   trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'
 };
 
@@ -560,7 +861,7 @@ function save(){ clearTimeout(saveTimer); saveTimer = setTimeout(() => store.set
 try{ if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 
 /* practice time */
-const PRACTICE = new Set(["shadow","cards","sounds","quiz","numbers","words","session","listen","frames"]);
+const PRACTICE = new Set(["shadow","cards","sounds","quiz","numbers","words","session","listen","frames","grammar"]);
 let lastAct = 0;
 const today = () => { const k = dayKey(); if (!S.days[k]) S.days[k] = {sec:0, spoken:0}; return k; };
 ["pointerdown","keydown","input"].forEach(ev => document.addEventListener(ev, () => lastAct = Date.now(), {passive:true, capture:true}));
@@ -708,8 +1009,8 @@ function starBtn(item){
 
 /* ================= router ================= */
 let view = "home", arg = null;
-const TAB_TONE = {home:"t-path", learn:"t-words", train:"t-listen", book:"t-cards"};
-const TABS = [["home","Start",I.home],["learn","Lernen",I.learn],["train","Üben",I.train],["book","Heft",I.book]];
+const TAB_TONE = {home:"t-path", learn:"t-words", grammar:"t-grammar", train:"t-listen", book:"t-cards"};
+const TABS = [["home","Start",I.home],["learn","Lernen",I.learn],["grammar","Grammatik",I.grammar],["train","Üben",I.train],["book","Heft",I.book]];
 const PARENT = {words:"learn", numbers:"learn", sounds:"learn", frames:"learn", quiz:"train", cards:"train", shadow:"train", listen:"train", settings:"home", path:"home", session:"home"};
 function go(v, a){
   if (recOn && rec) try{ rec.abort(); }catch(e){}
@@ -1557,6 +1858,7 @@ VIEWS.listen = (hdr, main) => {
     schwach: ["Schwache Karten", weakItems().map(v => ({bs: v.bs, de: v.de, laut: v.laut}))],
     heft: ["Ganzes Heft", Object.values(S.vocab).filter(v => v.de).map(v => ({bs: v.bs, de: v.de, laut: v.laut}))],
     baukasten: ["Satzbaukästen", FRAMES.flatMap(f => f.items.map(x => ({bs: x[0], de: x[1]})))],
+    grammatik: ["Grammatik-Sätze", gramSentences()],
     alltag: ["Alltagssätze", PHRASES.flatMap(g => g.items).filter(x => !x[0].includes("{ime}")).map(x => ({bs: x[0], de: x[1]}))]
   };
   main.append(h("section", {class:"stack"}, h("span", {class:"cap", text:"Sätze aus"}), pillChoice(Object.entries(sources).map(([k, v]) => [k, `${v[0]} (${v[1].length})`]), () => HMsrc, (v) => HMsrc = v)),
@@ -1569,6 +1871,62 @@ VIEWS.listen = (hdr, main) => {
       hmCreate(shuffle(pool).slice(0, HMn)); HM.standalone = true; render();
     }}));
   const vn = voiceNote(); if (vn) main.append(vn);
+};
+
+/* ---------- grammar reference ---------- */
+function rich(s){
+  const out = [];
+  for (const part of String(s).split(/(\*[^*]+\*|_[^_]+_)/)){
+    if (!part) continue;
+    if (part.length > 2 && part[0] === "*" && part.endsWith("*")) out.push(h("b", {text: part.slice(1, -1)}));
+    else if (part.length > 2 && part[0] === "_" && part.endsWith("_")) out.push(h("i", {lang:"bs", text: part.slice(1, -1)}));
+    else out.push(part);
+  }
+  return out;
+}
+function gramCell(c){
+  if (!Array.isArray(c)) return h("td", null, rich(c));
+  const td = h("td", {class:"bsc"}, c[2] ? h("small", {class:"lab", text: c[2]}) : null, h("b", {lang:"bs", text: c[0]}), c[1] ? h("small", {text: c[1]}) : null);
+  if (canSpeak()){ td.classList.add("say"); td.setAttribute("role", "button"); td.tabIndex = 0; td.onclick = () => speak(c[0], true, null); }
+  return td;
+}
+const gramChip = (main, sub, say) => { const b = h("button", {type:"button"}, h("b", {text: String(main)}), h("small", {text: sub})); b.onclick = () => speak(say, true, null); return b; };
+function gramBlock(b){
+  if (b.p) return h("p", null, rich(b.p));
+  if (b.h) return h("div", {class:"gh"}, h("h3", {text: b.h[1]}), h("small", {lang:"bs", text: b.h[0]}));
+  if (b.note || b.warn){ const x = b.note || b.warn; return h("div", {class:"note" + (b.warn ? " warn" : "")}, h("b", {text: x[0] + ": "}), rich(x[1])); }
+  if (b.abc) return h("div", {class:"card abc", lang:"bs", text: b.abc});
+  if (b.t) return h("div", {class:"gtw"}, h("table", {class:"gt"}, h("thead", null, h("tr", null, b.t.map(x => h("th", {text: x})))), h("tbody", null, b.r.map(row => h("tr", null, row.map(gramCell))))));
+  if (b.ex) return h("div", {class:"list"}, b.ex.map(([bs, de, hint]) => h("div", {class:"li"},
+    h("div", {class:"grow"}, h("b", {lang:"bs", text: bs}), h("small", {text: de}), hint ? h("small", {class:"ghint"}, rich(hint)) : null), speakIcon(bs), starBtn({bs, de, src:"Grammatik"}))));
+  if (b.dlg) return h("div", {class:"card dlg"}, b.dlg.map(([who, bs, de]) => h("div", {class:"ln"}, h("span", {class:"who", text: who}),
+    h("div", {class:"grow"}, h("b", {lang:"bs", text: bs}), h("small", {text: de})), speakIcon(bs))));
+  if (b.chips) return h("div", {class:"numgrid"}, b.chips.map(([w, de]) => gramChip(w, de, w)));
+  if (b.nums) return h("div", {class:"numgrid"}, b.nums.map(([n, w]) => gramChip(n, w, w)));
+  if (b.q) return h("div", {class:"card gq"}, h("span", {class:"cap", text: "Übung " + b.q.n}), h("p", null, rich(b.q.task)),
+    h("ol", null, b.q.parts.map(x => h("li", {text: x}))),
+    h("details", null, h("summary", {text:"Lösung zeigen"}), h("ol", null, b.q.sol.map(x => h("li", {lang:"bs", text: x}))), h("p", {class:"muted small"}, rich(b.q.why))));
+  if (b.cards) return h("div", {class:"grid2"}, b.cards.map(([t, bs, de]) => h("div", {class:"card gcard"}, h("span", {class:"cap", text: t}), h("b", {lang:"bs", text: bs}), h("small", {text: de}))));
+  if (b.go) return h("button", {class:"btn ghost", type:"button", style:"justify-self:start", text: b.go[1], onclick: () => go(b.go[0])});
+  return null;
+}
+GRAMMAR.forEach(c => { let n = 0; for (const b of c.blocks) if (b.q) b.q.n = ++n; });
+VIEWS.grammar = (hdr, main) => {
+  const i = GRAMMAR.findIndex(c => c.id === arg), ch = GRAMMAR[i];
+  if (!ch){
+    header(hdr, "Grammatik", "Gramatika · nachschlagen und anhören", {gear:true});
+    main.append(h("p", {class:"muted small", text:`${GRAMMAR.length} Kapitel nach dem Heft eines Muttersprachlers. Bosnische Wörter und Sätze kannst du antippen und anhören, Beispielsätze legst du mit dem Stern ins Heft.`}));
+    main.append(h("div", {class:"stack"}, GRAMMAR.map((c, k) => h("button", {class:"action t-grammar", type:"button", onclick: () => go("grammar", c.id)},
+      h("span", {class:"ico gno", text: String(k + 1).padStart(2, "0")}), h("span", {class:"txt"}, h("b", {text: c.de}), h("small", {lang:"bs", text: c.bs}))))));
+    const vn = voiceNote(); if (vn) main.append(vn);
+    return;
+  }
+  header(hdr, ch.de, `${i + 1} · ${ch.bs}`, {back:true, backTo:"grammar"});
+  const body = h("article", {class:"gram t-grammar"}, ch.blocks.map(gramBlock));
+  const prev = GRAMMAR[i - 1], next = GRAMMAR[i + 1];
+  main.append(body, h("div", {class:"spread"},
+    prev ? h("button", {class:"btn ghost", type:"button", text:"Zurück", "aria-label":"Vorheriges Kapitel: " + prev.de, onclick: () => go("grammar", prev.id)}) : h("span"),
+    next ? h("button", {class:"btn", type:"button", text:"Weiter: " + clip(next.de, 24), onclick: () => go("grammar", next.id)}) : h("span")));
 };
 
 /* ---------- sentence frames ---------- */

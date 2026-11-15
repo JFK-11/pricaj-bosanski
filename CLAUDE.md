@@ -27,6 +27,7 @@ Offline-Lern-App (PWA) für Bosnisch, genutzt als Home-Bildschirm-App auf einem 
 - Bosnisch in lateinischer Schrift, ijekavisch, bosnische Standardformen (kafa, hljeb, sedmica, hiljada).
 - Der Lerner ist ein Mann: Ich-Sätze in maskulinen Formen (bio sam, sretan sam).
 - Lernpfad folgt seinem 30-Tage-Plan: Laute & erste Sätze → Alltag & Verben → Essen, Orte, Vergangenheit → persönliche Sätze.
+- Grammatik (`GRAMMAR` in `app/index.html`, eigener Tab): 17 Kapitel nach dem Heft „Bosanski jezik za početnike“ eines Muttersprachlers. Erklärungen auf Deutsch in eigenen Worten, Beispiele und Tabellen aus dem Heft. Das PDF selbst liegt nicht im Repository.
 
 ## Testen
 - `cd app && python3 -m http.server 8000`, dann im Browser auf Handybreite prüfen, auch offline (Service Worker).
