@@ -44,3 +44,18 @@ Beide Formen gelten als richtig. Offen ist nur, welche man in Bosnien im Alltag 
 ## Nachträglich korrigiert
 
 - **Datum auf der Startseite:** „utorak, 10. novembar“ → „utorak, 10. novembra“. Im Datum steht der Monat im Genitiv. Falls man in Bosnien auch „10. novembar“ schreibt, bitte melden.
+
+## Durch das Grammatik-Heft eines Muttersprachlers geklärt (November 2026)
+
+Das Heft „Bosanski jezik za početnike“ ist als Bereich „Grammatik“ in die iPhone-App eingebaut. Es beantwortet einige Fragen von oben:
+
+- **Frage 9, jučer:** Das Heft schreibt *jučer*. Passt so.
+- **Frage 10, veče:** Das Heft schreibt *Dobro veče!* Passt so.
+- **Frage 5, Želim …:** Das Heft nennt *Želim vodu.* – „Ich möchte Wasser.“ als festes Satzmuster (*željeti* + Akkusativ). Als Muster passt es also. Offen bleibt nur, ob es beim Bestellen höflich genug klingt.
+- **Frage 11, trebam:** Das Heft verwendet nur *Treba mi pomoć.* Die persönliche Form *trebam* kommt nicht vor. Die Frage bleibt offen.
+- **Datum:** Das Heft schreibt *Rođen sam 12. maja.* (Genitiv) und *Danas je petnaesti novembar.* (Nominativ nach „heute ist“). Die Datumszeile auf der Startseite mit Genitiv passt dazu.
+
+Das Heft verwendet an drei Stellen andere, ebenfalls richtige Wörter als die App. Beide stehen jetzt im Grundwortschatz:
+*majka, otac* neben *mama, tata*; *ljekar* neben *doktor*; *hvala puno* neben *hvala lijepa*.
+
+Die Fragen 1 bis 4 und 6 bis 8 beantwortet das Heft nicht.
